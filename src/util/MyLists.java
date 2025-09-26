@@ -1,5 +1,7 @@
 package util;
 
+import model.cards.GameCard;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -166,5 +168,26 @@ public class MyLists {
 
     public static <E> E last(List<E> list) {
         return list.get(list.size()-1);
+    }
+
+    public static <E> String frequencyList(List<E> list, MyStringFunction<E> fun) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (E e : list) {
+            String key = fun.getString(e);
+            if (!counts.containsKey(key)) {
+                counts.put(key, 1);
+            } else {
+                counts.put(key, counts.get(key) + 1);
+            }
+        }
+        List<String> strs = new ArrayList<>();
+        for (String key : counts.keySet()) {
+            if (counts.get(key) > 1) {
+                strs.add(counts.get(key) + "x" + key);
+            } else {
+                strs.add(key);
+            }
+        }
+        return commaAndJoin(strs, (s) -> s);
     }
 }

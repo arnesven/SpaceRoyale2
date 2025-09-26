@@ -7,6 +7,7 @@ import model.cards.*;
 import model.states.GameState;
 import model.states.InitialGameState;
 import util.MyLists;
+import util.MyRandom;
 import view.MultipleChoice;
 import view.MultipleChoiceAction;
 import view.ScreenHandler;
@@ -192,8 +193,8 @@ public class Model {
         screenHandler.println("== Resolving battle for " + bb.getName() + "==");
         bb.resolveYourself(this);
         movePlayers(bb);
-        gameData.gameBoard.replaceBattle(this, bb);
-        addInitialRebelUnitsToBattle(bb);
+        BattleBoard newBattle = gameData.gameBoard.replaceBattle(this, bb);
+        addInitialRebelUnitsToBattle(newBattle);
         drawBoard();
     }
 
@@ -201,13 +202,15 @@ public class Model {
         for (Player p : getPlayers()) {
             if (p.getCurrentLocation() == bb) {
                 MultipleChoice multipleChoice = new MultipleChoice();
-                multipleChoice.addOption("To Centralia", (model, performer) -> performer.moveToLocation(model.getCentralia()));
+                multipleChoice.addOption("To Centralia (keep Shuttle)", (model, performer) -> performer.moveToLocation(model.getCentralia()));
                 EmpireUnitCard shuttle = MyLists.find(p.getUnitCardsInHand(), sc -> sc instanceof ShuttleCard);
                 if (shuttle != null) {
                     ((ShuttleCard)shuttle).addMoveOptionsAfterBattle(this, multipleChoice, bb);
                 }
                 if (multipleChoice.getNumberOfChoices() > 1) {
                     screenHandler.println(p.getName() + " has a " + shuttle.getName() + " and may play it to move to another location than Centralia.");
+                } else {
+                    screenHandler.println(p.getName() + " moves to Centralia.");
                 }
                 multipleChoice.promptAndDoAction(this, "Where do you want to move?", p);
             }
@@ -249,14 +252,6 @@ public class Model {
         gameData.gameTracks.incrementTurn();
     }
 
-    public List<EmpireUnitCard> getUnitDiscard() {
-        return gameData.empireUnitDiscard;
-    }
-
-    public List<TacticsCard> getTacticsDiscard() {
-        return gameData.tacticsDiscard;
-    }
-
     public EmpireUnitCard drawCommunalEmpireUnitCard() {
         if (gameData.commonEmpireUnitDeck == null) {
             gameData.commonEmpireUnitDeck = new CommonEmpireUnitDeck(gameData.empireUnitDiscard);
@@ -266,16 +261,21 @@ public class Model {
     }
 
     public void discardRebelCards(List<RebelUnitCard> cards) {
-        if (gameData.rebelUnitDiscard == null) {
-            gameData.rebelUnitDiscard = new ArrayList<>();
-        }
         gameData.rebelUnitDiscard.addAll(cards);
     }
 
     public void discardEmpireCards(List<EmpireUnitCard> cards) {
-        if (gameData.empireUnitDiscard == null) {
-            gameData.empireUnitDiscard = new ArrayList<>();
-        }
         gameData.empireUnitDiscard.addAll(cards);
+    }
+
+    public void discardTacticsCards(List<TacticsCard> cards) {
+        gameData.tacticsDiscard.addAll(cards);
+    }
+
+    public AlignmentCard drawBattleChanceCard() {
+        AlignmentCard cardToReturn = gameData.battleChanceDeck.drawOne();
+        gameData.battleChanceDeck.addCard(cardToReturn);
+        gameData.battleChanceDeck.shuffle();
+        return cardToReturn;
     }
 }

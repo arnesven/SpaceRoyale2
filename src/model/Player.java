@@ -69,7 +69,12 @@ public class Player {
         if (cards.isEmpty()) {
             screenHandler.println("*None*");
         } else {
-            screenHandler.println(MyLists.commaAndJoin(cards, GameCard::getName));
+            if (!unitCardsInHand.isEmpty()) {
+                screenHandler.println(MyLists.frequencyList(unitCardsInHand, UnitCard::getNameAndStrength));
+            }
+            if (!tacticsCardsInHand.isEmpty()) {
+                screenHandler.println(MyLists.commaAndJoin(tacticsCardsInHand, GameCard::getName));
+            }
         }
     }
 
@@ -99,10 +104,6 @@ public class Player {
         return unitCardsInHand;
     }
 
-    public void removeUnitCardFromHand(EmpireUnitCard eu) {
-        unitCardsInHand.remove(eu);
-    }
-
     public void addToPopularInfluence(int i) {
         popularInfluence += i;
     }
@@ -120,12 +121,16 @@ public class Player {
     }
 
     public void discardCard(Model model, EmpireUnitCard eu) {
-        unitCardsInHand.remove(eu);
-        model.getUnitDiscard().add(eu);
+        removeUnitCardFromHand(eu);
+        model.discardEmpireCards(List.of(eu));
     }
 
     public void discardCard(Model model, TacticsCard tc) {
         tacticsCardsInHand.remove(tc);
-        model.getTacticsDiscard().add(tc);
+        model.discardTacticsCards(List.of(tc));
+    }
+
+    public void removeUnitCardFromHand(EmpireUnitCard eu) {
+        unitCardsInHand.remove(eu);
     }
 }

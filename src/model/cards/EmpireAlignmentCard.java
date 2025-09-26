@@ -2,7 +2,7 @@ package model.cards;
 
 public class EmpireAlignmentCard extends AlignmentCard {
     public EmpireAlignmentCard() {
-        super("Empire");
+        super("Empire", 0);
     }
 
     @Override

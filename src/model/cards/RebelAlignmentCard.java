@@ -2,7 +2,7 @@ package model.cards;
 
 public class RebelAlignmentCard extends AlignmentCard {
     public RebelAlignmentCard() {
-        super("Rebel");
+        super("Rebel", 2);
     }
 
     @Override

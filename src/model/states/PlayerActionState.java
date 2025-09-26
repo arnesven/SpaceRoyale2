@@ -191,13 +191,9 @@ public class PlayerActionState extends GameState {
 
     private void drawCardsTogetherWith(Model model, Player performer, Player other) {
         drawThreeCards(model, performer);
-        print(model, performer.getName() + "'s hand: ");
-        performer.printHand(model.getScreenHandler());
         collaborativeDraw.add(performer);
         if (other != null) {
             drawThreeCards(model, other);
-            print(model, other.getName() + "'s hand: ");
-            other.printHand(model.getScreenHandler());
             collaborativeDraw.add(other);
             println(model, "It's still " + performer.getName() + "'s turn.");
         }
@@ -212,8 +208,14 @@ public class PlayerActionState extends GameState {
                 performer2.drawTacticsCard(model2);
             });
         }
-        println(model, performer.getName() + " is about to draw cards.");
+        if (multipleChoice.getNumberOfChoices() > 1) {
+            println(model, performer.getName() + " is about to draw cards.");
+        } else {
+            println(model, performer.getName() + " draws 3 cards.");
+        }
         multipleChoice.promptAndDoAction(model, "Select an option:", performer);
+        print(model, performer.getName() + "'s hand: ");
+        performer.printHand(model.getScreenHandler());
     }
 
     private void discardIfOverLimit(Model model, Player current) {

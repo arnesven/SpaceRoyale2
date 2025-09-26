@@ -2,6 +2,7 @@ package model.board;
 
 import model.Model;
 import model.Player;
+import model.cards.AlignmentCard;
 import model.cards.EmpireUnitCard;
 import model.cards.RebelUnitCard;
 import model.cards.UnitCard;
@@ -65,11 +66,14 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void resolveYourself(Model model) {
-        model.getScreenHandler().println("Rebel Forces are: " + commaListOrNone(rebelUnits));
-        model.getScreenHandler().println("Empire Forces are: " + commaListOrNone(empireUnits));
+        model.getScreenHandler().println("Rebel Forces are: " + freqListOrNone(rebelUnits));
+        model.getScreenHandler().println("Empire Forces are: " + freqListOrNone(empireUnits));
 
-        boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits);
-        boolean empireWinsGroundDomain = resolveGroundDomain(model, rebelUnits, empireUnits);
+        AlignmentCard align = model.drawBattleChanceCard();
+        model.getScreenHandler().println("Drawing 1 card from Battle Chance Deck: " + align.getName());
+
+        boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits, align);
+        boolean empireWinsGroundDomain = resolveGroundDomain(model, rebelUnits, empireUnits, align);
         // TODO: Draw Battle Chance
 
         List<Player> playersInBattle = getPlayersInBattle(model);
@@ -86,11 +90,11 @@ public abstract class BattleBoard extends BoardLocation {
         endOfBattle(model, rebelUnits, empireUnits, imperialWin);
     }
 
-    private String commaListOrNone(List<? extends UnitCard> units) {
+    private String freqListOrNone(List<? extends UnitCard> units) {
         if (units.isEmpty()) {
             return "*None*";
         }
-        return MyLists.commaAndJoin(units, UnitCard::getNameAndStrength);
+        return MyLists.frequencyList(units, UnitCard::getNameAndStrength);
     }
 
     protected void endOfBattle(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, boolean empireWin) {
@@ -102,8 +106,8 @@ public abstract class BattleBoard extends BoardLocation {
         return MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == this);
     }
 
-    private boolean resolveSpaceDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits) {
-        int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
+    private boolean resolveSpaceDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, AlignmentCard battleChance) {
+        int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength) + getSpaceBonus(battleChance);
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
 
         model.getScreenHandler().println("Space total (R vs E): " + rebelSpace + " vs " + empireSpace);
@@ -115,6 +119,14 @@ public abstract class BattleBoard extends BoardLocation {
         return true;
     }
 
+    protected int getGroundBonus(AlignmentCard battleChance) {
+        return battleChance.rebelBattleBonus();
+    }
+
+    protected int getSpaceBonus(AlignmentCard battleChance) {
+        return battleChance.rebelBattleBonus();
+    }
+
     private int getSpaceStrength(UnitCard unitCard) {
         return unitCard.isGroundUnit() ? 0 : unitCard.getStrength();
     }
@@ -123,8 +135,8 @@ public abstract class BattleBoard extends BoardLocation {
         return unitCard.isGroundUnit() ? unitCard.getStrength() : 0;
     }
 
-    protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits) {
-        int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
+    protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, AlignmentCard battleChance) {
+        int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength) + getGroundBonus(battleChance);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
         model.getScreenHandler().println("Ground total (R vs E): " + rebelGround + " vs " + empireGround);
         if (rebelGround > empireGround) {
@@ -136,6 +148,6 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void printRebelUnits(Model model) {
-        model.getScreenHandler().println("Rebel Units: " + commaListOrNone(rebelUnits));
+        model.getScreenHandler().println("Rebel Units: " + freqListOrNone(rebelUnits));
     }
 }

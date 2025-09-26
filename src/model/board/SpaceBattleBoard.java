@@ -2,16 +2,15 @@ package model.board;
 
 import model.Model;
 import model.Player;
+import model.cards.AlignmentCard;
 import model.cards.EmpireUnitCard;
 import model.cards.RebelUnitCard;
 import model.cards.UnitCard;
 import util.MyLists;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class SpaceBattleBoard extends BattleBoard {
     public SpaceBattleBoard(char identifier) {
@@ -19,8 +18,18 @@ public class SpaceBattleBoard extends BattleBoard {
     }
 
     @Override
-    protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits) {
+    protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, AlignmentCard battleBonus) {
         return true;
+    }
+
+    @Override
+    protected int getGroundBonus(AlignmentCard battleChance) {
+        return 0;
+    }
+
+    @Override
+    protected int getSpaceBonus(AlignmentCard battleChance) {
+        return 2 * super.getSpaceBonus(battleChance);
     }
 
     @Override
