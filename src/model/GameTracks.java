@@ -86,4 +86,8 @@ public class GameTracks {
     public void incrementTurn() {
         turn++;
     }
+
+    public int getWar() {
+        return war;
+    }
 }

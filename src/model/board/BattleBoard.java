@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class BattleBoard extends BoardLocation {
 
-    private static final int CARD_LIMIT = 8;
+    private static final int CARD_LIMIT = 10;
     private final String name;
     private final char identifier;
     private List<RebelUnitCard> rebelUnits = new ArrayList<>();
@@ -80,12 +80,14 @@ public abstract class BattleBoard extends BoardLocation {
         boolean imperialWin = battleSpecificResolve(model, playersInBattle, empireWinsSpace, empireWinsGroundDomain);
         if (imperialWin) {
             model.advanceWarCounter();
+            model.getScreenHandler().println("The War counter advances to " + model.getWarCounter());
         } else {
             for (Player p : playersInBattle) {
                 model.getScreenHandler().println(p.getName() + " loses one Emperor Influence.");
                 p.addToEmperorInfluence(-1);
             }
             model.retreatWarCounter();
+            model.getScreenHandler().println("The War counter retreats to " + model.getWarCounter());
         }
         endOfBattle(model, rebelUnits, empireUnits, imperialWin);
     }
@@ -115,7 +117,7 @@ public abstract class BattleBoard extends BoardLocation {
             model.getScreenHandler().println("The rebels are victorious in the space domain.");
             return false;
         }
-        model.getScreenHandler().println("The empire are victorious in the space domain.");
+        model.getScreenHandler().println("The empire is victorious in the space domain.");
         return true;
     }
 

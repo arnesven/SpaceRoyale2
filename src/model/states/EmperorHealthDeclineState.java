@@ -8,7 +8,7 @@ public class EmperorHealthDeclineState extends GameState {
     public GameState run(Model model) {
         print(model, "Rolling die for Emperor Health Decline.");
         int dieRoll = MyRandom.rollD10();
-        println(model, "... Its a " + dieRoll);
+        println(model, "... It's a " + dieRoll);
         print(model, "The Emperor's health is ");
         if (dieRoll < 3) {
             println(model, "unchanged.");

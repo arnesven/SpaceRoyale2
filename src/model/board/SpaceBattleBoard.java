@@ -56,20 +56,20 @@ public class SpaceBattleBoard extends BattleBoard {
                 otherBattles.add(bb);
             }
         }
-        model.discardRebelCards(MyLists.filter(rebelUnitCards, rebelUnitCard -> !rebelUnitCard.isGroundUnit()));
+        otherBattles.remove(this);
         model.discardEmpireCards(empireUnitCards);
+        List<RebelUnitCard> groundUnits = MyLists.filter(rebelUnitCards, UnitCard::isGroundUnit);
         if (otherBattles.isEmpty()) {
+            model.getScreenHandler().println("Since there is no suitable battle for the rebel Ground units to go, they are discarded.");
+            model.discardRebelCards(rebelUnitCards);
             return;
         }
+        model.discardRebelCards(MyLists.filter(rebelUnitCards, rebelUnitCard -> !rebelUnitCard.isGroundUnit()));
         otherBattles.sort(Comparator.comparingInt(BattleBoard::getIdentifier));
         BattleBoard destination = otherBattles.getFirst();
         model.getScreenHandler().println("The ground units from the space battle are moved to " + destination.getName());
-        List<RebelUnitCard> groundUnits = MyLists.filter(rebelUnitCards, UnitCard::isGroundUnit);
         for (RebelUnitCard ru : groundUnits) {
             destination.addRebelCard(ru);
-        }
-        if (destination.battleIsTriggered()) {
-            model.resolveBattle(destination);
         }
     }
 

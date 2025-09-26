@@ -2,6 +2,7 @@ package model.board;
 
 import model.Model;
 import model.Player;
+import view.MultipleChoice;
 
 import java.util.List;
 
@@ -13,11 +14,21 @@ public class DefendPlanetBattleBoard extends BattleBoard {
     @Override
     protected boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGroundDomain) {
         if (empireWinsSpace || empireWinsGroundDomain) {
+            if (!empireWinsSpace) {
+                model.getScreenHandler().println("The Rebel establish a blockade of the planet,");
+                model.getScreenHandler().println("but the imperial forces hold out until a relief force can break the siege.");
+            } else if (!empireWinsGroundDomain) {
+                model.getScreenHandler().println("The Rebel quickly land troops and overrun the planet.");
+                model.getScreenHandler().println("Their supply lines are however cut off by the imperial fleet which dominates the skies.");
+            }
             model.getScreenHandler().println("The Imperial forces have successfully defended the planet.");
             for (Player p : playersInBattle) {
                 model.getScreenHandler().println(p.getName() + " gains 1 Popular Influence.");
                 p.addToPopularInfluence(+1);
-                // TODO: Let player draw 1 unit or 1 tactics
+                MultipleChoice multipleChoice = new MultipleChoice();
+                multipleChoice.addOption("Draw Unit Card", (m, _) -> p.drawUnitCard(m));
+                multipleChoice.addOption("Draw Tactics Card", (m, _) -> p.drawTacticsCard(m));
+                multipleChoice.promptAndDoAction(model, p.getName() + " gets one card as a reward:", p);
             }
             return true;
         }

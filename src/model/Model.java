@@ -196,6 +196,11 @@ public class Model {
         BattleBoard newBattle = gameData.gameBoard.replaceBattle(this, bb);
         addInitialRebelUnitsToBattle(newBattle);
         drawBoard();
+        for (BattleBoard chainedBattle : getBattles()) {
+            if (chainedBattle.battleIsTriggered()) {
+                resolveBattle(chainedBattle);
+            }
+        }
     }
 
     private void movePlayers(BattleBoard bb) {
@@ -257,7 +262,7 @@ public class Model {
             gameData.commonEmpireUnitDeck = new CommonEmpireUnitDeck(gameData.empireUnitDiscard);
             gameData.empireUnitDiscard.clear();
         }
-        return null;
+        return gameData.commonEmpireUnitDeck.drawOne();
     }
 
     public void discardRebelCards(List<RebelUnitCard> cards) {
@@ -277,5 +282,9 @@ public class Model {
         gameData.battleChanceDeck.addCard(cardToReturn);
         gameData.battleChanceDeck.shuffle();
         return cardToReturn;
+    }
+
+    public int getWarCounter() {
+        return gameData.gameTracks.getWar();
     }
 }
