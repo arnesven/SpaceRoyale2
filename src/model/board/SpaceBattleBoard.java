@@ -4,11 +4,14 @@ import model.Model;
 import model.Player;
 import model.cards.EmpireUnitCard;
 import model.cards.RebelUnitCard;
+import model.cards.UnitCard;
+import util.MyLists;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class SpaceBattleBoard extends BattleBoard {
     public SpaceBattleBoard(char identifier) {
@@ -35,7 +38,7 @@ public class SpaceBattleBoard extends BattleBoard {
     }
 
     @Override
-    protected void checkForSpecialBattle(Model model, List<RebelUnitCard> groundUnits, boolean imperialWin) {
+    protected void endOfBattle(Model model, List<RebelUnitCard> rebelUnitCards, List<EmpireUnitCard> empireUnitCards, boolean imperialWin) {
         // TODO: Only if special battle did not occur.
         List<BattleBoard> otherBattles = new ArrayList<>();
         for (BattleBoard bb : model.getBattles()) {
@@ -44,12 +47,15 @@ public class SpaceBattleBoard extends BattleBoard {
                 otherBattles.add(bb);
             }
         }
+        model.discardRebelCards(MyLists.filter(rebelUnitCards, rebelUnitCard -> !rebelUnitCard.isGroundUnit()));
+        model.discardEmpireCards(empireUnitCards);
         if (otherBattles.isEmpty()) {
             return;
         }
         otherBattles.sort(Comparator.comparingInt(BattleBoard::getIdentifier));
         BattleBoard destination = otherBattles.getFirst();
         model.getScreenHandler().println("The ground units from the space battle are moved to " + destination.getName());
+        List<RebelUnitCard> groundUnits = MyLists.filter(rebelUnitCards, UnitCard::isGroundUnit);
         for (RebelUnitCard ru : groundUnits) {
             destination.addRebelCard(ru);
         }

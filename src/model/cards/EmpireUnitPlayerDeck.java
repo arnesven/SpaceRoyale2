@@ -10,7 +10,7 @@ public class EmpireUnitPlayerDeck extends EmpireUnitDeck {
     private static final int NO_OF_CRUISER_CARDS = 3;
     private static final int NO_OF_BATTLESHIP_CARDS = 1;
 
-    private static final EmpireUnitCard AGENT_CARD = new EmpireUnitCard("Agent", 0, false);
+    private static final EmpireUnitCard AGENT_CARD = new AgentUnitCard();
     private static final EmpireUnitCard SHUTTLE_CARD = new EmpireUnitCard("Shuttle", 0, false);
     private static final EmpireUnitCard GROUND_TROOPS_CARD = new EmpireUnitCard("Ground Troops", 1, true);
     private static final EmpireUnitCard FIGHTERS_CARD = new EmpireUnitCard("Fighters", 2, false);

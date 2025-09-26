@@ -4,10 +4,13 @@ import model.Model;
 import model.Player;
 import model.board.BattleBoard;
 import model.board.BoardLocation;
+import model.cards.AgentUnitCard;
 import model.cards.EmpireUnitCard;
 import model.cards.RebelUnitCard;
 import model.cards.TacticsCard;
+import util.MyLists;
 import view.MultipleChoice;
+import view.MultipleChoiceAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +102,6 @@ public class PlayerActionState extends GameState {
             addNonMoveActions(multipleChoice2, model, current);
             multipleChoice2.promptAndDoAction(model, "Select an action:", current);
         } else {
-            // TODO: If you have not already, may now move.
             MultipleChoice multipleChoice2 = new MultipleChoice();
             multipleChoice2.addOption("Move", this::movePlayer);
             multipleChoice2.addOption("Stay in location", (_, _) -> {});
@@ -124,6 +126,15 @@ public class PlayerActionState extends GameState {
 
     private void addCardsToBattle(Model model, Player player) {
         BattleBoard bb = (BattleBoard) player.getCurrentLocation();
+        EmpireUnitCard agent = MyLists.find(player.getUnitCardsInHand(), eu -> eu instanceof AgentUnitCard);
+        if (agent != null) {
+            println(model, player.getName() + " has an Agent card and can play it to look at the Rebel Unit Cards on " + bb.getName() + ".");
+            MultipleChoice multipleChoice = new MultipleChoice();
+            multipleChoice.addOption("Use Agent", (m, _) -> ((AgentUnitCard)agent).useToPeek(m, player, bb));
+            multipleChoice.addOption("Skip", (_, _) -> {});
+            multipleChoice.promptAndDoAction(model, "Do you want to play an Agent Card?", player);
+        }
+
         boolean[] done = new boolean[]{false};
         do {
             MultipleChoice multipleChoice = new MultipleChoice();
@@ -215,6 +226,7 @@ public class PlayerActionState extends GameState {
         }
         while (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
             multipleChoice.promptAndDoAction(model,"Select a card to discard:", current);
+            multipleChoice.removeSelectedOption();
         }
     }
 }

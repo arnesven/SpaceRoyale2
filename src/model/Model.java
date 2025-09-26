@@ -9,7 +9,6 @@ import model.states.InitialGameState;
 import view.ScreenHandler;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -127,8 +126,29 @@ public class Model {
     public void drawBoard() {
         screenHandler.clearDrawingArea();
         gameData.gameBoard.drawYourself(this);
-        gameData.gameTracks.drawYourself(this, 44, 8);
+        drawDecks(20, 8);
+        gameData.gameTracks.drawYourself(this, 48, 8);
         screenHandler.printDrawingArea();
+    }
+
+    private void drawDecks(int x, int y) {
+        screenHandler.drawText("Decks", x+5, y);
+        getTacticsDeck().drawYourself(screenHandler, x, y+1);
+        if (gameData.commonEmpireUnitDeck != null) {
+            gameData.commonEmpireUnitDeck.drawYourself(screenHandler, x + 7, y + 1);
+        }
+        gameData.rebelUnitDeck.drawYourself(screenHandler, x + 14, y + 1);
+
+        screenHandler.drawText("Discards", x+4, y+4);
+        if (!gameData.tacticsDiscard.isEmpty()) {
+            screenHandler.drawText("T " + gameData.tacticsDiscard.size(), x, y + 5);
+        }
+        if (!gameData.empireUnitDiscard.isEmpty()) {
+            screenHandler.drawText("E " + gameData.empireUnitDiscard.size(), x + 7, y + 5);
+        }
+        if (!gameData.rebelUnitDiscard.isEmpty()) {
+            screenHandler.drawText("R " + gameData.rebelUnitDiscard.size(), x + 14, y + 5);
+        }
     }
 
     public Player getCurrentPlayer() {
@@ -209,10 +229,32 @@ public class Model {
     }
 
     public List<EmpireUnitCard> getUnitDiscard() {
-        return gameData.unitDiscard;
+        return gameData.empireUnitDiscard;
     }
 
     public List<TacticsCard> getTacticsDiscard() {
         return gameData.tacticsDiscard;
+    }
+
+    public EmpireUnitCard drawCommunalEmpireUnitCard() {
+        if (gameData.commonEmpireUnitDeck == null) {
+            gameData.commonEmpireUnitDeck = new CommonEmpireUnitDeck(gameData.empireUnitDiscard);
+            gameData.empireUnitDiscard.clear();
+        }
+        return null;
+    }
+
+    public void discardRebelCards(List<RebelUnitCard> cards) {
+        if (gameData.rebelUnitDiscard == null) {
+            gameData.rebelUnitDiscard = new ArrayList<>();
+        }
+        gameData.rebelUnitDiscard.addAll(cards);
+    }
+
+    public void discardEmpireCards(List<EmpireUnitCard> cards) {
+        if (gameData.empireUnitDiscard == null) {
+            gameData.empireUnitDiscard = new ArrayList<>();
+        }
+        gameData.empireUnitDiscard.addAll(cards);
     }
 }

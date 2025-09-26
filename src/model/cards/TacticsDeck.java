@@ -1,5 +1,7 @@
 package model.cards;
 
+import view.ScreenHandler;
+
 public class TacticsDeck extends Deck<TacticsCard> {
 
     private static final int NO_OF_BOMBARDMENT_CARDS = 4;
@@ -33,5 +35,13 @@ public class TacticsDeck extends Deck<TacticsCard> {
         addCopies(MINEFIELD_CODES_CARD, NO_OF_MINEFIELD_CODES_CARDS);
         addCopies(HUMANITARIAN_AID_CARD, NO_OF_HUMANITARIAN_CARDS);
         shuffle();
+    }
+
+    public void drawYourself(ScreenHandler screenHandler, int x, int y) {
+        if (!isEmpty()) {
+            screenHandler.drawText(".-.", x, y);
+            screenHandler.drawText("|T|" + size(), x, y + 1);
+            screenHandler.drawText("'¨'", x, y + 2);
+        }
     }
 }

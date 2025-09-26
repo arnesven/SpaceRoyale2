@@ -52,8 +52,11 @@ public class Player {
     }
 
     public void drawUnitCard(Model model) {
-        // TODO: if unitDeck empty, draw from communal.
-        this.unitCardsInHand.add(unitDeck.drawOne());
+        if (unitDeck.isEmpty()) {
+            this.unitCardsInHand.add(model.drawCommunalEmpireUnitCard());
+        } else {
+            this.unitCardsInHand.add(unitDeck.drawOne());
+        }
         unitCardsInHand.sort(Comparator.comparingInt(UnitCard::getStrength));
     }
 

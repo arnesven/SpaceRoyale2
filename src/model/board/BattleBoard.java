@@ -83,7 +83,7 @@ public abstract class BattleBoard extends BoardLocation {
             }
             model.retreatWarCounter();
         }
-        checkForSpecialBattle(model, MyLists.filter(rebelUnits, UnitCard::isGroundUnit), imperialWin);
+        endOfBattle(model, rebelUnits, empireUnits, imperialWin);
     }
 
     private String commaListOrNone(List<? extends UnitCard> units) {
@@ -93,8 +93,9 @@ public abstract class BattleBoard extends BoardLocation {
         return MyLists.commaAndJoin(units, UnitCard::getNameAndStrength);
     }
 
-    protected void checkForSpecialBattle(Model model, List<RebelUnitCard> groundUnits, boolean empireWin) {
-        // TODO: Battle at Rebel Stronghold or Battle of Centralia
+    protected void endOfBattle(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, boolean empireWin) {
+        model.discardRebelCards(rebelUnits);
+        model.discardEmpireCards(empireUnits);
     }
 
     private List<Player> getPlayersInBattle(Model model) {
@@ -132,5 +133,9 @@ public abstract class BattleBoard extends BoardLocation {
         }
         model.getScreenHandler().println("The empire are victorious in the ground domain.");
         return true;
+    }
+
+    public void printRebelUnits(Model model) {
+        model.getScreenHandler().println("Rebel Units: " + commaListOrNone(rebelUnits));
     }
 }

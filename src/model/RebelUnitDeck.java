@@ -2,6 +2,7 @@ package model;
 
 import model.cards.Deck;
 import model.cards.RebelUnitCard;
+import view.ScreenHandler;
 
 public class RebelUnitDeck extends Deck<RebelUnitCard> {
 
@@ -30,5 +31,13 @@ public class RebelUnitDeck extends Deck<RebelUnitCard> {
         addCopies(DESTROYER, NO_OF_DESTROYER_CARDS);
         addCopies(TITAN, NO_OF_TITAN_CARDS);
         shuffle();
+    }
+
+    public void drawYourself(ScreenHandler screenHandler, int x, int y) {
+        if (!isEmpty()) {
+            screenHandler.drawText(".-.", x, y);
+            screenHandler.drawText("|R|" + size(), x, y + 1);
+            screenHandler.drawText("'¨'", x, y + 2);
+        }
     }
 }
