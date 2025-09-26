@@ -9,6 +9,7 @@ import model.states.InitialGameState;
 import view.ScreenHandler;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -205,5 +206,13 @@ public class Model {
 
     public void incrementTurn() {
         gameData.gameTracks.incrementTurn();
+    }
+
+    public List<EmpireUnitCard> getUnitDiscard() {
+        return gameData.unitDiscard;
+    }
+
+    public List<TacticsCard> getTacticsDiscard() {
+        return gameData.tacticsDiscard;
     }
 }

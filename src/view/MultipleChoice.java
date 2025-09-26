@@ -32,7 +32,7 @@ public class MultipleChoice {
         executeOption(model, performer, choice);
     }
 
-    public int noOfChoices() {
+    public int getNumberOfChoices() {
         return options.size();
     }
 

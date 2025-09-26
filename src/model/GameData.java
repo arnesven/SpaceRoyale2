@@ -1,9 +1,7 @@
 package model;
 
 import model.board.GameBoard;
-import model.cards.AlignmentCard;
-import model.cards.Deck;
-import model.cards.TacticsDeck;
+import model.cards.*;
 
 import java.util.List;
 
@@ -15,4 +13,6 @@ public class GameData {
     public TacticsDeck tacticsDeck;
     public GameTracks gameTracks;
     public Player currentPlayer;
+    public List<EmpireUnitCard> unitDiscard;
+    public List<TacticsCard> tacticsDiscard;
 }

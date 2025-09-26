@@ -6,12 +6,15 @@ import model.board.BattleBoard;
 import model.board.BoardLocation;
 import model.cards.EmpireUnitCard;
 import model.cards.RebelUnitCard;
+import model.cards.TacticsCard;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerActionState extends GameState {
+    private static final int MAX_HAND_SIZE = 8;
+
     @Override
     public GameState run(Model model) {
 
@@ -23,7 +26,7 @@ public class PlayerActionState extends GameState {
             doNegativeAction(model, current);
             doPlayerAction(model, current);
             drawThreeCards(model, current);
-            // TODO: Discard down to 8 cards in hand
+            discardIfOverLimit(model, current);
             model.stepCurrentPlayer();
             model.drawBoard();
         }
@@ -70,7 +73,7 @@ public class PlayerActionState extends GameState {
                 });
             }
         }
-        while (multipleChoice.noOfChoices() > 0) {
+        while (multipleChoice.getNumberOfChoices() > 0) {
             multipleChoice.promptAndDoAction(model, "There are multiple battles which need to be resolved. Which one would you like to resolve first?", player);
             multipleChoice.removeSelectedOption();
         }
@@ -168,7 +171,7 @@ public class PlayerActionState extends GameState {
                 multipleChoice.addOption(p.getName(), (model1, performer) -> drawCardsTogetherWith(model1, performer, p));
             }
         }
-        if (multipleChoice.noOfChoices() == 0) {
+        if (multipleChoice.getNumberOfChoices() == 0) {
             drawCardsTogetherWith(model, player, null);
         } else {
             multipleChoice.promptAndDoAction(model, "Which player do you want collaboratively draw cards with?", player);
@@ -197,5 +200,21 @@ public class PlayerActionState extends GameState {
             });
         }
         multipleChoice.promptAndDoAction(model, "Select an option:", performer);
+    }
+
+    private void discardIfOverLimit(Model model, Player current) {
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (EmpireUnitCard eu : current.getUnitCardsInHand()) {
+            multipleChoice.addOption(eu.getNameAndStrength(), (m, performer) -> performer.discardCard(m, eu));
+        }
+        for (TacticsCard tc : current.getTacticsCardsInHand()) {
+            multipleChoice.addOption(tc.getName(), (m, p) -> p.discardCard(model, tc));
+        }
+        if (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
+            println(model, current.getName() + " has too many cards in hand.");
+        }
+        while (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
+            multipleChoice.promptAndDoAction(model,"Select a card to discard:", current);
+        }
     }
 }

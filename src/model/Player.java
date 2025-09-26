@@ -113,4 +113,18 @@ public class Player {
     public AlignmentCard getLoyaltyCard() {
         return loyalty;
     }
+
+    public List<TacticsCard> getTacticsCardsInHand() {
+        return tacticsCardsInHand;
+    }
+
+    public void discardCard(Model model, EmpireUnitCard eu) {
+        unitCardsInHand.remove(eu);
+        model.getUnitDiscard().add(eu);
+    }
+
+    public void discardCard(Model model, TacticsCard tc) {
+        tacticsCardsInHand.remove(tc);
+        model.getTacticsDiscard().add(tc);
+    }
 }
