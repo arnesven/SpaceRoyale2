@@ -17,4 +17,8 @@ public abstract class UnitCard extends GameCard {
     public boolean isGroundUnit() {
         return isGround;
     }
+
+    public String getNameAndStrength() {
+        return getName() + " (" + getStrength() + ")";
+    }
 }

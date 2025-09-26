@@ -161,7 +161,16 @@ public class Model {
     }
 
     public void resolveBattle(BattleBoard bb) {
-        screenHandler.println("Resolving battle for " + bb.getName());
+        screenHandler.println("Resolving battle for " + bb.getName() + ".");
         bb.resolveYourself(this);
+        gameData.gameBoard.replaceBattle(this, bb);
+    }
+
+    public void advanceWarCounter() {
+        gameData.gameTracks.addToWar(+1);
+    }
+
+    public void retreatWarCounter() {
+        gameData.gameTracks.addToWar(-1);
     }
 }

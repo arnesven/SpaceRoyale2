@@ -1,8 +1,5 @@
 package util;
 
-import model.races.Race;
-import view.MyColors;
-
 import java.util.*;
 
 public class MyRandom {
@@ -43,16 +40,8 @@ public class MyRandom {
         return "she";
     }
 
-    public static MyColors nextColor() {
-        return sample(Arrays.asList(MyColors.values()));
-    }
-
     public static boolean flipCoin() {
         return random.nextBoolean();
-    }
-
-    public static Race nextRace() {
-        return sample(Arrays.asList(Race.allRaces));
     }
 
     public static double nextDouble() {

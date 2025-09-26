@@ -13,8 +13,8 @@ public class Player {
     private final String name;
     private final char shortName;
     private final EmpireUnitPlayerDeck unitDeck;
-    private final int emperorInfluence;
-    private final int popularInfluence;
+    private int emperorInfluence;
+    private int popularInfluence;
     private BoardLocation currentLocation = null;
     private AlignmentCard loyalty;
     private List<EmpireUnitCard> unitCardsInHand = new ArrayList<>();
@@ -97,5 +97,13 @@ public class Player {
 
     public void removeUnitCardFromHand(EmpireUnitCard eu) {
         unitCardsInHand.remove(eu);
+    }
+
+    public void addToPopularInfluence(int i) {
+        popularInfluence += i;
+    }
+
+    public void addToEmperorInfluence(int i) {
+        emperorInfluence -= i;
     }
 }

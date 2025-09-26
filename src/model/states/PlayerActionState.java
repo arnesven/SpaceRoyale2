@@ -104,17 +104,22 @@ public class PlayerActionState extends GameState {
     }
 
     private void addCardsToBattle(Model model, Player player) {
-        MultipleChoice multipleChoice = new MultipleChoice();
         BattleBoard bb = (BattleBoard) player.getCurrentLocation();
-        for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
-            multipleChoice.addOption(eu.getName(), (_, performer) -> {
-                bb.addEmpireUnit(eu);
-                performer.removeUnitCardFromHand(eu);
-                if (bb.battleIsTriggered()) {
-                    model.resolveBattle(bb);
-                }
-            });
-        }
+        boolean[] done = new boolean[]{false};
+        do {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
+                multipleChoice.addOption(eu.getName(), (_, performer) -> {
+                    bb.addEmpireUnit(eu);
+                    performer.removeUnitCardFromHand(eu);
+                    if (bb.battleIsTriggered()) {
+                        model.resolveBattle(bb);
+                    }
+                });
+            }
+            multipleChoice.addOption("Done", (_,_) -> { done[0] = true; });
+            multipleChoice.promptAndDoAction(model, "Which card do you wish to add to the battle?", player);
+        } while (!done[0] && !player.getUnitCardsInHand().isEmpty());
     }
 
     private void movePlayer(Model model, Player player) {

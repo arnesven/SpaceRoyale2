@@ -1,10 +1,7 @@
 package util;
 
-import model.characters.GameCharacter;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MyStrings {
     private static final List<String> NUM_WORDS = List.of(

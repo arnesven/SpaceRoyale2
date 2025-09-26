@@ -27,4 +27,13 @@ public class GameBoard {
     public BattleBoard[] getBattles() {
         return battles;
     }
+
+    public void replaceBattle(Model model, BattleBoard bb) {
+        for (int i = 0; i < battles.length; ++i) {
+            if (battles[i] == bb) {
+                battles[i] = bb.makeReplacement(model);
+                break;
+            }
+        }
+    }
 }

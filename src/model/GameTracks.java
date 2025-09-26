@@ -43,4 +43,8 @@ public class GameTracks {
     public boolean isUnrestMaxedOut() {
         return unrest >= MAX_UNREST;
     }
+
+    public void addToWar(int i) {
+        war += i;
+    }
 }
