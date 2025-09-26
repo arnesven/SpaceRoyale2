@@ -4,19 +4,18 @@ import model.Model;
 import model.Player;
 import model.board.BattleBoard;
 import model.board.BoardLocation;
-import model.cards.AgentUnitCard;
-import model.cards.EmpireUnitCard;
-import model.cards.RebelUnitCard;
-import model.cards.TacticsCard;
+import model.cards.*;
 import util.MyLists;
 import view.MultipleChoice;
-import view.MultipleChoiceAction;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PlayerActionState extends GameState {
     private static final int MAX_HAND_SIZE = 8;
+    private Set<Player> collaborativeDraw = new HashSet<>();
 
     @Override
     public GameState run(Model model) {
@@ -42,7 +41,6 @@ public class PlayerActionState extends GameState {
         multipleChoice.addOption("Increase Unrest", this::increaseUnrest);
         multipleChoice.addOption("Draw Turmoil Card", this::drawTurmoilCard);
         multipleChoice.promptAndDoAction(model, "Select a negative action:", current);
-
     }
 
     public void draw2RebelUnits(Model model, Player performer) {
@@ -95,12 +93,12 @@ public class PlayerActionState extends GameState {
         MultipleChoice multipleChoice = new MultipleChoice();
         multipleChoice.addOption("Move", this::movePlayer);
         addNonMoveActions(multipleChoice, model, current);
-        multipleChoice.promptAndDoAction(model, "Select an action:", current);
+        multipleChoice.promptAndDoAction(model, "Select an action for " + current.getName() + ":", current);
 
         if (multipleChoice.getSelectedOptionIndex() == 1) {
             MultipleChoice multipleChoice2 = new MultipleChoice();
             addNonMoveActions(multipleChoice2, model, current);
-            multipleChoice2.promptAndDoAction(model, "Select an action:", current);
+            multipleChoice2.promptAndDoAction(model, "Select an action for " + current.getName() + ":", current);
         } else {
             MultipleChoice multipleChoice2 = new MultipleChoice();
             multipleChoice2.addOption("Move", this::movePlayer);
@@ -164,8 +162,10 @@ public class PlayerActionState extends GameState {
        for (BoardLocation dest : destinations) {
             multipleChoice.addOption(dest.getName(),
                     (_, performer) -> {
+                        BoardLocation movedFrom = performer.getCurrentLocation();
                         performer.moveToLocation(dest);
                         println(model, performer.getName() + " moves to " + dest.getName() + ".");
+                        ShuttleCard.moveWithPlayer(model, performer, movedFrom, dest);
                     });
         }
         multipleChoice.promptAndDoAction(model, "Move to which location?", player);
@@ -178,7 +178,7 @@ public class PlayerActionState extends GameState {
     private void collaborativeDrawUnitCards(Model model, Player player) {
         MultipleChoice multipleChoice = new MultipleChoice();
         for (Player p : model.getPlayers()) {
-            if (p != player && isOnCentralia(model, p)) {
+            if (p != player && isOnCentralia(model, p) && !collaborativeDraw.contains(p)) {
                 multipleChoice.addOption(p.getName(), (model1, performer) -> drawCardsTogetherWith(model1, performer, p));
             }
         }
@@ -193,10 +193,12 @@ public class PlayerActionState extends GameState {
         drawThreeCards(model, performer);
         print(model, performer.getName() + "'s hand: ");
         performer.printHand(model.getScreenHandler());
+        collaborativeDraw.add(performer);
         if (other != null) {
             drawThreeCards(model, other);
             print(model, other.getName() + "'s hand: ");
             other.printHand(model.getScreenHandler());
+            collaborativeDraw.add(other);
             println(model, "It's still " + performer.getName() + "'s turn.");
         }
     }
@@ -210,6 +212,7 @@ public class PlayerActionState extends GameState {
                 performer2.drawTacticsCard(model2);
             });
         }
+        println(model, performer.getName() + " is about to draw cards.");
         multipleChoice.promptAndDoAction(model, "Select an option:", performer);
     }
 

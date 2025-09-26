@@ -6,6 +6,9 @@ import model.board.GameBoard;
 import model.cards.*;
 import model.states.GameState;
 import model.states.InitialGameState;
+import util.MyLists;
+import view.MultipleChoice;
+import view.MultipleChoiceAction;
 import view.ScreenHandler;
 
 import java.util.ArrayList;
@@ -188,9 +191,27 @@ public class Model {
     public void resolveBattle(BattleBoard bb) {
         screenHandler.println("== Resolving battle for " + bb.getName() + "==");
         bb.resolveYourself(this);
+        movePlayers(bb);
         gameData.gameBoard.replaceBattle(this, bb);
         addInitialRebelUnitsToBattle(bb);
         drawBoard();
+    }
+
+    private void movePlayers(BattleBoard bb) {
+        for (Player p : getPlayers()) {
+            if (p.getCurrentLocation() == bb) {
+                MultipleChoice multipleChoice = new MultipleChoice();
+                multipleChoice.addOption("To Centralia", (model, performer) -> performer.moveToLocation(model.getCentralia()));
+                EmpireUnitCard shuttle = MyLists.find(p.getUnitCardsInHand(), sc -> sc instanceof ShuttleCard);
+                if (shuttle != null) {
+                    ((ShuttleCard)shuttle).addMoveOptionsAfterBattle(this, multipleChoice, bb);
+                }
+                if (multipleChoice.getNumberOfChoices() > 1) {
+                    screenHandler.println(p.getName() + " has a " + shuttle.getName() + " and may play it to move to another location than Centralia.");
+                }
+                multipleChoice.promptAndDoAction(this, "Where do you want to move?", p);
+            }
+        }
     }
 
     public void advanceWarCounter() {

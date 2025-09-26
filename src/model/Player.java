@@ -2,6 +2,8 @@ package model;
 
 import model.board.BoardLocation;
 import model.cards.*;
+import util.MyLists;
+import util.MyStrings;
 import view.ScreenHandler;
 
 import java.util.*;
@@ -61,17 +63,13 @@ public class Player {
     }
 
     public void printHand(ScreenHandler screenHandler) {
-        StringBuilder bldr = new StringBuilder();
-        for (GameCard c : unitCardsInHand) {
-            bldr.append(c.getName()).append(", ");
-        }
-        for (GameCard c : tacticsCardsInHand) {
-            bldr.append(c.getName()).append(", ");
-        }
-        if (bldr.isEmpty()) {
+        List<GameCard> cards = new ArrayList<>();
+        cards.addAll(unitCardsInHand);
+        cards.addAll(tacticsCardsInHand);
+        if (cards.isEmpty()) {
             screenHandler.println("*None*");
         } else {
-            screenHandler.println(bldr.substring(0, bldr.length() - 2));
+            screenHandler.println(MyLists.commaAndJoin(cards, GameCard::getName));
         }
     }
 
