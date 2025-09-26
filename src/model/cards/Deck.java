@@ -32,4 +32,9 @@ public class Deck<T extends GameCard> {
     public T drawOne() {
         return cards.removeFirst();
     }
+
+
+    public boolean isEmpty() {
+        return size() == 0;
+    }
 }

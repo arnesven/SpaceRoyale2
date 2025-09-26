@@ -44,14 +44,18 @@ public class Model {
         screenHandler.println("Shuffling " + gameData.rebelUnitDeck.size() +
                 " Rebel Unit Cards into Rebel Forces Deck.");
         for (BattleBoard bb : gameData.gameBoard.getBattles()) {
-            screenHandler.println("Adding 3 Rebel Units to " + bb.getName() + ".");
-            for (int i = 0; i < 3; ++i) {
-                bb.addRebelCard(gameData.rebelUnitDeck.drawOne());
-            }
+            addInitialRebelUnitsToBattle(bb);
         }
         gameData.tacticsDeck = new TacticsDeck();
         screenHandler.println("Shuffling " + gameData.tacticsDeck.size() +
                 " Tactics Cards into a deck.");
+    }
+
+    private void addInitialRebelUnitsToBattle(BattleBoard bb) {
+        screenHandler.println("Adding 3 Rebel Units to " + bb.getName() + ".");
+        for (int i = 0; i < 3; ++i) {
+            bb.addRebelCard(gameData.rebelUnitDeck.drawOne());
+        }
     }
 
     public void setUpBoards() {
@@ -122,7 +126,7 @@ public class Model {
     public void drawBoard() {
         screenHandler.clearDrawingArea();
         gameData.gameBoard.drawYourself(this);
-        gameData.gameTracks.drawYourself(this, 50, 10);
+        gameData.gameTracks.drawYourself(this, 44, 8);
         screenHandler.printDrawingArea();
     }
 
@@ -161,9 +165,11 @@ public class Model {
     }
 
     public void resolveBattle(BattleBoard bb) {
-        screenHandler.println("Resolving battle for " + bb.getName() + ".");
+        screenHandler.println("== Resolving battle for " + bb.getName() + "==");
         bb.resolveYourself(this);
         gameData.gameBoard.replaceBattle(this, bb);
+        addInitialRebelUnitsToBattle(bb);
+        drawBoard();
     }
 
     public void advanceWarCounter() {
@@ -172,5 +178,32 @@ public class Model {
 
     public void retreatWarCounter() {
         gameData.gameTracks.addToWar(-1);
+    }
+
+    public int getUnrest() {
+        return gameData.gameTracks.getUnrest();
+    }
+
+    public int getMaxUnrest() {
+        return GameTracks.getMaxUnrest();
+    }
+
+    public void advanceHealthCounter(int i) {
+        gameData.gameTracks.addToHealth(i);
+        if (gameData.gameTracks.isEmperorDeath()) {
+            // TODO: Emperor death ending.
+        }
+    }
+
+    public int getEmperorHealth() {
+        return gameData.gameTracks.getHealth();
+    }
+
+    public int getEmperorMaxHealth() {
+        return gameData.gameTracks.getMaxHealth();
+    }
+
+    public void incrementTurn() {
+        gameData.gameTracks.incrementTurn();
     }
 }

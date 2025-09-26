@@ -2,13 +2,15 @@ package model.states;
 
 import model.Model;
 
-import java.util.Scanner;
-
 public abstract class GameState {
     public abstract GameState run(Model model);
 
-    protected void print(Model model, String text) {
+    protected void println(Model model, String text) {
         model.getScreenHandler().println(text);
+    }
+
+    protected void print(Model model, String text) {
+        model.getScreenHandler().print(text);
     }
 
     protected int integerInput(Model model, String prompt) {

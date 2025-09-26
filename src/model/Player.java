@@ -4,9 +4,7 @@ import model.board.BoardLocation;
 import model.cards.*;
 import view.ScreenHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player {
     private final MyColors color;
@@ -56,6 +54,7 @@ public class Player {
     public void drawUnitCard(Model model) {
         // TODO: if unitDeck empty, draw from communal.
         this.unitCardsInHand.add(unitDeck.drawOne());
+        unitCardsInHand.sort(Comparator.comparingInt(UnitCard::getStrength));
     }
 
     public void printHand(ScreenHandler screenHandler) {
@@ -88,7 +87,11 @@ public class Player {
     }
 
     public void drawTacticsCard(Model model) {
-        this.tacticsCardsInHand.add(model.getTacticsDeck().drawOne());
+        if (!model.getTacticsDeck().isEmpty()) {
+            this.tacticsCardsInHand.add(model.getTacticsDeck().drawOne());
+        } else {
+            model.getScreenHandler().println("The Tactics Deck is empty!"); // TODO: reshuffle discard
+        }
     }
 
     public List<EmpireUnitCard> getUnitCardsInHand() {
@@ -105,5 +108,9 @@ public class Player {
 
     public void addToEmperorInfluence(int i) {
         emperorInfluence -= i;
+    }
+
+    public AlignmentCard getLoyaltyCard() {
+        return loyalty;
     }
 }

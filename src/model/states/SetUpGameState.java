@@ -11,16 +11,16 @@ public class SetUpGameState extends GameState {
 
     @Override
     public GameState run(Model model) {
-        print(model, "Setting up the game.");
-        print(model, "Setting up game boards.");
+        println(model, "Setting up the game.");
+        println(model, "Setting up game boards.");
         model.setUpBoards();
-        print(model, "Setting up players.");
+        println(model, "Setting up players.");
         model.setUpPlayers(noOfPlayers);
-        print(model, "Setting up tracks.");
+        println(model, "Setting up tracks.");
         model.setUpTracks();
-        print(model, "Setting up decks.");
+        println(model, "Setting up decks.");
         model.setUpDecks();
-        print(model,"Setup complete. Press enter to continue.");
+        println(model,"Setup complete. Press enter to continue.");
         waitForReturn(model);
         return new StartOfTurnState();
     }

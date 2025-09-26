@@ -5,6 +5,9 @@ import model.Player;
 import model.cards.EmpireUnitCard;
 import model.cards.RebelUnitCard;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SpaceBattleBoard extends BattleBoard {
@@ -29,6 +32,30 @@ public class SpaceBattleBoard extends BattleBoard {
         }
         model.getScreenHandler().println("The rebels are victorious in the space battle.");
         return false;
+    }
+
+    @Override
+    protected void checkForSpecialBattle(Model model, List<RebelUnitCard> groundUnits, boolean imperialWin) {
+        // TODO: Only if special battle did not occur.
+        List<BattleBoard> otherBattles = new ArrayList<>();
+        for (BattleBoard bb : model.getBattles()) {
+            if ((imperialWin && bb instanceof InvasionBattleBoard) ||
+                    (!imperialWin && bb instanceof DefendPlanetBattleBoard)) {
+                otherBattles.add(bb);
+            }
+        }
+        if (otherBattles.isEmpty()) {
+            return;
+        }
+        otherBattles.sort(Comparator.comparingInt(BattleBoard::getIdentifier));
+        BattleBoard destination = otherBattles.getFirst();
+        model.getScreenHandler().println("The ground units from the space battle are moved to " + destination.getName());
+        for (RebelUnitCard ru : groundUnits) {
+            destination.addRebelCard(ru);
+        }
+        if (destination.battleIsTriggered()) {
+            model.resolveBattle(destination);
+        }
     }
 
     @Override

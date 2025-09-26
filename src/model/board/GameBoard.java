@@ -31,7 +31,9 @@ public class GameBoard {
     public void replaceBattle(Model model, BattleBoard bb) {
         for (int i = 0; i < battles.length; ++i) {
             if (battles[i] == bb) {
-                battles[i] = bb.makeReplacement(model);
+                BattleBoard newBattleBoard = bb.makeReplacement(model);
+                model.getScreenHandler().println(battles[i].getName() + " is replaced by " + newBattleBoard.getName() + ".");
+                battles[i] = newBattleBoard;
                 break;
             }
         }

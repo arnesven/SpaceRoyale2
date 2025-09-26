@@ -18,14 +18,18 @@ public class MultipleChoice {
     }
 
     public void promptAndDoAction(Model model, String prompt, Player performer) {
-        model.getScreenHandler().println(prompt);
-        for (int i = 0; i < options.size(); ++i) {
-            model.getScreenHandler().println("[" + (i+1) + "] " + options.get(i));
+        if (options.size() == 1) {
+            choice = 1;
+        } else {
+            model.getScreenHandler().println(prompt);
+            for (int i = 0; i < options.size(); ++i) {
+                model.getScreenHandler().println("[" + (i + 1) + "] " + options.get(i));
+            }
+            do {
+                this.choice = model.getScreenHandler().integerInput();
+            } while (choice < 1 || choice > options.size());
         }
-        do {
-            this.choice = model.getScreenHandler().integerInput();
-        } while (choice < 1 || choice > options.size());
-        actions.get(choice-1).execute(model, performer);
+        executeOption(model, performer, choice);
     }
 
     public int noOfChoices() {
@@ -34,5 +38,14 @@ public class MultipleChoice {
 
     public int getSelectedOptionIndex() {
         return choice;
+    }
+
+    public void removeSelectedOption() {
+        options.remove(choice-1);
+        actions.remove(choice-1);
+    }
+
+    public void executeOption(Model model, Player performer, int choice) {
+        actions.get(choice-1).execute(model, performer);
     }
 }

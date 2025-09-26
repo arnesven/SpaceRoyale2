@@ -17,15 +17,17 @@ public class PlayerActionState extends GameState {
 
         for (int i = 0; i < model.getPlayers().size(); ++i) {
             Player current = model.getCurrentPlayer();
-            model.getScreenHandler().println(current.getName() + "'s turn. Card's in hand: ");
+            println(model, current.getName() + "'s turn. Card's in hand: ");
             current.printHand(model.getScreenHandler());
+            println(model, "   Loyalty: " + current.getLoyaltyCard().getName());
             doNegativeAction(model, current);
             doPlayerAction(model, current);
-
+            drawThreeCards(model, current);
+            // TODO: Discard down to 8 cards in hand
             model.stepCurrentPlayer();
             model.drawBoard();
         }
-        return null;
+        return new EmperorHealthDeclineState();
     }
 
     private void doNegativeAction(Model model, Player current) {
@@ -38,7 +40,7 @@ public class PlayerActionState extends GameState {
     }
 
     public void draw2RebelUnits(Model model, Player performer) {
-        model.getScreenHandler().println(performer.getName() + " draws 2 Rebel Units from the deck.");
+        println(model, performer.getName() + " draws 2 Rebel Units from the deck.");
         List<RebelUnitCard> cards = new ArrayList<>();
         cards.add(model.getRebelUnitDeck().drawOne());
         cards.add(model.getRebelUnitDeck().drawOne());
@@ -52,17 +54,31 @@ public class PlayerActionState extends GameState {
                 multipleChoice.addOption(bb.getName(),
                         (_, _) -> {
                             bb.addRebelCard(cards.get(finalI));
-                            if (bb.battleIsTriggered()) {
-                                model.resolveBattle(bb);
-                            }
                         });
             }
             multipleChoice.promptAndDoAction(model, prompt, performer);
+        }
+        checkForTriggeredBattles(model, performer);
+    }
+
+    private void checkForTriggeredBattles(Model model, Player player) {
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (BattleBoard bb : model.getBattles()) {
+            if (bb.battleIsTriggered()) {
+                multipleChoice.addOption(bb.getName(), (Model m, Player p) -> {
+                    m.resolveBattle(bb);
+                });
+            }
+        }
+        while (multipleChoice.noOfChoices() > 0) {
+            multipleChoice.promptAndDoAction(model, "There are multiple battles which need to be resolved. Which one would you like to resolve first?", player);
+            multipleChoice.removeSelectedOption();
         }
     }
 
     private void increaseUnrest(Model model, Player player) {
         model.increaseUnrest(1);
+        println(model, "Unrest is now at " + model.getUnrest() + "/" + model.getMaxUnrest());
     }
 
     private void drawTurmoilCard(Model model, Player player) {
@@ -100,7 +116,7 @@ public class PlayerActionState extends GameState {
     }
 
     private void notYetImplemented(Model model, Player player) {
-        model.getScreenHandler().println("Not yet implemented!!!");
+        println(model, "Not yet implemented!!!");
     }
 
     private void addCardsToBattle(Model model, Player player) {
@@ -109,17 +125,17 @@ public class PlayerActionState extends GameState {
         do {
             MultipleChoice multipleChoice = new MultipleChoice();
             for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
-                multipleChoice.addOption(eu.getName(), (_, performer) -> {
+                multipleChoice.addOption(eu.getNameAndStrength(), (_, performer) -> {
                     bb.addEmpireUnit(eu);
                     performer.removeUnitCardFromHand(eu);
-                    if (bb.battleIsTriggered()) {
-                        model.resolveBattle(bb);
-                    }
                 });
             }
             multipleChoice.addOption("Done", (_,_) -> { done[0] = true; });
             multipleChoice.promptAndDoAction(model, "Which card do you wish to add to the battle?", player);
         } while (!done[0] && !player.getUnitCardsInHand().isEmpty());
+        if (bb.battleIsTriggered()) {
+            model.resolveBattle(bb);
+        }
     }
 
     private void movePlayer(Model model, Player player) {
@@ -135,7 +151,7 @@ public class PlayerActionState extends GameState {
             multipleChoice.addOption(dest.getName(),
                     (_, performer) -> {
                         performer.moveToLocation(dest);
-                        model.getScreenHandler().println(performer.getName() + " moves to " + dest.getName() + ".");
+                        println(model, performer.getName() + " moves to " + dest.getName() + ".");
                     });
         }
         multipleChoice.promptAndDoAction(model, "Move to which location?", player);
@@ -160,15 +176,26 @@ public class PlayerActionState extends GameState {
     }
 
     private void drawCardsTogetherWith(Model model, Player performer, Player other) {
+        drawThreeCards(model, performer);
+        print(model, performer.getName() + "'s hand: ");
+        performer.printHand(model.getScreenHandler());
+        if (other != null) {
+            drawThreeCards(model, other);
+            print(model, other.getName() + "'s hand: ");
+            other.printHand(model.getScreenHandler());
+            println(model, "It's still " + performer.getName() + "'s turn.");
+        }
+    }
+
+    private void drawThreeCards(Model model, Player performer) {
         MultipleChoice multipleChoice = new MultipleChoice();
         multipleChoice.addOption("3 Unit Cards", (model1, performer1) -> performer1.drawUnitCards(model1, 3));
-        multipleChoice.addOption("2 Unit Cards + 1 Tactics Card", (model2, performer2) -> {
-            performer2.drawUnitCards(model2, 2);
-            performer2.drawTacticsCard(model2);
-        });
-        multipleChoice.promptAndDoAction(model, "Select an option:", performer);
-        if (other != null) {
-            multipleChoice.promptAndDoAction(model, other.getName() + ", select an option:", other);
+        if (isOnCentralia(model, performer)) {
+            multipleChoice.addOption("2 Unit Cards + 1 Tactics Card", (model2, performer2) -> {
+                performer2.drawUnitCards(model2, 2);
+                performer2.drawTacticsCard(model2);
+            });
         }
+        multipleChoice.promptAndDoAction(model, "Select an option:", performer);
     }
 }

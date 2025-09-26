@@ -12,7 +12,7 @@ import java.util.List;
 
 public abstract class BattleBoard extends BoardLocation {
 
-    private static final int CARD_LIMIT = 6; // TODO: 8
+    private static final int CARD_LIMIT = 8;
     private final String name;
     private final char identifier;
     private List<RebelUnitCard> rebelUnits = new ArrayList<>();
@@ -65,8 +65,8 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void resolveYourself(Model model) {
-        model.getScreenHandler().println("Rebel Forces are: " + MyLists.commaAndJoin(rebelUnits, UnitCard::getNameAndStrength));
-        model.getScreenHandler().println("Empire Forces are: " + MyLists.commaAndJoin(empireUnits, UnitCard::getNameAndStrength));
+        model.getScreenHandler().println("Rebel Forces are: " + commaListOrNone(rebelUnits));
+        model.getScreenHandler().println("Empire Forces are: " + commaListOrNone(empireUnits));
 
         boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits);
         boolean empireWinsGroundDomain = resolveGroundDomain(model, rebelUnits, empireUnits);
@@ -83,10 +83,17 @@ public abstract class BattleBoard extends BoardLocation {
             }
             model.retreatWarCounter();
         }
-        checkForSpecialBattle(model, MyLists.filter(rebelUnits, UnitCard::isGroundUnit));
+        checkForSpecialBattle(model, MyLists.filter(rebelUnits, UnitCard::isGroundUnit), imperialWin);
     }
 
-    private void checkForSpecialBattle(Model model, List<RebelUnitCard> groundUnits) {
+    private String commaListOrNone(List<? extends UnitCard> units) {
+        if (units.isEmpty()) {
+            return "*None*";
+        }
+        return MyLists.commaAndJoin(units, UnitCard::getNameAndStrength);
+    }
+
+    protected void checkForSpecialBattle(Model model, List<RebelUnitCard> groundUnits, boolean empireWin) {
         // TODO: Battle at Rebel Stronghold or Battle of Centralia
     }
 
@@ -117,7 +124,7 @@ public abstract class BattleBoard extends BoardLocation {
 
     protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits) {
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
-        int empireGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
+        int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
         model.getScreenHandler().println("Ground total (R vs E): " + rebelGround + " vs " + empireGround);
         if (rebelGround > empireGround) {
             model.getScreenHandler().println("The rebels are victorious in the ground domain.");
