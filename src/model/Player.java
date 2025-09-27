@@ -69,12 +69,19 @@ public class Player {
         if (cards.isEmpty()) {
             screenHandler.println("*None*");
         } else {
-            if (!unitCardsInHand.isEmpty()) {
-                screenHandler.println(MyLists.frequencyList(unitCardsInHand, UnitCard::getNameAndStrength));
+            String unitString = MyLists.frequencyList(unitCardsInHand, UnitCard::getNameAndStrength);
+            String tacticsString = MyLists.commaAndJoin(tacticsCardsInHand, GameCard::getName);
+            String strToPrint;
+            if (!unitCardsInHand.isEmpty() && !tacticsCardsInHand.isEmpty()) {
+                strToPrint = unitString + ", " + tacticsString;
+            } else {
+                if (unitCardsInHand.isEmpty()) {
+                    strToPrint = tacticsString;
+                } else {
+                    strToPrint = unitString;
+                }
             }
-            if (!tacticsCardsInHand.isEmpty()) {
-                screenHandler.println(MyLists.commaAndJoin(tacticsCardsInHand, GameCard::getName));
-            }
+            screenHandler.println(strToPrint);
         }
     }
 

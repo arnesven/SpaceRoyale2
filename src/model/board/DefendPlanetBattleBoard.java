@@ -16,6 +16,11 @@ public class DefendPlanetBattleBoard extends BattleBoard {
     }
 
     @Override
+    protected boolean minesAreEffective(Model model) {
+        return false;
+    }
+
+    @Override
     protected boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGroundDomain) {
         if (empireWinsSpace || empireWinsGroundDomain) {
             if (!empireWinsSpace) {

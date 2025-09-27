@@ -70,8 +70,17 @@ public abstract class BattleBoard extends BoardLocation {
         AlignmentCard align = model.drawBattleChanceCard();
         model.getScreenHandler().println("Drawing 1 card from Battle Chance Deck: " + align.getName());
 
-        if (MyLists.any(rebelUnits, ru -> ru instanceof MinefieldUnitCard)) {
-
+        if (MyLists.any(rebelUnits, ru -> ru instanceof MinefieldUnitCard) && minesAreEffective(model)) {
+            List<EmpireUnitCard> cardsToDiscard = MyLists.filter(empireUnits,
+                    eu -> eu instanceof CruiserCard || eu instanceof BattleshipCard);
+            if (!cardsToDiscard.isEmpty()) {
+                model.getScreenHandler().println("The rebels' minefield destroys all imperial cruisers and battleships!");
+                model.getScreenHandler().println("Discarding " + MyLists.frequencyList(cardsToDiscard, GameCard::getName));
+            }
+            for (EmpireUnitCard ship : cardsToDiscard) {
+                empireUnits.remove(ship);
+                model.discardEmpireCards(List.of(ship));
+            }
         }
 
         boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits, align);
@@ -96,6 +105,10 @@ public abstract class BattleBoard extends BoardLocation {
         } else {
             discardRebelCards(model, rebelUnits, imperialWin);
         }
+    }
+
+    protected boolean minesAreEffective(Model model) {
+        return true;
     }
 
     protected void advanceWarCounter(Model model) {
