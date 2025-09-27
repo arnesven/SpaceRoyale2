@@ -70,6 +70,10 @@ public abstract class BattleBoard extends BoardLocation {
         AlignmentCard align = model.drawBattleChanceCard();
         model.getScreenHandler().println("Drawing 1 card from Battle Chance Deck: " + align.getName());
 
+        if (MyLists.any(rebelUnits, ru -> ru instanceof MinefieldUnitCard)) {
+
+        }
+
         boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits, align);
         boolean empireWinsGroundDomain = resolveGroundDomain(model, rebelUnits, empireUnits, align);
 

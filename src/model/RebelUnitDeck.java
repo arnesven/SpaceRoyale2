@@ -1,7 +1,6 @@
 package model;
 
-import model.cards.Deck;
-import model.cards.RebelUnitCard;
+import model.cards.*;
 import view.ScreenHandler;
 
 public class RebelUnitDeck extends Deck<RebelUnitCard> {
@@ -14,13 +13,13 @@ public class RebelUnitDeck extends Deck<RebelUnitCard> {
     private static final int NO_OF_DESTROYER_CARDS = 4;
     private static final int NO_OF_TITAN_CARDS = 3;
 
-    private static final RebelUnitCard DRONES = new RebelUnitCard("Drones", 1, false);
-    private static final RebelUnitCard REBEL_SOLDIERS = new RebelUnitCard("Rebel Soldiers", 2, true);
-    private static final RebelUnitCard MINEFIELD = new RebelUnitCard("Minefield", 0, false);
-    private static final RebelUnitCard FRIGATE = new RebelUnitCard("Frigate", 3, false);
-    private static final RebelUnitCard STAR_WARRIOR = new RebelUnitCard("Star Warrior", 4, true);
-    private static final RebelUnitCard DESTROYER = new RebelUnitCard("Destroyer", 5, false);
-    private static final RebelUnitCard TITAN = new RebelUnitCard("Titan", 7, false);
+    private static final RebelUnitCard DRONES = new DronesUnitCard();
+    private static final RebelUnitCard REBEL_SOLDIERS = new RebelSoldiersCard();
+    private static final RebelUnitCard MINEFIELD = new MinefieldUnitCard();
+    private static final RebelUnitCard FRIGATE = new FrigateUnitCard();
+    private static final RebelUnitCard STAR_WARRIOR = new StarWarriorUnitCard();
+    private static final RebelUnitCard DESTROYER = new DestroyerUnitCard();
+    private static final RebelUnitCard TITAN = new TitanUnitCard();
 
     public RebelUnitDeck() {
         addCopies(DRONES, NO_OF_DRONES_CARDS);
