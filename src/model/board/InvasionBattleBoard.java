@@ -7,8 +7,12 @@ import java.util.List;
 
 public class InvasionBattleBoard extends BattleBoard {
 
+    public InvasionBattleBoard(String name, char identifier) {
+        super(name, identifier);
+    }
+
     public InvasionBattleBoard(char identifier) {
-        super("Invasion", identifier);
+        this("Invasion", identifier);
     }
 
     @Override

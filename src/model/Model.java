@@ -164,8 +164,14 @@ public class Model {
         gameData.currentPlayer = gameData.players.get((index + 1) % gameData.players.size());
     }
 
-    public RebelUnitDeck getRebelUnitDeck() {
-        return gameData.rebelUnitDeck;
+    public RebelUnitCard drawRebelUnitCard() {
+        if (gameData.rebelUnitDeck.isEmpty()) {
+            for (RebelUnitCard c : gameData.rebelUnitDiscard) {
+                gameData.rebelUnitDeck.addCard(c);
+            }
+            gameData.rebelUnitDeck.shuffle();
+        }
+        return gameData.rebelUnitDeck.drawOne();
     }
 
     public BattleBoard[] getBattles() {
@@ -190,34 +196,15 @@ public class Model {
     }
 
     public void resolveBattle(BattleBoard bb) {
-        screenHandler.println("== Resolving battle for " + bb.getName() + "==");
+        screenHandler.println("== Resolving " + bb.getName() + " ==");
         bb.resolveYourself(this);
-        movePlayers(bb);
+        bb.movePlayersAfterBattle(this);
         BattleBoard newBattle = gameData.gameBoard.replaceBattle(this, bb);
         addInitialRebelUnitsToBattle(newBattle);
         drawBoard();
         for (BattleBoard chainedBattle : getBattles()) {
             if (chainedBattle.battleIsTriggered()) {
                 resolveBattle(chainedBattle);
-            }
-        }
-    }
-
-    private void movePlayers(BattleBoard bb) {
-        for (Player p : getPlayers()) {
-            if (p.getCurrentLocation() == bb) {
-                MultipleChoice multipleChoice = new MultipleChoice();
-                multipleChoice.addOption("To Centralia (keep Shuttle)", (model, performer) -> performer.moveToLocation(model.getCentralia()));
-                EmpireUnitCard shuttle = MyLists.find(p.getUnitCardsInHand(), sc -> sc instanceof ShuttleCard);
-                if (shuttle != null) {
-                    ((ShuttleCard)shuttle).addMoveOptionsAfterBattle(this, multipleChoice, bb);
-                }
-                if (multipleChoice.getNumberOfChoices() > 1) {
-                    screenHandler.println(p.getName() + " has a " + shuttle.getName() + " and may play it to move to another location than Centralia.");
-                } else {
-                    screenHandler.println(p.getName() + " moves to Centralia.");
-                }
-                multipleChoice.promptAndDoAction(this, "Where do you want to move?", p);
             }
         }
     }
@@ -286,5 +273,21 @@ public class Model {
 
     public int getWarCounter() {
         return gameData.gameTracks.getWar();
+    }
+
+    public boolean checkForBattleOfCentralia() {
+        return gameData.gameTracks.isBattleOfCentralia();
+    }
+
+    public boolean checkForBattleAtRebelStronghold() {
+        return gameData.gameTracks.isBattleAtTheRebelStronghold();
+    }
+
+    public void resetWarCounter() {
+        gameData.gameTracks.setWarCounter(0);
+    }
+
+    public void setGameOver(boolean b) {
+        gameIsOver = b;
     }
 }

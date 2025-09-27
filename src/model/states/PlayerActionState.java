@@ -46,8 +46,8 @@ public class PlayerActionState extends GameState {
     public void draw2RebelUnits(Model model, Player performer) {
         println(model, performer.getName() + " draws 2 Rebel Units from the deck.");
         List<RebelUnitCard> cards = new ArrayList<>();
-        cards.add(model.getRebelUnitDeck().drawOne());
-        cards.add(model.getRebelUnitDeck().drawOne());
+        cards.add(model.drawRebelUnitCard());
+        cards.add(model.drawRebelUnitCard());
 
         for (int i = 0; i < 2; ++i) {
             String prompt = "Where would you like to place the " +
@@ -113,7 +113,7 @@ public class PlayerActionState extends GameState {
             multipleChoice.addOption("Quell Unrest", this::notYetImplemented);
             multipleChoice.addOption("Attempt Arrest", this::notYetImplemented);
         } else if (!current.getUnitCardsInHand().isEmpty()) {
-            multipleChoice.addOption("Add Cards to Battle", this::addCardsToBattle);
+            multipleChoice.addOption("Add Cards to Battle", PlayerActionState::addCardsToBattle);
         }
         multipleChoice.addOption("Pass", (_, _) -> {});
     }
@@ -122,11 +122,11 @@ public class PlayerActionState extends GameState {
         println(model, "Not yet implemented!!!");
     }
 
-    private void addCardsToBattle(Model model, Player player) {
+    public static void addCardsToBattle(Model model, Player player) {
         BattleBoard bb = (BattleBoard) player.getCurrentLocation();
         EmpireUnitCard agent = MyLists.find(player.getUnitCardsInHand(), eu -> eu instanceof AgentUnitCard);
         if (agent != null) {
-            println(model, player.getName() + " has an Agent card and can play it to look at the Rebel Unit Cards on " + bb.getName() + ".");
+            model.getScreenHandler().println(player.getName() + " has an Agent card and can play it to look at the Rebel Unit Cards on " + bb.getName() + ".");
             MultipleChoice multipleChoice = new MultipleChoice();
             multipleChoice.addOption("Use Agent", (m, _) -> ((AgentUnitCard)agent).useToPeek(m, player, bb));
             multipleChoice.addOption("Skip", (_, _) -> {});
@@ -143,7 +143,7 @@ public class PlayerActionState extends GameState {
                 });
             }
             multipleChoice.addOption("Done", (_,_) -> { done[0] = true; });
-            multipleChoice.promptAndDoAction(model, "Which card do you wish to add to the battle?", player);
+            multipleChoice.promptAndDoAction(model, "Which card do you wish " + player.getName() + " to add to the battle?", player);
         } while (!done[0] && !player.getUnitCardsInHand().isEmpty());
         if (bb.battleIsTriggered()) {
             model.resolveBattle(bb);

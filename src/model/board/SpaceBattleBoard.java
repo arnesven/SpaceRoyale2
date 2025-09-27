@@ -35,20 +35,19 @@ public class SpaceBattleBoard extends BattleBoard {
     @Override
     protected boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGroundDomain) {
         if (empireWinsSpace) {
-            model.getScreenHandler().println("The Empire is victorious in the space battle.");
+            model.getScreenHandler().println("The Empire won the battle.");
             for (Player p : playersInBattle) {
                 model.getScreenHandler().println(p.getName() + " gains 1 Emperor Influence.");
                 p.addToEmperorInfluence(1);
             }
             return true;
         }
-        model.getScreenHandler().println("The rebels are victorious in the space battle.");
+        model.getScreenHandler().println("The rebels won the battle.");
         return false;
     }
 
     @Override
-    protected void endOfBattle(Model model, List<RebelUnitCard> rebelUnitCards, List<EmpireUnitCard> empireUnitCards, boolean imperialWin) {
-        // TODO: Only if special battle did not occur.
+    protected void discardRebelCards(Model model, List<RebelUnitCard> rebelUnitCards, boolean imperialWin) {
         List<BattleBoard> otherBattles = new ArrayList<>();
         for (BattleBoard bb : model.getBattles()) {
             if ((imperialWin && bb instanceof InvasionBattleBoard) ||
@@ -57,20 +56,24 @@ public class SpaceBattleBoard extends BattleBoard {
             }
         }
         otherBattles.remove(this);
-        model.discardEmpireCards(empireUnitCards);
-        List<RebelUnitCard> groundUnits = MyLists.filter(rebelUnitCards, UnitCard::isGroundUnit);
+        List<RebelUnitCard> groundUnits = sendUnitsToSpecialBattle(model, rebelUnitCards);
         if (otherBattles.isEmpty()) {
             model.getScreenHandler().println("Since there is no suitable battle for the rebel Ground units to go, they are discarded.");
-            model.discardRebelCards(rebelUnitCards);
+            model.discardRebelCards(groundUnits);
             return;
         }
-        model.discardRebelCards(MyLists.filter(rebelUnitCards, rebelUnitCard -> !rebelUnitCard.isGroundUnit()));
         otherBattles.sort(Comparator.comparingInt(BattleBoard::getIdentifier));
         BattleBoard destination = otherBattles.getFirst();
         model.getScreenHandler().println("The ground units from the space battle are moved to " + destination.getName());
         for (RebelUnitCard ru : groundUnits) {
             destination.addRebelCard(ru);
         }
+    }
+
+    @Override
+    protected List<RebelUnitCard> sendUnitsToSpecialBattle(Model model, List<RebelUnitCard> rebelUnits) {
+        model.discardRebelCards(MyLists.filter(rebelUnits, rebelUnitCard -> !rebelUnitCard.isGroundUnit()));
+        return MyLists.filter(rebelUnits, UnitCard::isGroundUnit);
     }
 
     @Override

@@ -6,6 +6,8 @@ public class GameTracks {
     public static final int MAX_GAME_TURN = 8;
     private static final int MAX_HEALTH = 14;
     private static final int MAX_UNREST = 10;
+    private static final int BATTLE_OF_CENTRALIA_SPACE = -6;
+    private static final int BATTLE_AT_REBEL_STRONGHOLD_SPACE = 6;
 
     private int turn;
     private int unrest;
@@ -16,7 +18,7 @@ public class GameTracks {
         this.turn = 1;
         this.unrest = 0;
         this.health = 0;
-        this.war = 1;
+        this.war = 0; // TODO: 0
     }
 
     public void printYourself(ScreenHandler screenHandler) {
@@ -89,5 +91,17 @@ public class GameTracks {
 
     public int getWar() {
         return war;
+    }
+
+    public boolean isBattleOfCentralia() {
+        return war == BATTLE_OF_CENTRALIA_SPACE;
+    }
+
+    public boolean isBattleAtTheRebelStronghold() {
+        return war == BATTLE_AT_REBEL_STRONGHOLD_SPACE;
+    }
+
+    public void setWarCounter(int i) {
+        war = i;
     }
 }

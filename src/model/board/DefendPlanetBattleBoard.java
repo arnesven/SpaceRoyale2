@@ -7,8 +7,12 @@ import view.MultipleChoice;
 import java.util.List;
 
 public class DefendPlanetBattleBoard extends BattleBoard {
+    public DefendPlanetBattleBoard(String name, char identifier) {
+        super(name, identifier);
+    }
+
     public DefendPlanetBattleBoard(char identifier) {
-        super("Defend Planet", identifier);
+        this("Defend Planet", identifier);
     }
 
     @Override

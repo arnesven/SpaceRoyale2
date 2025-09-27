@@ -2,11 +2,9 @@ package model.board;
 
 import model.Model;
 import model.Player;
-import model.cards.AlignmentCard;
-import model.cards.EmpireUnitCard;
-import model.cards.RebelUnitCard;
-import model.cards.UnitCard;
+import model.cards.*;
 import util.MyLists;
+import view.MultipleChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,22 +72,41 @@ public abstract class BattleBoard extends BoardLocation {
 
         boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits, align);
         boolean empireWinsGroundDomain = resolveGroundDomain(model, rebelUnits, empireUnits, align);
-        // TODO: Draw Battle Chance
 
         List<Player> playersInBattle = getPlayersInBattle(model);
         boolean imperialWin = battleSpecificResolve(model, playersInBattle, empireWinsSpace, empireWinsGroundDomain);
         if (imperialWin) {
-            model.advanceWarCounter();
-            model.getScreenHandler().println("The War counter advances to " + model.getWarCounter());
+            advanceWarCounter(model);
         } else {
+            retreatWarCounter(model);
             for (Player p : playersInBattle) {
                 model.getScreenHandler().println(p.getName() + " loses one Emperor Influence.");
                 p.addToEmperorInfluence(-1);
             }
-            model.retreatWarCounter();
-            model.getScreenHandler().println("The War counter retreats to " + model.getWarCounter());
         }
-        endOfBattle(model, rebelUnits, empireUnits, imperialWin);
+        model.discardEmpireCards(empireUnits);
+        if (model.checkForBattleOfCentralia()) {
+            new BattleOfCentralia(model, sendUnitsToSpecialBattle(model, rebelUnits)).resolveYourself(model);
+        } else if (model.checkForBattleAtRebelStronghold()) {
+            new BattleAtTheRebelStronghold(model, sendUnitsToSpecialBattle(model, rebelUnits)).resolveYourself(model);
+        } else {
+            discardRebelCards(model, rebelUnits, imperialWin);
+        }
+    }
+
+    protected void advanceWarCounter(Model model) {
+        model.advanceWarCounter();
+        model.getScreenHandler().println("The War counter advances to " + model.getWarCounter());
+    }
+
+    protected void retreatWarCounter(Model model) {
+        model.retreatWarCounter();
+        model.getScreenHandler().println("The War counter retreats to " + model.getWarCounter());
+    }
+
+    protected List<RebelUnitCard> sendUnitsToSpecialBattle(Model model, List<RebelUnitCard> rebelUnits) {
+        model.discardRebelCards(rebelUnits);
+        return new ArrayList<>();
     }
 
     private String freqListOrNone(List<? extends UnitCard> units) {
@@ -99,9 +116,8 @@ public abstract class BattleBoard extends BoardLocation {
         return MyLists.frequencyList(units, UnitCard::getNameAndStrength);
     }
 
-    protected void endOfBattle(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, boolean empireWin) {
+    protected void discardRebelCards(Model model, List<RebelUnitCard> rebelUnits, boolean empireWin) {
         model.discardRebelCards(rebelUnits);
-        model.discardEmpireCards(empireUnits);
     }
 
     private List<Player> getPlayersInBattle(Model model) {
@@ -151,5 +167,27 @@ public abstract class BattleBoard extends BoardLocation {
 
     public void printRebelUnits(Model model) {
         model.getScreenHandler().println("Rebel Units: " + freqListOrNone(rebelUnits));
+    }
+
+    public void movePlayersAfterBattle(Model model) {
+        List<Player> players = MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == this);
+        if (!players.isEmpty()) {
+            model.getScreenHandler().println("Moving players from " + this.getName() + ".");
+        }
+
+        for (Player p : players) {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            multipleChoice.addOption("To Centralia (keep Shuttle)", (m, performer) -> performer.moveToLocation(m.getCentralia()));
+            EmpireUnitCard shuttle = MyLists.find(p.getUnitCardsInHand(), sc -> sc instanceof ShuttleCard);
+            if (shuttle != null) {
+                ((ShuttleCard)shuttle).addMoveOptionsAfterBattle(model, multipleChoice, this);
+            }
+            if (multipleChoice.getNumberOfChoices() > 1) {
+                model.getScreenHandler().println(p.getName() + " has a " + shuttle.getName() + " and may play it to move to another location than Centralia.");
+            } else {
+                model.getScreenHandler().println(p.getName() + " moves to Centralia.");
+            }
+            multipleChoice.promptAndDoAction(model, "Where do you want to move?", p);
+        }
     }
 }
