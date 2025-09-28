@@ -140,4 +140,8 @@ public class Player {
     public void removeUnitCardFromHand(EmpireUnitCard eu) {
         unitCardsInHand.remove(eu);
     }
+
+    public void addCardToHand(EmpireUnitCard eu) {
+        unitCardsInHand.add(eu);
+    }
 }

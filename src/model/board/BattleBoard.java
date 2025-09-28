@@ -7,6 +7,7 @@ import util.MyLists;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class BattleBoard extends BoardLocation {
@@ -65,8 +66,11 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void resolveYourself(Model model) {
+        rebelUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
+        empireUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
         print(model, "Rebel Forces are: " + freqListOrNone(rebelUnits));
         print(model, "Empire Forces are: " + freqListOrNone(empireUnits));
+        printTallies(model);
 
         playEarlyTacticsCards(model);
 
@@ -97,6 +101,16 @@ public abstract class BattleBoard extends BoardLocation {
         } else {
             discardRebelCards(model, rebelUnits, imperialWin);
         }
+    }
+
+    private void printTallies(Model model) {
+        print(model, "Tallies:  Space  Ground");
+        int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
+        int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
+        print(model, String.format("%15d%8d", rebelSpace, rebelGround));
+        int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
+        int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
+        print(model, String.format("%15d%8d", empireSpace, empireGround));
     }
 
     private void playEarlyTacticsCards(Model model) {
@@ -258,6 +272,25 @@ public abstract class BattleBoard extends BoardLocation {
         model.discardRebelCards(cardsToDiscard);
         player.addToPopularInfluence(-1);
         print(model, player.getName() + " gets -1 Popular Influence.");
+    }
+
+    public void retreatPlayer(Model model, Player player) {
+        if (empireUnits.isEmpty()) {
+            print(model, player.getName() + " moves to Centralia.");
+            player.moveToLocation(model.getCentralia());
+            return;
+        }
+
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (EmpireUnitCard eu : empireUnits) {
+            multipleChoice.addOption(eu.getNameAndStrength(), (m, p) -> {
+                p.addCardToHand(eu);
+                print(m, p.getName() + " removes " + eu.getName() + " from the battle and puts in hand.");
+                print(m, p.getName() + " moves to Centralia.");
+                p.moveToLocation(m.getCentralia());
+            });
+        }
+        multipleChoice.promptAndDoAction(model, "Which card does " + player.getName() + " pick up from the battle?", player);
     }
 
     void print(Model model, String s) {

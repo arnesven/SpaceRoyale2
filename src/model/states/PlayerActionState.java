@@ -162,13 +162,15 @@ public class PlayerActionState extends GameState {
             destinations.add(model.getCentralia());
         }
        for (BoardLocation dest : destinations) {
-            multipleChoice.addOption(dest.getName(),
-                    (_, performer) -> {
-                        BoardLocation movedFrom = performer.getCurrentLocation();
-                        performer.moveToLocation(dest);
-                        println(model, performer.getName() + " moves to " + dest.getName() + ".");
-                        ShuttleCard.moveWithPlayer(model, performer, movedFrom, dest);
-                    });
+           if (dest != player.getCurrentLocation()) {
+               multipleChoice.addOption(dest.getName(),
+                       (_, performer) -> {
+                           BoardLocation movedFrom = performer.getCurrentLocation();
+                           performer.moveToLocation(dest);
+                           println(model, performer.getName() + " moves to " + dest.getName() + ".");
+                           ShuttleCard.moveWithPlayer(model, performer, movedFrom, dest);
+                       });
+           }
         }
         multipleChoice.promptAndDoAction(model, "Move to which location?", player);
     }
