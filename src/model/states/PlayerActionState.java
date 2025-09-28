@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PlayerActionState extends GameState {
-    private static final int MAX_HAND_SIZE = 8;
+    private static final int MAX_HAND_SIZE = 9;
     private Set<Player> collaborativeDraw = new HashSet<>();
 
     @Override

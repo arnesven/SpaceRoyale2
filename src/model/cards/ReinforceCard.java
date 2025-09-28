@@ -21,7 +21,11 @@ public class ReinforceCard extends TacticsCard {
 
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
-        model.getScreenHandler().println("Not yet implemented!");
+        if (player.getCurrentLocation() != battle) {
+            model.getScreenHandler().println(player.getName() + " moves to " + battle.getName() + ".");
+            player.moveToLocation(battle);
+        }
+        battle.reinforce(model, player);
     }
 
     @Override

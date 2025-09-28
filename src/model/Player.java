@@ -3,7 +3,6 @@ package model;
 import model.board.BoardLocation;
 import model.cards.*;
 import util.MyLists;
-import util.MyStrings;
 import view.ScreenHandler;
 
 import java.util.*;

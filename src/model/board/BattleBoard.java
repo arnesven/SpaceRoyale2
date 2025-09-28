@@ -3,6 +3,7 @@ package model.board;
 import model.Model;
 import model.Player;
 import model.cards.*;
+import model.states.PlayerActionState;
 import util.MyLists;
 import view.MultipleChoice;
 
@@ -107,10 +108,10 @@ public abstract class BattleBoard extends BoardLocation {
         print(model, "Tallies:  Space  Ground");
         int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
-        print(model, String.format("%15d%8d", rebelSpace, rebelGround));
+        print(model, String.format("Rebel %9d%8d", rebelSpace, rebelGround));
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
-        print(model, String.format("%15d%8d", empireSpace, empireGround));
+        print(model, String.format("Empire %8d%8d", empireSpace, empireGround));
     }
 
     private void playEarlyTacticsCards(Model model) {
@@ -154,12 +155,12 @@ public abstract class BattleBoard extends BoardLocation {
 
     protected void advanceWarCounter(Model model) {
         model.advanceWarCounter();
-        print(model, "The War counter advances to " + model.getWarCounter());
+        print(model, "The War counter advances to " + model.getWarCounter() + ".");
     }
 
     protected void retreatWarCounter(Model model) {
         model.retreatWarCounter();
-        print(model, "The War counter retreats to " + model.getWarCounter());
+        print(model, "The War counter retreats to " + model.getWarCounter() + ".");
     }
 
     protected List<RebelUnitCard> sendUnitsToSpecialBattle(Model model, List<RebelUnitCard> rebelUnits) {
@@ -291,6 +292,22 @@ public abstract class BattleBoard extends BoardLocation {
             });
         }
         multipleChoice.promptAndDoAction(model, "Which card does " + player.getName() + " pick up from the battle?", player);
+    }
+
+    public void reinforce(Model model, Player player) {
+        if (player.getUnitCardsInHand().isEmpty()) {
+            print(model, player.getName() + " has no cards to add to the battle.");
+            return;
+        }
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
+            multipleChoice.addOption(eu.getNameAndStrength(), (_, performer) -> {
+                this.addEmpireUnit(eu);
+                performer.removeUnitCardFromHand(eu);
+                print(model, player.getName() + " added " + eu.getName() + " to the battle.");
+            });
+        }
+        multipleChoice.promptAndDoAction(model, "Which card do you wish " + player.getName() + " to add to the battle?", player);
     }
 
     void print(Model model, String s) {
