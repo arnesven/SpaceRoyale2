@@ -16,4 +16,8 @@ public abstract class TacticsCard extends GameCard {
     public boolean canBePlayedOutsideOfBattle() {
         return false;
     }
+
+    public boolean playAfterBattle() {
+        return !playedAfterReveal();
+    }
 }

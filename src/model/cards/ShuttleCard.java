@@ -7,8 +7,6 @@ import model.board.BoardLocation;
 import util.MyLists;
 import view.MultipleChoice;
 
-import java.util.List;
-
 public class ShuttleCard extends EmpireUnitCard {
     public ShuttleCard() {
         super("Shuttle", 0, false);
@@ -17,6 +15,16 @@ public class ShuttleCard extends EmpireUnitCard {
     @Override
     public EmpireUnitCard copy() {
         return new ShuttleCard();
+    }
+
+    @Override
+    public boolean isSpaceUnit() {
+        return false;
+    }
+
+    @Override
+    public boolean isGroundUnit() {
+        return false;
     }
 
     public static void moveWithPlayer(Model model, Player performer, BoardLocation movedFrom, BoardLocation dest) {

@@ -6,6 +6,16 @@ public class MinefieldUnitCard extends RebelUnitCard {
     }
 
     @Override
+    public boolean isSpaceUnit() {
+        return false;
+    }
+
+    @Override
+    public boolean isGroundUnit() {
+        return false;
+    }
+
+    @Override
     public RebelUnitCard copy() {
         return new MinefieldUnitCard();
     }

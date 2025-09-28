@@ -23,10 +23,10 @@ public class PlayerActionState extends GameState {
         for (int i = 0; i < model.getPlayers().size(); ++i) {
             Player current = model.getCurrentPlayer();
             println(model, current.getName() + "'s turn. ");
-            println(model, "Location: " + current.getName() + ".");
+            println(model, "Location: " + current.getCurrentLocation().getName() + ".");
+            println(model, "Loyalty: " + current.getLoyaltyCard().getName());
             println(model, "Card's in hand: ");
             current.printHand(model.getScreenHandler());
-            println(model, "   Loyalty: " + current.getLoyaltyCard().getName());
             doNegativeAction(model, current);
             doPlayerAction(model, current);
             drawThreeCards(model, current);
@@ -105,7 +105,8 @@ public class PlayerActionState extends GameState {
             MultipleChoice multipleChoice2 = new MultipleChoice();
             multipleChoice2.addOption("Move", this::movePlayer);
             multipleChoice2.addOption("Stay in location", (_, _) -> {});
-            multipleChoice2.promptAndDoAction(model, "Do you want to move?", current);
+            multipleChoice2.promptAndDoAction(model, "Do you want to move from " +
+                    current.getCurrentLocation().getName() + "?", current);
         }
     }
 

@@ -86,6 +86,9 @@ public abstract class BattleBoard extends BoardLocation {
 
         List<Player> playersInBattle = getPlayersInBattle(model);
         boolean imperialWin = battleSpecificResolve(model, playersInBattle, empireWinsSpace, empireWinsGroundDomain);
+
+        playLateTacticsCards(model);
+
         if (imperialWin) {
             advanceWarCounter(model);
         } else {
@@ -106,13 +109,17 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     private void printTallies(Model model) {
+        printRebelTally(model);
+        int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
+        int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
+        print(model, String.format("Empire %8d%8d", empireSpace, empireGround));
+    }
+
+    public void printRebelTally(Model model) {
         print(model, "Tallies:  Space  Ground");
         int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
         print(model, String.format("Rebel %9d%8d", rebelSpace, rebelGround));
-        int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
-        int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
-        print(model, String.format("Empire %8d%8d", empireSpace, empireGround));
     }
 
     private void playEarlyTacticsCards(Model model) {
@@ -120,6 +127,22 @@ public abstract class BattleBoard extends BoardLocation {
             MultipleChoice multipleChoice = new MultipleChoice();
             for (TacticsCard tc : player.getTacticsCardsInHand()) {
                 if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playedAfterReveal()) {
+                    multipleChoice.addOption(tc.getName(), (m, p) -> {
+                        tc.resolve(model, p, this);
+                        player.discardCard(model, tc);
+                    });
+                }
+            }
+            multipleChoice.addOption("Pass", (_, _) -> {});
+            multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
+        }
+    }
+
+    private void playLateTacticsCards(Model model) {
+        for (Player player : MyLists.filter(model.getPlayers(), p -> !p.getTacticsCardsInHand().isEmpty())) {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            for (TacticsCard tc : player.getTacticsCardsInHand()) {
+                if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playAfterBattle()) {
                     multipleChoice.addOption(tc.getName(), (m, p) -> {
                         tc.resolve(model, p, this);
                         player.discardCard(model, tc);
@@ -189,7 +212,7 @@ public abstract class BattleBoard extends BoardLocation {
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
 
         print(model, "Space total (R vs E): " + rebelSpace + " vs " + empireSpace);
-        if (rebelSpace > empireSpace || MyLists.all(empireUnits, UnitCard::isGroundUnit)) {
+        if (rebelSpace > empireSpace || !MyLists.any(empireUnits, UnitCard::isSpaceUnit)) {
             print(model, "The rebels are victorious in the space domain.");
             return false;
         }
@@ -206,7 +229,7 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     private int getSpaceStrength(UnitCard unitCard) {
-        return unitCard.isGroundUnit() ? 0 : unitCard.getStrength();
+        return unitCard.isSpaceUnit() ? unitCard.getStrength() : 0;
     }
 
     private int getGroundStrength(UnitCard unitCard) {

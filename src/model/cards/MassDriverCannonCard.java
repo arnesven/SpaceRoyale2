@@ -20,7 +20,7 @@ public class MassDriverCannonCard extends TacticsCard {
 
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
-        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), ru -> !ru.isGroundUnit());
+        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), ru -> ru.isSpaceUnit());
         if (ground.isEmpty()) {
             model.getScreenHandler().println("There are no Space units to discard.");
             return;
