@@ -3,6 +3,7 @@ package model.cards;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import model.board.InvasionBattleBoard;
 
 public class HumanitarianAidCard extends TacticsCard {
     public HumanitarianAidCard() {
@@ -16,7 +17,12 @@ public class HumanitarianAidCard extends TacticsCard {
 
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
-        // TODO
+        if (battle instanceof InvasionBattleBoard) {
+            player.addToPopularInfluence(1);
+            model.getScreenHandler().println(player.getName() + " plays " + this.getName() + " to gain 1 Popular Influence.");
+        } else {
+            model.getScreenHandler().println(getName() + " has no effect in this type of battle.");
+        }
     }
 
     @Override
