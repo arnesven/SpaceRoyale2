@@ -143,4 +143,24 @@ public class Player {
     public void addCardToHand(EmpireUnitCard eu) {
         unitCardsInHand.add(eu);
     }
+
+    public void drawYourselfHorizontally(Model model, int x, int y) {
+        model.getScreenHandler().drawText(makeSimpleName() + " E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
+        model.getScreenHandler().drawText("EI:" + emperorInfluence + " PI:" + popularInfluence + " Deck:" + unitDeck.size(), x, y+1);
+    }
+
+    private String makeSimpleName() {
+        return getName().replace("General ", "").replace("Admiral ", "");
+    }
+
+    public void drawYourselfVertically(Model model, int x, int y) {
+        
+        model.getScreenHandler().drawText(makeSimpleName(), x, y);
+        model.getScreenHandler().drawText("E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y+1);
+        model.getScreenHandler().drawText("EI:" + emperorInfluence, x, y+2);
+        model.getScreenHandler().drawText("PI:" + popularInfluence, x, y+3);
+        model.getScreenHandler().drawText("Deck:", x, y+4);
+        model.getScreenHandler().drawText(" " + unitDeck.size(), x, y+5);
+
+    }
 }

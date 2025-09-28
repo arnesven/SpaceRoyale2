@@ -7,6 +7,7 @@ import model.cards.*;
 import model.states.GameState;
 import model.states.InitialGameState;
 import util.MyLists;
+import util.MyPair;
 import util.MyRandom;
 import view.MultipleChoice;
 import view.MultipleChoiceAction;
@@ -129,10 +130,36 @@ public class Model {
 
     public void drawBoard() {
         screenHandler.clearDrawingArea();
-        gameData.gameBoard.drawYourself(this);
+        drawPlayers(gameData.players);
+        gameData.gameBoard.drawYourself(this, 8, 2);
         drawDecks(20, 8);
         gameData.gameTracks.drawYourself(this, 48, 8);
         screenHandler.printDrawingArea();
+        screenHandler.println("");
+    }
+
+    private void drawPlayers(List<Player> players) {
+        List<MyPair<Integer, Integer>> bottomLocs = List.of(
+                new MyPair<>(48, 14),
+                new MyPair<>(24, 14),
+                new MyPair<>(0, 14));
+        for (int i = 0; i < 3 && i < players.size(); ++i) {
+            players.get(i).drawYourselfHorizontally(this, bottomLocs.get(i).first, bottomLocs.get(i).second);
+        }
+        List<Integer> sideLocs = List.of(7, 0);
+        for (int i = 3; i < 5 && i < players.size(); ++i) {
+            players.get(i).drawYourselfVertically(this, 0, sideLocs.get(i-3));
+        }
+
+        List<MyPair<Integer, Integer>> topLocs = List.of(
+                new MyPair<>(10, 0),
+                new MyPair<>(34, 0));
+        for (int i = 5; i < 7 && i < players.size(); ++i) {
+            players.get(i).drawYourselfHorizontally(this, topLocs.get(i-5).first, topLocs.get(i-5).second);
+        }
+        if (players.size() == 8) {
+            players.get(7).drawYourselfVertically(this, 64, 3);
+        }
     }
 
     private void drawDecks(int x, int y) {

@@ -17,11 +17,11 @@ public class GameBoard {
         return centralia;
     }
 
-    public void drawYourself(Model model) {
+    public void drawYourself(Model model, int xOff, int yOff) {
         for (int i = 0; i < battles.length; ++i) {
-            battles[i].drawYourself(model, 2 + 20 * i, 2);
+            battles[i].drawYourself(model, xOff + 20 * i, yOff);
         }
-        centralia.drawYourself(model, 2, 8);
+        centralia.drawYourself(model, xOff, yOff + 6);
     }
 
     public BattleBoard[] getBattles() {
