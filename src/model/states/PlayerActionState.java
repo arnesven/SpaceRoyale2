@@ -109,7 +109,9 @@ public class PlayerActionState extends GameState {
 
     private void addNonMoveActions(MultipleChoice multipleChoice, Model model, Player current) {
         if (isOnCentralia(model, current)) {
-            multipleChoice.addOption("Collaborative Draw Unit Cards", this::collaborativeDrawUnitCards);
+            if (!collaborativeDraw.contains(current)) {
+                multipleChoice.addOption("Collaborative Draw Unit Cards", this::collaborativeDrawUnitCards);
+            }
             multipleChoice.addOption("Quell Unrest", this::notYetImplemented);
             multipleChoice.addOption("Attempt Arrest", this::notYetImplemented);
         } else if (!current.getUnitCardsInHand().isEmpty()) {

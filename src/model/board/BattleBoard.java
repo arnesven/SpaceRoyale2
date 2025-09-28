@@ -65,13 +65,13 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void resolveYourself(Model model) {
-        model.getScreenHandler().println("Rebel Forces are: " + freqListOrNone(rebelUnits));
-        model.getScreenHandler().println("Empire Forces are: " + freqListOrNone(empireUnits));
+        print(model, "Rebel Forces are: " + freqListOrNone(rebelUnits));
+        print(model, "Empire Forces are: " + freqListOrNone(empireUnits));
 
         playEarlyTacticsCards(model);
 
         AlignmentCard align = model.drawBattleChanceCard();
-        model.getScreenHandler().println("Drawing 1 card from Battle Chance Deck: " + align.getName());
+        print(model, "Drawing 1 card from Battle Chance Deck: " + align.getName());
 
         resolveMinefields(model);
 
@@ -85,7 +85,7 @@ public abstract class BattleBoard extends BoardLocation {
         } else {
             retreatWarCounter(model);
             for (Player p : playersInBattle) {
-                model.getScreenHandler().println(p.getName() + " loses one Emperor Influence.");
+                print(model, p.getName() + " loses one Emperor Influence.");
                 p.addToEmperorInfluence(-1);
             }
         }
@@ -120,8 +120,8 @@ public abstract class BattleBoard extends BoardLocation {
             List<EmpireUnitCard> cardsToDiscard = MyLists.filter(empireUnits,
                     eu -> eu instanceof CruiserCard || eu instanceof BattleshipCard);
             if (!cardsToDiscard.isEmpty()) {
-                model.getScreenHandler().println("The rebels' minefield destroys all imperial cruisers and battleships!");
-                model.getScreenHandler().println("Discarding " + MyLists.frequencyList(cardsToDiscard, GameCard::getName));
+                print(model, "The rebels' minefield destroys all imperial cruisers and battleships!");
+                print(model, "Discarding " + MyLists.frequencyList(cardsToDiscard, GameCard::getName));
             }
             for (EmpireUnitCard ship : cardsToDiscard) {
                 empireUnits.remove(ship);
@@ -140,12 +140,12 @@ public abstract class BattleBoard extends BoardLocation {
 
     protected void advanceWarCounter(Model model) {
         model.advanceWarCounter();
-        model.getScreenHandler().println("The War counter advances to " + model.getWarCounter());
+        print(model, "The War counter advances to " + model.getWarCounter());
     }
 
     protected void retreatWarCounter(Model model) {
         model.retreatWarCounter();
-        model.getScreenHandler().println("The War counter retreats to " + model.getWarCounter());
+        print(model, "The War counter retreats to " + model.getWarCounter());
     }
 
     protected List<RebelUnitCard> sendUnitsToSpecialBattle(Model model, List<RebelUnitCard> rebelUnits) {
@@ -172,12 +172,12 @@ public abstract class BattleBoard extends BoardLocation {
         int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength) + getSpaceBonus(battleChance);
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
 
-        model.getScreenHandler().println("Space total (R vs E): " + rebelSpace + " vs " + empireSpace);
-        if (rebelSpace > empireSpace) {
-            model.getScreenHandler().println("The rebels are victorious in the space domain.");
+        print(model, "Space total (R vs E): " + rebelSpace + " vs " + empireSpace);
+        if (rebelSpace > empireSpace || MyLists.all(empireUnits, UnitCard::isGroundUnit)) {
+            print(model, "The rebels are victorious in the space domain.");
             return false;
         }
-        model.getScreenHandler().println("The empire is victorious in the space domain.");
+        print(model, "The empire is victorious in the space domain.");
         return true;
     }
 
@@ -200,23 +200,23 @@ public abstract class BattleBoard extends BoardLocation {
     protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, AlignmentCard battleChance) {
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength) + getGroundBonus(battleChance);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
-        model.getScreenHandler().println("Ground total (R vs E): " + rebelGround + " vs " + empireGround);
-        if (rebelGround > empireGround) {
-            model.getScreenHandler().println("The rebels are victorious in the ground domain.");
+        print(model, "Ground total (R vs E): " + rebelGround + " vs " + empireGround);
+        if (rebelGround > empireGround || !MyLists.any(empireUnits, UnitCard::isGroundUnit)) {
+            print(model, "The rebels are victorious in the ground domain.");
             return false;
         }
-        model.getScreenHandler().println("The empire are victorious in the ground domain.");
+        print(model, "The empire are victorious in the ground domain.");
         return true;
     }
 
     public void printRebelUnits(Model model) {
-        model.getScreenHandler().println("Rebel Units: " + freqListOrNone(rebelUnits));
+        print(model, "Rebel Units: " + freqListOrNone(rebelUnits));
     }
 
     public void movePlayersAfterBattle(Model model) {
         List<Player> players = MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == this);
         if (!players.isEmpty()) {
-            model.getScreenHandler().println("Moving players from " + this.getName() + ".");
+            print(model, "Moving players from " + this.getName() + ".");
         }
 
         for (Player p : players) {
@@ -227,9 +227,9 @@ public abstract class BattleBoard extends BoardLocation {
                 ((ShuttleCard)shuttle).addMoveOptionsAfterBattle(model, multipleChoice, this);
             }
             if (multipleChoice.getNumberOfChoices() > 1) {
-                model.getScreenHandler().println(p.getName() + " has a " + shuttle.getName() + " and may play it to move to another location than Centralia.");
+                print(model, p.getName() + " has a " + shuttle.getName() + " and may play it to move to another location than Centralia.");
             } else {
-                model.getScreenHandler().println(p.getName() + " moves to Centralia.");
+                print(model, p.getName() + " moves to Centralia.");
             }
             multipleChoice.promptAndDoAction(model, "Where do you want to move?", p);
         }
@@ -237,5 +237,30 @@ public abstract class BattleBoard extends BoardLocation {
 
     public void disableMines() {
         this.minesEffective = false;
+    }
+
+    public void useBombardment(Model model, Player player) {
+        List<RebelUnitCard> cardsToDiscard = new ArrayList<>();
+        List<RebelUnitCard> ground = MyLists.filter(rebelUnits, UnitCard::isGroundUnit);
+        if (ground.size() <= 3) {
+            cardsToDiscard.addAll(ground);
+        } else {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            for (RebelUnitCard ru : ground) {
+                multipleChoice.addOption(ru.getName(), (m, p) -> {cardsToDiscard.add(ru);});
+            }
+            multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);
+        }
+        for (RebelUnitCard ru : cardsToDiscard) {
+            print(model, "Discarding " + ru.getName() + ".");
+            rebelUnits.remove(ru);
+        }
+        model.discardRebelCards(cardsToDiscard);
+        player.addToPopularInfluence(-1);
+        print(model, player.getName() + " gets -1 Popular Influence.");
+    }
+
+    void print(Model model, String s) {
+        model.getScreenHandler().println(s);
     }
 }

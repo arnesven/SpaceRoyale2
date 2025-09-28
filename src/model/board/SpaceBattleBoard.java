@@ -83,4 +83,9 @@ public class SpaceBattleBoard extends BattleBoard {
         }
         return new DefendPlanetBattleBoard(getIdentifier());
     }
+
+    @Override
+    public void useBombardment(Model model, Player player) {
+        print(model, "Bombardment has no effect in Space battles.");
+    }
 }

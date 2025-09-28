@@ -16,7 +16,7 @@ public class BombardmentCard extends TacticsCard {
 
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
-        model.getScreenHandler().println("Not yet implemented!");
+        battle.useBombardment(model, player);
     }
 
     @Override
