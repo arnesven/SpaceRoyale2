@@ -85,7 +85,7 @@ public class SpaceBattleBoard extends BattleBoard {
     }
 
     @Override
-    public void useBombardment(Model model, Player player) {
-        print(model, "Bombardment has no effect in Space battles.");
+    public boolean canUseBombardment() {
+        return false;
     }
 }

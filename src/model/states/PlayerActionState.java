@@ -22,7 +22,9 @@ public class PlayerActionState extends GameState {
 
         for (int i = 0; i < model.getPlayers().size(); ++i) {
             Player current = model.getCurrentPlayer();
-            println(model, current.getName() + "'s turn. Card's in hand: ");
+            println(model, current.getName() + "'s turn. ");
+            println(model, "Location: " + current.getName() + ".");
+            println(model, "Card's in hand: ");
             current.printHand(model.getScreenHandler());
             println(model, "   Loyalty: " + current.getLoyaltyCard().getName());
             doNegativeAction(model, current);

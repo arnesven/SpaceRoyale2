@@ -8,7 +8,7 @@ public class RebelUnitDeck extends Deck<RebelUnitCard> {
     private static final int NO_OF_DRONES_CARDS = 8;
     private static final int NO_OF_REBEL_SOLDIERS_CARDS = 10;
     private static final int NO_OF_MINEFIELD_CARDS = 3;
-    private static final int NO_OF_FRIGATE_CARDS = 4;
+    private static final int NO_OF_FRIGATE_CARDS = 6;
     private static final int NO_OF_STAR_WARRIOR_CARDS = 3;
     private static final int NO_OF_DESTROYER_CARDS = 4;
     private static final int NO_OF_TITAN_CARDS = 3;

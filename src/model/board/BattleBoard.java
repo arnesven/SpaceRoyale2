@@ -10,6 +10,7 @@ import view.MultipleChoice;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public abstract class BattleBoard extends BoardLocation {
 
@@ -254,63 +255,27 @@ public abstract class BattleBoard extends BoardLocation {
         this.minesEffective = false;
     }
 
-    public void useBombardment(Model model, Player player) {
-        List<RebelUnitCard> cardsToDiscard = new ArrayList<>();
-        List<RebelUnitCard> ground = MyLists.filter(rebelUnits, UnitCard::isGroundUnit);
-        if (ground.size() <= 3) {
-            cardsToDiscard.addAll(ground);
-        } else {
-            MultipleChoice multipleChoice = new MultipleChoice();
-            for (RebelUnitCard ru : ground) {
-                multipleChoice.addOption(ru.getName(), (m, p) -> {cardsToDiscard.add(ru);});
-            }
-            multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);
-        }
-        for (RebelUnitCard ru : cardsToDiscard) {
-            print(model, "Discarding " + ru.getName() + ".");
-            rebelUnits.remove(ru);
-        }
-        model.discardRebelCards(cardsToDiscard);
-        player.addToPopularInfluence(-1);
-        print(model, player.getName() + " gets -1 Popular Influence.");
-    }
-
-    public void retreatPlayer(Model model, Player player) {
-        if (empireUnits.isEmpty()) {
-            print(model, player.getName() + " moves to Centralia.");
-            player.moveToLocation(model.getCentralia());
-            return;
-        }
-
-        MultipleChoice multipleChoice = new MultipleChoice();
-        for (EmpireUnitCard eu : empireUnits) {
-            multipleChoice.addOption(eu.getNameAndStrength(), (m, p) -> {
-                p.addCardToHand(eu);
-                print(m, p.getName() + " removes " + eu.getName() + " from the battle and puts in hand.");
-                print(m, p.getName() + " moves to Centralia.");
-                p.moveToLocation(m.getCentralia());
-            });
-        }
-        multipleChoice.promptAndDoAction(model, "Which card does " + player.getName() + " pick up from the battle?", player);
-    }
-
-    public void reinforce(Model model, Player player) {
-        if (player.getUnitCardsInHand().isEmpty()) {
-            print(model, player.getName() + " has no cards to add to the battle.");
-            return;
-        }
-        MultipleChoice multipleChoice = new MultipleChoice();
-        for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
-            multipleChoice.addOption(eu.getNameAndStrength(), (_, performer) -> {
-                this.addEmpireUnit(eu);
-                performer.removeUnitCardFromHand(eu);
-                print(model, player.getName() + " added " + eu.getName() + " to the battle.");
-            });
-        }
-        multipleChoice.promptAndDoAction(model, "Which card do you wish " + player.getName() + " to add to the battle?", player);
-    }
-
     void print(Model model, String s) {
         model.getScreenHandler().println(s);
+    }
+
+    public List<RebelUnitCard> getRebelUnits() {
+        return rebelUnits;
+    }
+
+    public List<EmpireUnitCard> getEmpireUnits() {
+        return empireUnits;
+    }
+
+    public void removeUnit(RebelUnitCard ru) {
+        rebelUnits.remove(ru);
+    }
+
+    public void removeUnit(EmpireUnitCard eu) {
+        rebelUnits.remove(eu);
+    }
+
+    public boolean canUseBombardment() {
+        return true;
     }
 }

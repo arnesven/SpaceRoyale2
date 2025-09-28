@@ -3,6 +3,10 @@ package model.cards;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import util.MyLists;
+import view.MultipleChoice;
+
+import java.util.List;
 
 public class MassDriverCannonCard extends TacticsCard {
     public MassDriverCannonCard() {
@@ -16,7 +20,20 @@ public class MassDriverCannonCard extends TacticsCard {
 
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
-        model.getScreenHandler().println("Not yet implemented!");
+        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), ru -> !ru.isGroundUnit());
+        if (ground.isEmpty()) {
+            model.getScreenHandler().println("There are no Space units to discard.");
+            return;
+        }
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (RebelUnitCard ru : ground) {
+            multipleChoice.addOption(ru.getName(), (m, p) -> {
+                model.getScreenHandler().println("Discarding " + ru.getName() + ".");
+                battle.removeUnit(ru);
+                model.discardRebelCards(List.of(ru));
+            });
+        }
+        multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);
     }
 
     @Override

@@ -3,6 +3,7 @@ package model.cards;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import view.MultipleChoice;
 
 public class ReinforceCard extends TacticsCard {
     public ReinforceCard() {
@@ -25,7 +26,19 @@ public class ReinforceCard extends TacticsCard {
             model.getScreenHandler().println(player.getName() + " moves to " + battle.getName() + ".");
             player.moveToLocation(battle);
         }
-        battle.reinforce(model, player);
+        if (player.getUnitCardsInHand().isEmpty()) {
+            model.getScreenHandler().println(player.getName() + " has no cards to add to the battle.");
+            return;
+        }
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
+            multipleChoice.addOption(eu.getNameAndStrength(), (_, performer) -> {
+                battle.addEmpireUnit(eu);
+                performer.removeUnitCardFromHand(eu);
+                model.getScreenHandler().println(player.getName() + " added " + eu.getName() + " to the battle.");
+            });
+        }
+        multipleChoice.promptAndDoAction(model, "Which card do you wish " + player.getName() + " to add to the battle?", player);
     }
 
     @Override
