@@ -28,6 +28,7 @@ public class ShuttleCard extends EmpireUnitCard {
                     multipleChoice.addOption("Use Shuttle", (m, p2) -> {
                         p2.moveToLocation(dest);
                         p2.discardCard(m, shuttle);
+                        model.getScreenHandler().println(p2.getName() + " moves to " + dest.getName() + ".");
                     });
                     multipleChoice.addOption("Skip", (_, _) -> {});
                     multipleChoice.promptAndDoAction(model, "Will " + p.getName() + " play a Shuttle to go with " +

@@ -14,15 +14,15 @@ public class TacticsDeck extends Deck<TacticsCard> {
     private static final int NO_OF_MINEFIELD_CODES_CARDS = 4;
     private static final int NO_OF_HUMANITARIAN_CARDS = 2;
 
-    private static final TacticsCard BOMBARDMENT_CARD = new TacticsCard("Bombardment");
-    private static final TacticsCard ALL_HAIL_THE_EMPEROR_CARD = new TacticsCard("All Hail the Emperor");
-    private static final TacticsCard FTL_RETREAT_CARD = new TacticsCard("FTL Retreat");
-    private static final TacticsCard REINFORCE_CARD = new TacticsCard("Reinforce");
-    private static final TacticsCard EVASIVE_MANEUVERS_CARD = new TacticsCard("Evasive Maneuvers");
-    private static final TacticsCard MASS_DRIVER_CANNON_CARD = new TacticsCard("Mass Driver Cannon");
-    private static final TacticsCard ZOTRIAN_ARMOR_CARD = new TacticsCard("Zotrian Armor");
-    private static final TacticsCard MINEFIELD_CODES_CARD = new TacticsCard("Minefield Codes");
-    private static final TacticsCard HUMANITARIAN_AID_CARD = new TacticsCard("Humanitarian Aid");
+    private static final TacticsCard BOMBARDMENT_CARD = new BombardmentCard();
+    private static final TacticsCard ALL_HAIL_THE_EMPEROR_CARD = new AllHailTheEmperorCard();
+    private static final TacticsCard FTL_RETREAT_CARD = new FTLRetreatCard();
+    private static final TacticsCard REINFORCE_CARD = new ReinforceCard();
+    private static final TacticsCard EVASIVE_MANEUVERS_CARD = new EvasiveManeuversCard();
+    private static final TacticsCard MASS_DRIVER_CANNON_CARD = new MassDriverCannonCard();
+    private static final TacticsCard ZOTRIAN_ARMOR_CARD = new ZotrianArmorCard();
+    private static final TacticsCard MINEFIELD_CODES_CARD = new MinefieldCodesCard();
+    private static final TacticsCard HUMANITARIAN_AID_CARD = new HumanitarianAidCard();
 
     public TacticsDeck() {
         addCopies(BOMBARDMENT_CARD, NO_OF_BOMBARDMENT_CARDS);

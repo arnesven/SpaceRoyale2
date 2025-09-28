@@ -29,7 +29,7 @@ public class InvasionBattleBoard extends BattleBoard {
             model.getScreenHandler().println("The Empire establish a blockade of the planet,");
             model.getScreenHandler().println("but the rebel forces hold out until a relief force can break the siege.");
         } else if (empireWinsGround) {
-            model.getScreenHandler().println("The Empire quickly land troops and overrun the planet.");
+            model.getScreenHandler().println("The Empire quickly lands troops and overrun the planet.");
             model.getScreenHandler().println("Their supply lines are however cut off by the rebel fleet which dominates the skies.");
         }
         model.getScreenHandler().println("The rebels have thwarted the imperial invasion.");

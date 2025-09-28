@@ -16,6 +16,7 @@ public abstract class BattleBoard extends BoardLocation {
     private final char identifier;
     private List<RebelUnitCard> rebelUnits = new ArrayList<>();
     private List<EmpireUnitCard> empireUnits = new ArrayList<>();
+    private boolean minesEffective = true;
 
     public BattleBoard(String name, char identifier) {
         this.name = name;
@@ -67,21 +68,12 @@ public abstract class BattleBoard extends BoardLocation {
         model.getScreenHandler().println("Rebel Forces are: " + freqListOrNone(rebelUnits));
         model.getScreenHandler().println("Empire Forces are: " + freqListOrNone(empireUnits));
 
+        playEarlyTacticsCards(model);
+
         AlignmentCard align = model.drawBattleChanceCard();
         model.getScreenHandler().println("Drawing 1 card from Battle Chance Deck: " + align.getName());
 
-        if (MyLists.any(rebelUnits, ru -> ru instanceof MinefieldUnitCard) && minesAreEffective(model)) {
-            List<EmpireUnitCard> cardsToDiscard = MyLists.filter(empireUnits,
-                    eu -> eu instanceof CruiserCard || eu instanceof BattleshipCard);
-            if (!cardsToDiscard.isEmpty()) {
-                model.getScreenHandler().println("The rebels' minefield destroys all imperial cruisers and battleships!");
-                model.getScreenHandler().println("Discarding " + MyLists.frequencyList(cardsToDiscard, GameCard::getName));
-            }
-            for (EmpireUnitCard ship : cardsToDiscard) {
-                empireUnits.remove(ship);
-                model.discardEmpireCards(List.of(ship));
-            }
-        }
+        resolveMinefields(model);
 
         boolean empireWinsSpace = resolveSpaceDomain(model, rebelUnits, empireUnits, align);
         boolean empireWinsGroundDomain = resolveGroundDomain(model, rebelUnits, empireUnits, align);
@@ -107,8 +99,43 @@ public abstract class BattleBoard extends BoardLocation {
         }
     }
 
+    private void playEarlyTacticsCards(Model model) {
+        for (Player player : MyLists.filter(model.getPlayers(), p -> !p.getTacticsCardsInHand().isEmpty())) {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            for (TacticsCard tc : player.getTacticsCardsInHand()) {
+                if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playedAfterReveal()) {
+                    multipleChoice.addOption(tc.getName(), (m, p) -> {
+                        tc.resolve(model, p, this);
+                        player.discardCard(model, tc);
+                    });
+                }
+            }
+            multipleChoice.addOption("Pass", (_, _) -> {});
+            multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
+        }
+    }
+
+    private void resolveMinefields(Model model) {
+        if (battleHasMinefields() && minesAreEffective(model)) {
+            List<EmpireUnitCard> cardsToDiscard = MyLists.filter(empireUnits,
+                    eu -> eu instanceof CruiserCard || eu instanceof BattleshipCard);
+            if (!cardsToDiscard.isEmpty()) {
+                model.getScreenHandler().println("The rebels' minefield destroys all imperial cruisers and battleships!");
+                model.getScreenHandler().println("Discarding " + MyLists.frequencyList(cardsToDiscard, GameCard::getName));
+            }
+            for (EmpireUnitCard ship : cardsToDiscard) {
+                empireUnits.remove(ship);
+                model.discardEmpireCards(List.of(ship));
+            }
+        }
+    }
+
+    public boolean battleHasMinefields() {
+        return MyLists.any(rebelUnits, ru -> ru instanceof MinefieldUnitCard);
+    }
+
     protected boolean minesAreEffective(Model model) {
-        return true;
+        return minesEffective;
     }
 
     protected void advanceWarCounter(Model model) {
@@ -206,5 +233,9 @@ public abstract class BattleBoard extends BoardLocation {
             }
             multipleChoice.promptAndDoAction(model, "Where do you want to move?", p);
         }
+    }
+
+    public void disableMines() {
+        this.minesEffective = false;
     }
 }
