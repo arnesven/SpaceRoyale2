@@ -46,7 +46,7 @@ public class DefendPlanetBattleBoard extends BattleBoard {
     }
 
     @Override
-    public BattleBoard makeReplacement(Model model) {
+    public BattleBoard flipBattleBoard() {
         if (getIdentifier() == 'C' || getIdentifier() == 'E') {
             return new SpaceBattleBoard(getIdentifier());
         }

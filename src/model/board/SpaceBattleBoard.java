@@ -77,7 +77,7 @@ public class SpaceBattleBoard extends BattleBoard {
     }
 
     @Override
-    public BattleBoard makeReplacement(Model model) {
+    public BattleBoard flipBattleBoard() {
         if (getIdentifier() == 'A' || getIdentifier() == 'D') {
             return new InvasionBattleBoard(getIdentifier());
         }

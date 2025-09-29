@@ -21,7 +21,7 @@ public class ZotrianArmorCard extends TacticsCard {
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
         List<EmpireUnitCard> cardsToPickFrom = MyLists.filter(battle.getEmpireUnits(),
-                eu -> eu instanceof ShuttleCard || eu instanceof FightersCard);
+                UnitCard::isSpaceUnit);
         if (cardsToPickFrom.isEmpty()) {
             model.getScreenHandler().println("There are no suitable cards for " + this.getName() + " to recover.");
             return;
@@ -35,10 +35,7 @@ public class ZotrianArmorCard extends TacticsCard {
                 p.addCardToHand(eu);
             });
         }
-        for (int i = 0; i < 3; ++i) {
-            multipleChoice.promptAndDoAction(model, "Which card do you want to pick up?", player);
-            multipleChoice.removeSelectedOption();
-        }
+        multipleChoice.promptAndDoAction(model, "Which card do you want to pick up?", player);
     }
 
     @Override

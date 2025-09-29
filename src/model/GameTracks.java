@@ -1,31 +1,31 @@
 package model;
 
+import model.board.BattleBoard;
+import model.tracks.WarTrack;
 import view.ScreenHandler;
 
 public class GameTracks {
     public static final int MAX_GAME_TURN = 8;
     private static final int MAX_HEALTH = 14;
     private static final int MAX_UNREST = 10;
-    private static final int BATTLE_OF_CENTRALIA_SPACE = -6;
-    private static final int BATTLE_AT_REBEL_STRONGHOLD_SPACE = 6;
 
     private int turn;
     private int unrest;
     private int health;
-    private int war;
+    private WarTrack war;
 
     public GameTracks(Model model) {
         this.turn = 1;
         this.unrest = 0;
         this.health = 0;
-        this.war = 0; // TODO: 0
+        this.war = new WarTrack();
     }
 
     public void printYourself(ScreenHandler screenHandler) {
         screenHandler.println("Current Turn: " + turn);
         screenHandler.println("Current Unrest: " + unrest + "/" + MAX_UNREST);
         screenHandler.println("Current Emperor Health: " + health + "/" + MAX_HEALTH);
-        screenHandler.println("Current War Advantage: " + war);
+        screenHandler.println("Current War Advantage: " + war.asString());
     }
 
     public int getTurn() {
@@ -36,7 +36,7 @@ public class GameTracks {
         model.getScreenHandler().drawText("Turn: " + turn, x, y);
         model.getScreenHandler().drawText("Unrest: " + unrest + "/" + MAX_UNREST, x, y+1);
         model.getScreenHandler().drawText("Emperor Health: " + health + " " + healthCategory(health), x, y+2);
-        model.getScreenHandler().drawText("War Advantage: " + war, x, y+3);
+        model.getScreenHandler().drawText("War Advantage: " + war.asString(), x, y+3);
     }
 
     private String healthCategory(int health) {
@@ -58,7 +58,7 @@ public class GameTracks {
     }
 
     public void addToWar(int i) {
-        war += i;
+        war.moveCounter(i);
     }
 
     public int getUnrest() {
@@ -87,21 +87,26 @@ public class GameTracks {
 
     public void incrementTurn() {
         turn++;
+        war.setTurn(turn);
     }
 
     public int getWar() {
-        return war;
+        return war.getCounter();
     }
 
     public boolean isBattleOfCentralia() {
-        return war == BATTLE_OF_CENTRALIA_SPACE;
+        return war.isBattleOfCentralia();
     }
 
     public boolean isBattleAtTheRebelStronghold() {
-        return war == BATTLE_AT_REBEL_STRONGHOLD_SPACE;
+        return war.isBattleAtRebelStronghold();
     }
 
     public void setWarCounter(int i) {
-        war = i;
+        war.setCounter(i);
+    }
+
+    public BattleBoard replaceBattleBoard(Model model, BattleBoard bb) {
+        return war.replaceBoard(bb);
     }
 }

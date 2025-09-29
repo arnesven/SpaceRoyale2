@@ -1,16 +1,20 @@
 package model.board;
 
 import model.Model;
+import model.tracks.WarTrack;
+
+import java.util.List;
 
 public class GameBoard {
     BoardLocation centralia = new CentraliaLocation();
     private final BattleBoard[] battles;
 
     public GameBoard() {
-        this.battles = new BattleBoard[3];
-        battles[0] = new InvasionBattleBoard('A');
-        battles[1] = new DefendPlanetBattleBoard('B');
-        battles[2] = new SpaceBattleBoard('C');
+        battles = new BattleBoard[3];
+        List<BattleBoard> neutrals = WarTrack.getNeutralBattleBoards();
+        for (int i = 0; i < battles.length; ++i) {
+            battles[i] = neutrals.get(i);
+        }
     }
 
     public BoardLocation getCentralia() {
@@ -31,8 +35,7 @@ public class GameBoard {
     public BattleBoard replaceBattle(Model model, BattleBoard bb) {
         for (int i = 0; i < battles.length; ++i) {
             if (battles[i] == bb) {
-                BattleBoard newBattleBoard = bb.makeReplacement(model);
-                model.getScreenHandler().println(battles[i].getName() + " is replaced by " + newBattleBoard.getName() + ".");
+                BattleBoard newBattleBoard = model.makeBattleBoardReplacement(model, bb);
                 battles[i] = newBattleBoard;
                 return newBattleBoard;
             }

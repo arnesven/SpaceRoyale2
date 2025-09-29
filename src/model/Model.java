@@ -227,6 +227,11 @@ public class Model {
         bb.resolveYourself(this);
         bb.movePlayersAfterBattle(this);
         BattleBoard newBattle = gameData.gameBoard.replaceBattle(this, bb);
+        if (bb.getIdentifier() == newBattle.getIdentifier()) {
+            screenHandler.println(bb.getName() + " is flipped to other side; " + newBattle.getName() + ".");
+        } else {
+            screenHandler.println(bb.getName() + " is obsolete. Replaced by " + newBattle.getName() + ".");
+        }
         addInitialRebelUnitsToBattle(newBattle);
         drawBoard();
         for (BattleBoard chainedBattle : getBattles()) {
@@ -316,5 +321,9 @@ public class Model {
 
     public void setGameOver(boolean b) {
         gameIsOver = b;
+    }
+
+    public BattleBoard makeBattleBoardReplacement(Model model, BattleBoard bb) {
+        return gameData.gameTracks.replaceBattleBoard(model, bb);
     }
 }

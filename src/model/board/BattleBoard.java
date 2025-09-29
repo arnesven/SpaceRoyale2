@@ -3,14 +3,12 @@ package model.board;
 import model.Model;
 import model.Player;
 import model.cards.*;
-import model.states.PlayerActionState;
 import util.MyLists;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public abstract class BattleBoard extends BoardLocation {
 
@@ -32,7 +30,7 @@ public abstract class BattleBoard extends BoardLocation {
 
     protected abstract boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGround);
 
-    public abstract BattleBoard makeReplacement(Model model);
+    public abstract BattleBoard flipBattleBoard();
 
     @Override
     public final String getName() {
