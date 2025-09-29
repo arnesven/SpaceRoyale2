@@ -6,11 +6,7 @@ import model.board.GameBoard;
 import model.cards.*;
 import model.states.GameState;
 import model.states.InitialGameState;
-import util.MyLists;
 import util.MyPair;
-import util.MyRandom;
-import view.MultipleChoice;
-import view.MultipleChoiceAction;
 import view.ScreenHandler;
 
 import java.util.ArrayList;
@@ -133,7 +129,7 @@ public class Model {
         screenHandler.clearDrawingArea();
         drawPlayers(gameData.players);
         gameData.gameBoard.drawYourself(this, 8, 2);
-        drawDecks(20, 8);
+        drawDecks(22, 8);
         gameData.gameTracks.drawYourself(this, 48, 8);
         screenHandler.printDrawingArea();
         screenHandler.println("");
@@ -278,9 +274,12 @@ public class Model {
     }
 
     public EmpireUnitCard drawCommunalEmpireUnitCard() {
-        if (gameData.commonEmpireUnitDeck == null) {
+        if (gameData.commonEmpireUnitDeck == null || gameData.commonEmpireUnitDeck.isEmpty()) {
             gameData.commonEmpireUnitDeck = new CommonEmpireUnitDeck(gameData.empireUnitDiscard);
             gameData.empireUnitDiscard.clear();
+        }
+        if (gameData.commonEmpireUnitDeck.isEmpty()) {
+            throw new DeckIsEmptyException();
         }
         return gameData.commonEmpireUnitDeck.drawOne();
     }
@@ -326,5 +325,9 @@ public class Model {
 
     public BattleBoard makeBattleBoardReplacement(Model model, BattleBoard bb) {
         return gameData.gameTracks.replaceBattleBoard(model, bb);
+    }
+
+    public BoardLocation getPrisonPlanet() {
+        return gameData.gameBoard.getPrisonPlanet();
     }
 }

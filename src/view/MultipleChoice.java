@@ -48,4 +48,8 @@ public class MultipleChoice {
     public void executeOption(Model model, Player performer, int choice) {
         actions.get(choice-1).execute(model, performer);
     }
+
+    public String getSelectedOptionName() {
+        return options.get(choice-1);
+    }
 }

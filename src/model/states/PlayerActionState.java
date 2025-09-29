@@ -4,6 +4,7 @@ import model.Model;
 import model.Player;
 import model.board.BattleBoard;
 import model.board.BoardLocation;
+import model.board.PrisonPlanetLocation;
 import model.cards.*;
 import util.MyLists;
 import view.MultipleChoice;
@@ -27,7 +28,9 @@ public class PlayerActionState extends GameState {
             println(model, "Loyalty: " + current.getLoyaltyCard().getName());
             println(model, "Cards in hand: ");
             current.printHand(model.getScreenHandler());
-            doNegativeAction(model, current);
+            if (!isOnPrisonPlanet(current)) {
+                doNegativeAction(model, current);
+            }
             doPlayerAction(model, current);
             drawThreeCards(model, current);
             discardIfOverLimit(model, current);
@@ -93,17 +96,21 @@ public class PlayerActionState extends GameState {
 
     private void doPlayerAction(Model model, Player current) {
         MultipleChoice multipleChoice = new MultipleChoice();
-        multipleChoice.addOption("Move", this::movePlayer);
+        if (!isOnPrisonPlanet(current)) {
+            multipleChoice.addOption("Move", this::movePlayer);
+        }
         addNonMoveActions(multipleChoice, model, current);
         multipleChoice.promptAndDoAction(model, "Select an action for " + current.getName() + ":", current);
 
-        if (multipleChoice.getSelectedOptionIndex() == 1) {
+        if (multipleChoice.getSelectedOptionName().equals("Move")) {
             MultipleChoice multipleChoice2 = new MultipleChoice();
             addNonMoveActions(multipleChoice2, model, current);
             multipleChoice2.promptAndDoAction(model, "Select an action for " + current.getName() + ":", current);
         } else {
             MultipleChoice multipleChoice2 = new MultipleChoice();
-            multipleChoice2.addOption("Move", this::movePlayer);
+            if (!isOnPrisonPlanet(current)) {
+                multipleChoice2.addOption("Move", this::movePlayer);
+            }
             multipleChoice2.addOption("Stay in location", (_, _) -> {});
             multipleChoice2.promptAndDoAction(model, "Do you want to move from " +
                     current.getCurrentLocation().getName() + "?", current);
@@ -118,15 +125,21 @@ public class PlayerActionState extends GameState {
             if (MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getCentralia()).size() > 1) {
                 multipleChoice.addOption("Quell Unrest", QuellUnrestAction::doAction);
             }
-            multipleChoice.addOption("Attempt Arrest", this::notYetImplemented);
+            multipleChoice.addOption("Attempt Arrest", ArrestAction::doAction);
+        } else if (isOnPrisonPlanet(current)) {
+            multipleChoice.addOption("Escape prison", this::notYetImplemented);
         } else if (!current.getUnitCardsInHand().isEmpty()) {
             multipleChoice.addOption("Add Cards to Battle", PlayerActionState::addCardsToBattle);
         }
         multipleChoice.addOption("Pass", (_, _) -> {});
     }
 
+    private boolean isOnPrisonPlanet(Player current) {
+        return current.getCurrentLocation() instanceof PrisonPlanetLocation;
+    }
+
     private void notYetImplemented(Model model, Player player) {
-        println(model, "Not yet implemented!!!");
+        println(model, "Not yet implemented!");
     }
 
     public static void addCardsToBattle(Model model, Player player) {

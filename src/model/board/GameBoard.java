@@ -8,6 +8,7 @@ import java.util.List;
 public class GameBoard {
     BoardLocation centralia = new CentraliaLocation();
     private final BattleBoard[] battles;
+    private BoardLocation prisonPlanet = new PrisonPlanetLocation();
 
     public GameBoard() {
         battles = new BattleBoard[3];
@@ -26,6 +27,7 @@ public class GameBoard {
             battles[i].drawYourself(model, xOff + 20 * i, yOff);
         }
         centralia.drawYourself(model, xOff, yOff + 6);
+        prisonPlanet.drawYourself(model, xOff, yOff + 9);
     }
 
     public BattleBoard[] getBattles() {
@@ -41,5 +43,9 @@ public class GameBoard {
             }
         }
         return null;
+    }
+
+    public BoardLocation getPrisonPlanet() {
+        return prisonPlanet;
     }
 }
