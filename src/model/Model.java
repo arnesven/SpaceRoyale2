@@ -129,6 +129,7 @@ public class Model {
     }
 
     public void drawBoard() {
+        screenHandler.println("");
         screenHandler.clearDrawingArea();
         drawPlayers(gameData.players);
         gameData.gameBoard.drawYourself(this, 8, 2);

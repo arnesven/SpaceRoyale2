@@ -115,7 +115,9 @@ public class PlayerActionState extends GameState {
             if (!collaborativeDraw.contains(current)) {
                 multipleChoice.addOption("Collaborative Draw Unit Cards", this::collaborativeDrawUnitCards);
             }
-            multipleChoice.addOption("Quell Unrest", this::notYetImplemented);
+            if (MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getCentralia()).size() > 1) {
+                multipleChoice.addOption("Quell Unrest", QuellUnrestAction::doAction);
+            }
             multipleChoice.addOption("Attempt Arrest", this::notYetImplemented);
         } else if (!current.getUnitCardsInHand().isEmpty()) {
             multipleChoice.addOption("Add Cards to Battle", PlayerActionState::addCardsToBattle);

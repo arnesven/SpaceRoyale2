@@ -50,7 +50,7 @@ public class GameTracks {
     }
 
     public void addToUnrest(int i) {
-        unrest += i;
+        unrest = Math.max(0, unrest + i);
     }
 
     public boolean isUnrestMaxedOut() {
