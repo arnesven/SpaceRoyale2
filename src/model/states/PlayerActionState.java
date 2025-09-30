@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PlayerActionState extends GameState {
-    private static final int MAX_HAND_SIZE = 9;
+    private static final int MAX_HAND_SIZE = 8;
     private Set<Player> collaborativeDraw = new HashSet<>();
 
     @Override
@@ -217,10 +217,10 @@ public class PlayerActionState extends GameState {
     }
 
     private void drawCardsTogetherWith(Model model, Player performer, Player other) {
-        drawThreeCards(model, performer);
+        drawTwoCards(model, performer);
         collaborativeDraw.add(performer);
         if (other != null) {
-            drawThreeCards(model, other);
+            drawTwoCards(model, other);
             collaborativeDraw.add(other);
             println(model, "It's still " + performer.getName() + "'s turn.");
         }
@@ -240,6 +240,18 @@ public class PlayerActionState extends GameState {
         } else {
             println(model, performer.getName() + " draws 3 cards.");
         }
+        multipleChoice.promptAndDoAction(model, "Select an option:", performer);
+        print(model, performer.getName() + "'s hand: ");
+        performer.printHand(model.getScreenHandler());
+    }
+
+    private void drawTwoCards(Model model, Player performer) {
+        MultipleChoice multipleChoice = new MultipleChoice();
+        multipleChoice.addOption("2 Unit Cards", (model1, performer1) -> performer1.drawUnitCards(model1, 2));
+        multipleChoice.addOption("1 Tactics Card", (model2, performer2) -> {
+            performer2.drawTacticsCard(model2);
+        });
+        println(model, performer.getName() + " is about to draw cards.");
         multipleChoice.promptAndDoAction(model, "Select an option:", performer);
         print(model, performer.getName() + "'s hand: ");
         performer.printHand(model.getScreenHandler());
