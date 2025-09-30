@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ArrestAction {
-    public static void doAction(Model model, Player player) {
+    public static void arrestAction(Model model, Player player) {
         Player[] targetedPlayer = new Player[1];
         MultipleChoice multipleChoice = new MultipleChoice();
         for (Player p : model.getPlayers()) {
@@ -28,15 +28,26 @@ public class ArrestAction {
         model.getScreenHandler().println(player.getName() + " is attempting to arrest " + targetedPlayer[0].getName() + ".");
         model.getScreenHandler().println("All players may contribute cards to this attempt.");
         model.getScreenHandler().println("Ship units help to enforce the arrest, ground units prevent it.");
+        boolean arrestSucceeded = arrestOrFleeAttempt(model, player, targetedPlayer[0], "is the target of the arrest");
+        if (arrestSucceeded) {
+            model.getScreenHandler().println("The arrest attempt is successful. " + targetedPlayer[0].getName() + " is moved to the Prison Planet!");
+            targetedPlayer[0].moveToLocation(model.getPrisonPlanet());
+        } else {
+            model.getScreenHandler().println("The arrest attempt has failed.");
+        }
+    }
+
+    private static boolean arrestOrFleeAttempt(Model model, Player initiator, Player target, String extraCardString) {
 
         List<EmpireUnitCard> contributedCards = new ArrayList<>();
         List<Player> players = new ArrayList<>();
-        int index = model.getPlayers().indexOf(player);
+        int index = model.getPlayers().indexOf(initiator);
         for (int i = 0; i < model.getPlayers().size(); ++i) {
             players.add(model.getPlayers().get(index));
             index = Arithmetics.incrementWithWrap(index, model.getPlayers().size());
         }
 
+        MultipleChoice multipleChoice;
         for (Player p : players) {
             multipleChoice = new MultipleChoice();
             for (EmpireUnitCard eu : p.getUnitCardsInHand()) {
@@ -48,8 +59,8 @@ public class ArrestAction {
             }
             multipleChoice.addOption("Pass", (_, _) -> {});
             multipleChoice.promptAndDoAction(model, "What card does " + p.getName() + " contribute?", p);
-            if (p == targetedPlayer[0] && multipleChoice.getSelectedOptionIndex() != multipleChoice.getNumberOfChoices()) {
-                model.getScreenHandler().println("Since " + p.getName() + " is the target of the arrest, one additional card may be played.");
+            if (p == target && multipleChoice.getSelectedOptionIndex() != multipleChoice.getNumberOfChoices()) {
+                model.getScreenHandler().println("Since " + p.getName() + " " + extraCardString + ", one additional card may be played.");
                 multipleChoice.removeSelectedOption();
                 multipleChoice.promptAndDoAction(model, "What card do you want to contribute?", p);
             }
@@ -68,12 +79,23 @@ public class ArrestAction {
         int spaceTotal = MyLists.filter(contributedCards, UnitCard::isSpaceUnit).size();
         int groundTotal = MyLists.filter(contributedCards, UnitCard::isGroundUnit).size();
         model.getScreenHandler().println("There are " + spaceTotal + " Space Units and " + groundTotal + " Ground Units.");
-        if (spaceTotal > groundTotal) {
-            model.getScreenHandler().println("The arrest attempt is successful. " + targetedPlayer[0].getName() + " is moved to the Prison Planet!");
-            targetedPlayer[0].moveToLocation(model.getPrisonPlanet());
-        } else {
-            model.getScreenHandler().println("The arrest attempt has failed.");
-        }
         model.discardEmpireCards(contributedCards);
+        if (spaceTotal > groundTotal) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void escapeFromPrison(Model model, Player player) {
+        model.getScreenHandler().println(player.getName() + " attempts to escape the Prison Planet.");
+        model.getScreenHandler().println("All players may contribute cards to this attempt.");
+        model.getScreenHandler().println("Ground units will help the escapee, space units will hinder the escapee.");
+        boolean arrestSucceeded = arrestOrFleeAttempt(model, player, player, "is the one attempting the escape");
+        if (arrestSucceeded) {
+            model.getScreenHandler().println("The escape attempt has failed.");
+        } else {
+            model.getScreenHandler().println("The escape attempt is successful. " + player.getName() + " escapes the Prison Planet!");
+            player.moveToLocation(model.getCentralia());
+        }
     }
 }

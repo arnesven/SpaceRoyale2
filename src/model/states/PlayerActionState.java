@@ -125,9 +125,9 @@ public class PlayerActionState extends GameState {
             if (MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getCentralia()).size() > 1) {
                 multipleChoice.addOption("Quell Unrest", QuellUnrestAction::doAction);
             }
-            multipleChoice.addOption("Attempt Arrest", ArrestAction::doAction);
+            multipleChoice.addOption("Attempt Arrest", ArrestAction::arrestAction);
         } else if (isOnPrisonPlanet(current)) {
-            multipleChoice.addOption("Escape prison", this::notYetImplemented);
+            multipleChoice.addOption("Escape prison", ArrestAction::escapeFromPrison);
         } else if (!current.getUnitCardsInHand().isEmpty()) {
             multipleChoice.addOption("Add Cards to Battle", PlayerActionState::addCardsToBattle);
         }
