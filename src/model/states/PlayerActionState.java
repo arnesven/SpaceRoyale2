@@ -112,7 +112,7 @@ public class PlayerActionState extends GameState {
                 multipleChoice2.addOption("Move", this::movePlayer);
             }
             multipleChoice2.addOption("Stay in location", (_, _) -> {});
-            multipleChoice2.promptAndDoAction(model, "Do you want to move from " +
+            multipleChoice2.promptAndDoAction(model, "Does " + current.getName() + " want to move from " +
                     current.getCurrentLocation().getName() + "?", current);
         }
     }
@@ -125,7 +125,12 @@ public class PlayerActionState extends GameState {
             if (MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getCentralia()).size() > 1) {
                 multipleChoice.addOption("Quell Unrest", QuellUnrestAction::doAction);
             }
-            multipleChoice.addOption("Attempt Arrest", ArrestAction::arrestAction);
+            if (ArrestAction.anybodyArrestable(model, current)) {
+                multipleChoice.addOption("Attempt Arrest", ArrestAction::arrestAction);
+            }
+            if (ArrestAction.anybodyOnPrisonPlanet(model)) {
+                multipleChoice.addOption("Release from prison", ArrestAction::releaseFromPrison);
+            }
         } else if (isOnPrisonPlanet(current)) {
             multipleChoice.addOption("Escape prison", ArrestAction::escapeFromPrison);
         } else if (!current.getUnitCardsInHand().isEmpty()) {

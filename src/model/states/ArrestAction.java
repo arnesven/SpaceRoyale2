@@ -15,10 +15,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class ArrestAction {
+
     public static void arrestAction(Model model, Player player) {
         Player[] targetedPlayer = new Player[1];
         MultipleChoice multipleChoice = new MultipleChoice();
-        for (Player p : model.getPlayers()) {
+        for (Player p : MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() != model.getPrisonPlanet())) {
             if (p != player) {
                 multipleChoice.addOption(p.getName(), (_, _) -> targetedPlayer[0] = p);
             }
@@ -86,16 +87,39 @@ public class ArrestAction {
         return false;
     }
 
-    public static void escapeFromPrison(Model model, Player player) {
-        model.getScreenHandler().println(player.getName() + " attempts to escape the Prison Planet.");
+    public static void releaseFromPrison(Model model, Player player) {
+        Player[] targetedPlayer = new Player[1];
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (Player p : MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getPrisonPlanet())) {
+            multipleChoice.addOption(p.getName(), (_, _) -> targetedPlayer[0] = p);
+        }
+        multipleChoice.promptAndDoAction(model, "Who do you want to attempt to break out of prison?", player);
+        model.getScreenHandler().println(player.getName() + " is attempting to break " + targetedPlayer[0].getName() + " out of prison.");
+        innerEscapeFromPrison(model, player, targetedPlayer[0]);
+    }
+
+    private static void innerEscapeFromPrison(Model model, Player initiator, Player player) {
         model.getScreenHandler().println("All players may contribute cards to this attempt.");
         model.getScreenHandler().println("Ground units will help the escapee, space units will hinder the escapee.");
-        boolean arrestSucceeded = arrestOrFleeAttempt(model, player, player, "is the one attempting the escape");
+        boolean arrestSucceeded = arrestOrFleeAttempt(model, initiator, player, "is the one attempting the escape");
         if (arrestSucceeded) {
             model.getScreenHandler().println("The escape attempt has failed.");
         } else {
             model.getScreenHandler().println("The escape attempt is successful. " + player.getName() + " escapes the Prison Planet!");
             player.moveToLocation(model.getCentralia());
         }
+    }
+
+    public static void escapeFromPrison(Model model, Player player) {
+        model.getScreenHandler().println(player.getName() + " attempts to escape the Prison Planet.");
+        innerEscapeFromPrison(model, player, player);
+    }
+
+    public static boolean anybodyOnPrisonPlanet(Model model) {
+        return MyLists.any(model.getPlayers(), p -> p.getCurrentLocation() == model.getPrisonPlanet());
+    }
+
+    public static boolean anybodyArrestable(Model model, Player current) {
+        return MyLists.any(model.getPlayers(), p -> p != current && p.getCurrentLocation() != model.getPrisonPlanet());
     }
 }
