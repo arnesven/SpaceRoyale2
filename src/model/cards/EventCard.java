@@ -3,17 +3,25 @@ package model.cards;
 import model.Model;
 import model.Player;
 
-public class EventCard extends GameCard {
-    public EventCard(String name) {
+public abstract class EventCard extends GameCard {
+    private final boolean isMandatory;
+    private final String description;
+
+    public EventCard(String name, boolean isMandatory, String description) {
         super(name);
+        this.description = description;
+        this.isMandatory = isMandatory;
     }
 
-    @Override
-    public GameCard copy() {
-        return new EventCard(getName());
+    public boolean staysInPlay() { return false;}
+
+    public abstract void resolve(Model model, Player player);
+
+    public String getDescription() {
+        return description;
     }
 
-    public void resolve(Model model, Player player) {
-        // TODO
+    public boolean isMandatory() {
+        return isMandatory;
     }
 }

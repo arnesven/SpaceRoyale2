@@ -5,9 +5,10 @@ import java.util.List;
 public class EventDeck extends Deck<EventCard> {
 
     public EventDeck() {
-        addCard(new EventCard("Rebel Logistics"));
-        addCard(new EventCard("Banding Together"));
-        addCard(new EventCard("Rebel Recruits"));
+        addCard(new RebelLogistics());
+        addCard(new BandingTogetherEventCard());
+        addCard(new RebelRecruitsEventCard());
+        shuffle();
     }
 
     public EventDeck(List<EventCard> cards) {

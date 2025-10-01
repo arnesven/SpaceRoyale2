@@ -46,6 +46,7 @@ public class PlayerActionState extends GameState {
         multipleChoice.addOption("Increase Unrest", this::increaseUnrest);
         multipleChoice.addOption("Draw Event Cards", this::drawEventCards);
         multipleChoice.promptAndDoAction(model, "Select a negative action:", current);
+        checkForTriggeredBattles(model, current);
     }
 
     public void draw2RebelUnits(Model model, Player performer) {
@@ -67,10 +68,9 @@ public class PlayerActionState extends GameState {
             }
             multipleChoice.promptAndDoAction(model, prompt, performer);
         }
-        checkForTriggeredBattles(model, performer);
     }
 
-    private void checkForTriggeredBattles(Model model, Player player) {
+    public static void checkForTriggeredBattles(Model model, Player player) {
         MultipleChoice multipleChoice = new MultipleChoice();
         for (BattleBoard bb : model.getBattles()) {
             if (bb.battleIsTriggered()) {
@@ -107,7 +107,11 @@ public class PlayerActionState extends GameState {
     private void playOneAndPutOtherBack(Model model, Player player, EventCard card1, EventCard card2) {
         model.putEventBackOnBottom(card2);
         card1.resolve(model, player);
-        model.discardEventCard(card1);
+        if (!card1.staysInPlay()) {
+            model.discardEventCard(card1);
+        } else {
+            println(model, card1.getName() + " stays in play.");
+        }
     }
 
     private void doPlayerAction(Model model, Player current) {

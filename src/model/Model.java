@@ -56,7 +56,7 @@ public class Model {
 
     private void addInitialRebelUnitsToBattle(BattleBoard bb) {
         screenHandler.println("Adding 3 Rebel Units to " + bb.getName() + ".");
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < gameData.initialRebelUnitRate; ++i) {
             bb.addRebelCard(gameData.rebelUnitDeck.drawOne());
         }
     }
@@ -347,5 +347,13 @@ public class Model {
 
     public void discardEventCard(EventCard card) {
         gameData.eventDiscard.add(card);
+    }
+
+    public void incrementInitialRebelUnitRate() {
+        gameData.initialRebelUnitRate++;
+    }
+
+    public int getInitialRebelUnitRate() {
+        return gameData.initialRebelUnitRate;
     }
 }
