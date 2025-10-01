@@ -24,4 +24,8 @@ public abstract class EventCard extends GameCard {
     public boolean isMandatory() {
         return isMandatory;
     }
+
+    public String getNameAndMandatory() {
+        return getName() + (isMandatory() ? " (mandatory)" : "");
+    }
 }

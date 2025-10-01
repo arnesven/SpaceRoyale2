@@ -32,7 +32,7 @@ public class Model {
         }
     }
 
-    private boolean gameIsOver() {
+    public boolean gameIsOver() {
         return gameIsOver;
     }
 
@@ -355,5 +355,9 @@ public class Model {
 
     public int getInitialRebelUnitRate() {
         return gameData.initialRebelUnitRate;
+    }
+
+    public void setUnrest(int i) {
+        gameData.gameTracks.setUnrest(i);
     }
 }

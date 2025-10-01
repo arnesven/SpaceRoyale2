@@ -109,4 +109,8 @@ public class GameTracks {
     public BattleBoard replaceBattleBoard(Model model, BattleBoard bb) {
         return war.replaceBoard(bb);
     }
+
+    public void setUnrest(int i) {
+        unrest = i;
+    }
 }

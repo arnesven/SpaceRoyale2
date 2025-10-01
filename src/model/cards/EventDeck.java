@@ -5,9 +5,14 @@ import java.util.List;
 public class EventDeck extends Deck<EventCard> {
 
     public EventDeck() {
-        addCard(new RebelLogistics());
-        addCard(new BandingTogetherEventCard());
-        addCard(new RebelRecruitsEventCard());
+        for (int i = 0; i < 3; ++i) {
+            addCard(new RebelLogistics());
+            addCard(new BandingTogetherEventCard());
+            addCard(new RebelRecruitsEventCard());
+        }
+        addCard(new ViolentProtestsEventCard());
+        addCard(new RiotsEventCard());
+        addCard(new BoilingPointEventCard());
         shuffle();
     }
 

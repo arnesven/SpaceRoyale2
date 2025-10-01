@@ -31,7 +31,13 @@ public class PlayerActionState extends GameState {
             if (!isOnPrisonPlanet(current)) {
                 doNegativeAction(model, current);
             }
+            if (model.gameIsOver()) {
+                break;
+            }
             doPlayerAction(model, current);
+            if (model.gameIsOver()) {
+                break;
+            }
             drawThreeCards(model, current);
             discardIfOverLimit(model, current);
             model.stepCurrentPlayer();
@@ -93,19 +99,33 @@ public class PlayerActionState extends GameState {
     private void drawEventCards(Model model, Player player) {
         EventCard card1 = model.drawEventCard();
         EventCard card2 = model.drawEventCard();
-        MultipleChoice multipleChoice = new MultipleChoice();
-        multipleChoice.addOption(card1.getName(), (m, p) -> {
-            playOneAndPutOtherBack(m, p, card1, card2);
+        println(model, "Drew " + card1.getNameAndMandatory() + " and " + card2.getNameAndMandatory() + ".");
+        if (card1.isMandatory()) {
+            resolveEventThenDiscard(model, player, card1);
+            resolveEventThenDiscard(model, player, card2);
+        } else if (card2.isMandatory()) {
+            resolveEventThenDiscard(model, player, card2);
+            resolveEventThenDiscard(model, player, card1);
+        } else {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            multipleChoice.addOption(card1.getName() + ": " + card1.getDescription(), (m, p) -> {
+                playOneAndPutOtherBack(m, p, card1, card2);
 
-        });
-        multipleChoice.addOption(card2.getName(), (m, p) -> {
-            playOneAndPutOtherBack(m, p, card2, card1);
-        });
-        multipleChoice.promptAndDoAction(model, "Which card do you want to play?", player);
+            });
+            multipleChoice.addOption(card2.getName() + ": " + card2.getDescription(), (m, p) -> {
+                playOneAndPutOtherBack(m, p, card2, card1);
+            });
+            multipleChoice.promptAndDoAction(model, "Which card do you want to play?", player);
+        }
     }
 
     private void playOneAndPutOtherBack(Model model, Player player, EventCard card1, EventCard card2) {
         model.putEventBackOnBottom(card2);
+        resolveEventThenDiscard(model, player, card1);
+    }
+
+    private void resolveEventThenDiscard(Model model, Player player, EventCard card1) {
+        model.getScreenHandler().println("Playing event " + card1.getName() + ".");
         card1.resolve(model, player);
         if (!card1.staysInPlay()) {
             model.discardEventCard(card1);
