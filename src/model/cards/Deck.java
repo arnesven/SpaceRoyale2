@@ -37,4 +37,8 @@ public class Deck<T extends GameCard> {
     public boolean isEmpty() {
         return size() == 0;
     }
+
+    public void putOnBottom(T card) {
+        cards.addLast(card);
+    }
 }

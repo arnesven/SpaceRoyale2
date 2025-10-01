@@ -18,4 +18,6 @@ public class GameData {
     public List<TacticsCard> tacticsDiscard = new ArrayList<>();
     public GameTracks gameTracks;
     public Player currentPlayer;
+    public EventDeck eventDeck;
+    public List<EventCard> eventDiscard = new ArrayList<>();
 }

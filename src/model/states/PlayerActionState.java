@@ -44,7 +44,7 @@ public class PlayerActionState extends GameState {
         MultipleChoice multipleChoice = new MultipleChoice();
         multipleChoice.addOption("Draw 2 Rebel Units", this::draw2RebelUnits);
         multipleChoice.addOption("Increase Unrest", this::increaseUnrest);
-        multipleChoice.addOption("Draw Turmoil Card", this::drawTurmoilCard);
+        multipleChoice.addOption("Draw Event Cards", this::drawEventCards);
         multipleChoice.promptAndDoAction(model, "Select a negative action:", current);
     }
 
@@ -90,8 +90,24 @@ public class PlayerActionState extends GameState {
         println(model, "Unrest is now at " + model.getUnrest() + "/" + model.getMaxUnrest());
     }
 
-    private void drawTurmoilCard(Model model, Player player) {
-        // TODO
+    private void drawEventCards(Model model, Player player) {
+        EventCard card1 = model.drawEventCard();
+        EventCard card2 = model.drawEventCard();
+        MultipleChoice multipleChoice = new MultipleChoice();
+        multipleChoice.addOption(card1.getName(), (m, p) -> {
+            playOneAndPutOtherBack(m, p, card1, card2);
+
+        });
+        multipleChoice.addOption(card2.getName(), (m, p) -> {
+            playOneAndPutOtherBack(m, p, card2, card1);
+        });
+        multipleChoice.promptAndDoAction(model, "Which card do you want to play?", player);
+    }
+
+    private void playOneAndPutOtherBack(Model model, Player player, EventCard card1, EventCard card2) {
+        model.putEventBackOnBottom(card2);
+        card1.resolve(model, player);
+        model.discardEventCard(card1);
     }
 
     private void doPlayerAction(Model model, Player current) {

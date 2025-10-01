@@ -50,6 +50,8 @@ public class Model {
         gameData.tacticsDeck = new TacticsDeck();
         screenHandler.println("Shuffling " + gameData.tacticsDeck.size() +
                 " Tactics Cards into a deck.");
+        gameData.eventDeck = new EventDeck();
+        screenHandler.println("Shuffling " + gameData.eventDeck.size() + " Event cards into a deck.");
     }
 
     private void addInitialRebelUnitsToBattle(BattleBoard bb) {
@@ -329,5 +331,21 @@ public class Model {
 
     public BoardLocation getPrisonPlanet() {
         return gameData.gameBoard.getPrisonPlanet();
+    }
+
+    public EventCard drawEventCard() {
+        if (gameData.eventDeck.isEmpty()) {
+            gameData.eventDeck = new EventDeck(gameData.eventDiscard);
+            gameData.eventDiscard.clear();
+        }
+        return gameData.eventDeck.drawOne();
+    }
+
+    public void putEventBackOnBottom(EventCard card) {
+        gameData.eventDeck.putOnBottom(card);
+    }
+
+    public void discardEventCard(EventCard card) {
+        gameData.eventDiscard.add(card);
     }
 }
