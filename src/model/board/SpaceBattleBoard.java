@@ -33,6 +33,11 @@ public class SpaceBattleBoard extends BattleBoard {
     }
 
     @Override
+    protected void upgradeStarWarrior(Model model) {
+        // Do nothing
+    }
+
+    @Override
     protected boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGroundDomain) {
         if (empireWinsSpace) {
             model.getScreenHandler().println("The Empire won the battle.");

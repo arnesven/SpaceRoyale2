@@ -6,6 +6,7 @@ import model.board.BattleBoard;
 import model.cards.GameCard;
 import model.cards.units.RebelUnitCard;
 import model.cards.units.UnitCard;
+import model.cards.units.UpgradeableRebelUnitCard;
 import util.MyLists;
 import view.MultipleChoice;
 
@@ -29,7 +30,7 @@ public class BombardmentCard extends TacticsCard {
             return;
         }
         List<RebelUnitCard> cardsToDiscard = new ArrayList<>();
-        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), UnitCard::isGroundUnit);
+        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), this::isDestroyableGroundUnit);
         if (ground.size() <= 3) {
             cardsToDiscard.addAll(ground);
         } else {
@@ -49,6 +50,16 @@ public class BombardmentCard extends TacticsCard {
         model.discardRebelCards(cardsToDiscard);
         player.addToPopularInfluence(-1);
         model.getScreenHandler().println(player.getName() + " gets -1 Popular Influence.");
+    }
+
+    private boolean isDestroyableGroundUnit(RebelUnitCard rebelUnitCard) {
+        if (!rebelUnitCard.isGroundUnit()) {
+            return false;
+        }
+        if (rebelUnitCard instanceof UpgradeableRebelUnitCard) {
+            return !((UpgradeableRebelUnitCard) rebelUnitCard).isUpgraded();
+        }
+        return true;
     }
 
     @Override

@@ -28,5 +28,6 @@ public class GameData {
     public Player currentPlayer;
     public EventDeck eventDeck;
     public List<EventCard> eventDiscard = new ArrayList<>();
+    public List<EventCard> eventCardsInPlay = new ArrayList<>();
     public int initialRebelUnitRate = 3;
 }

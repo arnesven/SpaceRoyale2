@@ -385,4 +385,8 @@ public class Model {
     public void addBattleChanceCard(AlignmentCard card) {
         gameData.battleChanceDeck.addCard(card);
     }
+
+    public List<EventCard> getEventCardsInPlay() {
+        return gameData.eventCardsInPlay;
+    }
 }

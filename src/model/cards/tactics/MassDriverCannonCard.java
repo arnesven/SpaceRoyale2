@@ -5,6 +5,7 @@ import model.Player;
 import model.board.BattleBoard;
 import model.cards.GameCard;
 import model.cards.units.RebelUnitCard;
+import model.cards.units.UpgradeableRebelUnitCard;
 import util.MyLists;
 import view.MultipleChoice;
 
@@ -22,7 +23,7 @@ public class MassDriverCannonCard extends TacticsCard {
 
     @Override
     public void resolve(Model model, Player player, BattleBoard battle) {
-        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), ru -> ru.isSpaceUnit());
+        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), this::isDestroyableSpaceUnit);
         if (ground.isEmpty()) {
             model.getScreenHandler().println("There are no Space units to discard.");
             return;
@@ -36,6 +37,16 @@ public class MassDriverCannonCard extends TacticsCard {
             });
         }
         multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);
+    }
+
+    private boolean isDestroyableSpaceUnit(RebelUnitCard rebelUnitCard) {
+        if (!rebelUnitCard.isSpaceUnit()) {
+            return false;
+        }
+        if (rebelUnitCard instanceof UpgradeableRebelUnitCard) {
+            return !((UpgradeableRebelUnitCard) rebelUnitCard).isUpgraded();
+        }
+        return true;
     }
 
     @Override

@@ -4,6 +4,9 @@ import model.Model;
 import model.Player;
 import model.cards.*;
 import model.cards.alignment.AlignmentCard;
+import model.cards.events.ChampionOfLightEventCard;
+import model.cards.events.EventCard;
+import model.cards.events.SuperTitanEventCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.*;
 import util.MyLists;
@@ -69,6 +72,8 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void resolveYourself(Model model) {
+        upgradeTitan(model);
+        upgradeStarWarrior(model);
         rebelUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
         empireUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
         print(model, "Rebel Forces are: " + freqListOrNone(rebelUnits));
@@ -100,12 +105,43 @@ public abstract class BattleBoard extends BoardLocation {
             }
         }
         model.discardEmpireCards(empireUnits);
+        resetUpgradedCards(model);
         if (model.checkForBattleOfCentralia()) {
             new BattleOfCentralia(model, sendUnitsToSpecialBattle(model, rebelUnits)).resolveYourself(model);
         } else if (model.checkForBattleAtRebelStronghold()) {
             new BattleAtTheRebelStronghold(model, sendUnitsToSpecialBattle(model, rebelUnits)).resolveYourself(model);
         } else {
             discardRebelCards(model, rebelUnits, imperialWin);
+        }
+    }
+
+    private void upgradeTitan(Model model) {
+        if (MyLists.any(model.getEventCardsInPlay(), ev -> ev instanceof SuperTitanEventCard)) {
+            RebelUnitCard titan = MyLists.find(rebelUnits, ru -> ru instanceof TitanUnitCard);
+            if (titan != null) {
+                ((TitanUnitCard)titan).upgrade();
+                model.getScreenHandler().println("Titan upgraded to " + titan.getName() + ".");
+                EventCard event = MyLists.find(model.getEventCardsInPlay(),ev -> ev instanceof SuperTitanEventCard);
+                model.discardEventCard(event);
+            }
+        }
+    }
+
+    protected void upgradeStarWarrior(Model model) {
+        if (MyLists.any(model.getEventCardsInPlay(), ev -> ev instanceof ChampionOfLightEventCard)) {
+            RebelUnitCard starWarrior = MyLists.find(rebelUnits, ru -> ru instanceof StarWarriorUnitCard);
+            if (starWarrior != null) {
+                ((StarWarriorUnitCard)starWarrior).upgrade();
+                model.getScreenHandler().println("Star warrior upgraded to " + starWarrior.getName() + ".");
+                EventCard event = MyLists.find(model.getEventCardsInPlay(), ev -> ev instanceof ChampionOfLightEventCard);
+                model.discardEventCard(event);
+            }
+        }
+    }
+
+    private void resetUpgradedCards(Model model) {
+        for (RebelUnitCard ru : MyLists.filter(rebelUnits, r -> r instanceof UpgradeableRebelUnitCard)) {
+            ((UpgradeableRebelUnitCard)ru).reset();
         }
     }
 
