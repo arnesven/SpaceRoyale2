@@ -41,12 +41,7 @@ public class ArrestAction {
     private static boolean arrestOrFleeAttempt(Model model, Player initiator, Player target, String extraCardString) {
 
         List<EmpireUnitCard> contributedCards = new ArrayList<>();
-        List<Player> players = new ArrayList<>();
-        int index = model.getPlayers().indexOf(initiator);
-        for (int i = 0; i < model.getPlayers().size(); ++i) {
-            players.add(model.getPlayers().get(index));
-            index = Arithmetics.incrementWithWrap(index, model.getPlayers().size());
-        }
+        List<Player> players = model.getPlayersStartingFrom(initiator);
 
         MultipleChoice multipleChoice;
         for (Player p : players) {

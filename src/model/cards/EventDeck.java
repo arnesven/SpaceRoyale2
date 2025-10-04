@@ -19,6 +19,7 @@ public class EventDeck extends Deck<EventCard> {
             addCard(new DisastrousMoraleEventCard());
             addCard(new RebelSabotageEventCard());
         }
+        addCard(new UntimelySummonEventCard());
         shuffle();
     }
 

@@ -6,6 +6,7 @@ import model.board.GameBoard;
 import model.cards.*;
 import model.states.GameState;
 import model.states.InitialGameState;
+import util.Arithmetics;
 import util.MyPair;
 import view.ScreenHandler;
 
@@ -359,5 +360,15 @@ public class Model {
 
     public void setUnrest(int i) {
         gameData.gameTracks.setUnrest(i);
+    }
+
+    public List<Player> getPlayersStartingFrom(Player initiator) {
+        List<Player> players = new ArrayList<>();
+        int index = getPlayers().indexOf(initiator);
+        for (int i = 0; i < getPlayers().size(); ++i) {
+            players.add(getPlayers().get(index));
+            index = Arithmetics.incrementWithWrap(index, getPlayers().size());
+        }
+        return players;
     }
 }
