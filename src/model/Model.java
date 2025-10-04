@@ -371,4 +371,8 @@ public class Model {
         }
         return players;
     }
+
+    public void addBattleChanceCard(AlignmentCard card) {
+        gameData.battleChanceDeck.addCard(card);
+    }
 }
