@@ -13,7 +13,11 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new ViolentProtestsEventCard());
         addCard(new RiotsEventCard());
         addCard(new BoilingPointEventCard());
-        addCard(new UnrelentingIllnessCard());
+        for (int i = 0; i < 2; ++i) {
+            addCard(new UnrelentingIllnessCard());
+            addCard(new StrategicBlunderEventCard());
+            addCard(new DisastrousMorale());
+        }
         shuffle();
     }
 

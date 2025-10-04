@@ -1,0 +1,31 @@
+package model.cards;
+
+import model.Model;
+import model.Player;
+import view.MultipleChoice;
+
+public class DisastrousMorale extends EventCard {
+    public DisastrousMorale() {
+        super("Disastrous Morale", false,
+                "Each player discards two Unit cards from their hand.");
+    }
+
+    @Override
+    public void resolve(Model model, Player player) {
+        for (Player p : model.getPlayers()) {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            for (EmpireUnitCard eu : p.getUnitCardsInHand()) {
+                multipleChoice.addOption(eu.getNameAndStrength(), (m, performer) -> performer.discardCard(m, eu));
+            }
+            for (int i = 0; i < 2 && !p.getUnitCardsInHand().isEmpty(); ++i) {
+                multipleChoice.promptAndDoAction(model, "Which card does " + p.getName() + " discard?", p);
+                multipleChoice.removeSelectedOption();
+            }
+        }
+    }
+
+    @Override
+    public GameCard copy() {
+        return new DisastrousMorale();
+    }
+}
