@@ -293,7 +293,7 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void removeUnit(EmpireUnitCard eu) {
-        rebelUnits.remove(eu);
+        empireUnits.remove(eu);
     }
 
     public boolean canUseBombardment() {
