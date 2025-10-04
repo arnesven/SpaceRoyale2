@@ -4,8 +4,8 @@ import model.Model;
 import model.Player;
 import view.MultipleChoice;
 
-public class DisastrousMorale extends EventCard {
-    public DisastrousMorale() {
+public class DisastrousMoraleEventCard extends EventCard {
+    public DisastrousMoraleEventCard() {
         super("Disastrous Morale", false,
                 "Each player discards two Unit cards from their hand.");
     }
@@ -26,6 +26,6 @@ public class DisastrousMorale extends EventCard {
 
     @Override
     public GameCard copy() {
-        return new DisastrousMorale();
+        return new DisastrousMoraleEventCard();
     }
 }

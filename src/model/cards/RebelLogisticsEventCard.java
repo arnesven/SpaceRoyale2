@@ -3,8 +3,8 @@ package model.cards;
 import model.Model;
 import model.Player;
 
-public class RebelLogistics extends EventCard {
-    public RebelLogistics() {
+public class RebelLogisticsEventCard extends EventCard {
+    public RebelLogisticsEventCard() {
         super("Rebel Logistics", false,
                 "Keep this card in play. Each time a new Battle is set up, " +
                         "add one additional Rebel Unit to it.");
@@ -23,6 +23,6 @@ public class RebelLogistics extends EventCard {
 
     @Override
     public GameCard copy() {
-        return new RebelLogistics();
+        return new RebelLogisticsEventCard();
     }
 }

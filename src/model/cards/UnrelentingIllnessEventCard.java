@@ -4,8 +4,8 @@ import model.Model;
 import model.Player;
 import model.states.EmperorHealthDeclineState;
 
-public class UnrelentingIllnessCard extends EventCard {
-    public UnrelentingIllnessCard() {
+public class UnrelentingIllnessEventCard extends EventCard {
+    public UnrelentingIllnessEventCard() {
         super("Unrelenting Illness", true, "Immediately make an Emperor Health roll.");
     }
 
@@ -16,6 +16,6 @@ public class UnrelentingIllnessCard extends EventCard {
 
     @Override
     public GameCard copy() {
-        return new UnrelentingIllnessCard();
+        return new UnrelentingIllnessEventCard();
     }
 }
