@@ -70,7 +70,7 @@ public class GameTracks {
     }
 
     public void addToHealth(int i) {
-        health += i;
+        health = Math.max(0, health + i);
     }
 
     public boolean isEmperorDeath() {
