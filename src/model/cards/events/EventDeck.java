@@ -26,6 +26,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new AccordingToMyDesignEventCard());
         addCard(new MiraculousRecoveryEventCard());
         addCard(new PropagandaCampaignEventCard());
+        addCard(new PrisonBreakEventCard());
         shuffle();
     }
 
