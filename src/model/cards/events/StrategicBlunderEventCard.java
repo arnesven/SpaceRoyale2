@@ -11,8 +11,8 @@ public class StrategicBlunderEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
-        model.getScreenHandler().println("War counter advances one step.");
-        model.advanceWarCounter();
+        model.getScreenHandler().println("War counter retreats one step.");
+        model.retreatWarCounter();
     }
 
     @Override

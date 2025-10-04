@@ -17,7 +17,7 @@ public class MiraculousRecoveryEventCard extends EventCard {
         model.getScreenHandler().println("The die is rolled, it's a " + dieRoll + ".");
         model.getScreenHandler().print("The Health counter retreats ");
         int retreat = dieRoll <= 6 ? 1 : dieRoll <= 8 ? 2 : 3;
-        model.getScreenHandler().println(retreat + " spaces");
+        model.getScreenHandler().println(retreat + " spaces. Now on " + model.getEmperorHealth() + ".");
         model.advanceHealthCounter(-retreat);
     }
 

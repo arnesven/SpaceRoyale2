@@ -173,7 +173,7 @@ public class Model {
     }
 
     private void drawDecks(int x, int y) {
-        screenHandler.drawText("-= Decks =-", x+6, y);
+        screenHandler.drawText("-= Decks =-", x+7, y);
         getTacticsDeck().drawYourself(screenHandler, x, y+1);
         if (gameData.commonEmpireUnitDeck != null) {
             gameData.commonEmpireUnitDeck.drawYourself(screenHandler, x + 7, y + 1);
@@ -181,7 +181,7 @@ public class Model {
         gameData.rebelUnitDeck.drawYourself(screenHandler, x + 14, y + 1);
         gameData.eventDeck.drawYourself(screenHandler, x + 21, y + 1);
 
-        screenHandler.drawText("-= Discards =-", x+7, y+4);
+        screenHandler.drawText("-= Discards =-", x+4, y+4);
         if (!gameData.tacticsDiscard.isEmpty()) {
             screenHandler.drawText("T " + gameData.tacticsDiscard.size(), x, y + 5);
         }
@@ -192,7 +192,7 @@ public class Model {
             screenHandler.drawText("R " + gameData.rebelUnitDiscard.size(), x + 14, y + 5);
         }
         if (!gameData.eventDiscard.isEmpty()) {
-            screenHandler.drawText("Ev" + gameData.rebelUnitDiscard.size(), x + 21, y + 5);
+            screenHandler.drawText("Ev" + gameData.eventDiscard.size(), x + 21, y + 5);
             screenHandler.drawText("nt", x + 21, y + 6);
         }
     }
