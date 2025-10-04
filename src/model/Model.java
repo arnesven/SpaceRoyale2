@@ -398,4 +398,15 @@ public class Model {
     public void setEmperorHealth(int health) {
         gameData.gameTracks.setEmperorHealth(health);
     }
+
+    public TacticsCard drawTacticsCard() {
+        if (getTacticsDeck().isEmpty()) {
+            if (gameData.tacticsDiscard.isEmpty()) {
+                throw new DeckIsEmptyException();
+            }
+            gameData.tacticsDeck = new TacticsDeck(gameData.tacticsDiscard);
+            screenHandler.println("The tactics deck is reshuffled.");
+        }
+        return getTacticsDeck().drawOne();
+    }
 }

@@ -104,11 +104,7 @@ public class Player {
     }
 
     public void drawTacticsCard(Model model) {
-        if (!model.getTacticsDeck().isEmpty()) {
-            this.tacticsCardsInHand.add(model.getTacticsDeck().drawOne());
-        } else {
-            model.getScreenHandler().println("The Tactics Deck is empty!"); // TODO: reshuffle discard
-        }
+        this.tacticsCardsInHand.add(model.drawTacticsCard());
     }
 
     public List<EmpireUnitCard> getUnitCardsInHand() {
@@ -147,6 +143,10 @@ public class Player {
 
     public void addCardToHand(EmpireUnitCard eu) {
         unitCardsInHand.add(eu);
+    }
+
+    public void addCardToHand(TacticsCard tc) {
+        tacticsCardsInHand.add(tc);
     }
 
     public void drawYourselfHorizontally(Model model, int x, int y) {

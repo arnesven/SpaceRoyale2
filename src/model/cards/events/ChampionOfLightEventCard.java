@@ -18,7 +18,6 @@ public class ChampionOfLightEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
-        model.getEventCardsInPlay().add(this);
         model.getScreenHandler().println(getName() + " put into play. Next Star Warrior will be upgraded (if Invasion or Defend Planet battle).");
     }
 

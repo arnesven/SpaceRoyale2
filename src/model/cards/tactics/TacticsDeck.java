@@ -3,6 +3,8 @@ package model.cards.tactics;
 import model.cards.Deck;
 import view.ScreenHandler;
 
+import java.util.List;
+
 public class TacticsDeck extends Deck<TacticsCard> {
 
     private static final int NO_OF_BOMBARDMENT_CARDS = 4;
@@ -35,6 +37,13 @@ public class TacticsDeck extends Deck<TacticsCard> {
         addCopies(ZOTRIAN_ARMOR_CARD, NO_OF_ZOTRIAN_ARMOR_CARDS);
         addCopies(MINEFIELD_CODES_CARD, NO_OF_MINEFIELD_CODES_CARDS);
         addCopies(HUMANITARIAN_AID_CARD, NO_OF_HUMANITARIAN_CARDS);
+        shuffle();
+    }
+
+    public TacticsDeck(List<TacticsCard> cards) {
+        for (TacticsCard tc : cards) {
+            addCard(tc);
+        }
         shuffle();
     }
 

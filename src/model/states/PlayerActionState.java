@@ -135,6 +135,7 @@ public class PlayerActionState extends GameState {
         if (!card1.staysInPlay()) {
             model.discardEventCard(card1);
         } else {
+            model.getEventCardsInPlay().add(card1);
             println(model, card1.getName() + " stays in play.");
         }
     }
