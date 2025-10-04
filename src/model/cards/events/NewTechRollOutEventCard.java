@@ -28,7 +28,7 @@ public class NewTechRollOutEventCard extends EventCard {
         List<TacticsCard> otherCards = new ArrayList<>();
         do {
             try {
-                TacticsCard next = model.getTacticsDeck().drawOne();
+                TacticsCard next = model.drawTacticsCard();
                 if (next.getName().equals(tc.getName())) {
                     cardsOfSameType.add(next);
                 } else {
