@@ -41,4 +41,8 @@ public class Deck<T extends GameCard> {
     public void putOnBottom(T card) {
         cards.addLast(card);
     }
+
+    public T peek() {
+        return cards.getFirst();
+    }
 }

@@ -32,6 +32,8 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new ChampionOfLightEventCard());
         addCard(new SuddenDeathEventCard());
         addCard(new NewTechRollOutEventCard());
+        // addCard(new RescueCplCopperEventCard());
+        addCard(new ImperialSpyEventCard());
         shuffle();
     }
 

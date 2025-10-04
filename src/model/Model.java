@@ -409,4 +409,8 @@ public class Model {
         }
         return getTacticsDeck().drawOne();
     }
+
+    public AlignmentCard peekAtBattleChanceCard() {
+        return gameData.battleChanceDeck.peek();
+    }
 }
