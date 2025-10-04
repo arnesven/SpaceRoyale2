@@ -305,8 +305,8 @@ public class Model {
         gameData.empireUnitDiscard.addAll(cards);
     }
 
-    public void discardTacticsCards(List<TacticsCard> cards) {
-        gameData.tacticsDiscard.addAll(cards);
+    public void discardTacticsCards(TacticsCard card) {
+        gameData.tacticsDiscard.add(card);
     }
 
     public AlignmentCard drawBattleChanceCard() {

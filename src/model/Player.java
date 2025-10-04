@@ -138,7 +138,7 @@ public class Player {
 
     public void discardCard(Model model, TacticsCard tc) {
         tacticsCardsInHand.remove(tc);
-        model.discardTacticsCards(List.of(tc));
+        model.discardTacticsCards(tc);
     }
 
     public void removeUnitCardFromHand(EmpireUnitCard eu) {

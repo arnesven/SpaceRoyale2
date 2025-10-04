@@ -58,11 +58,11 @@ public class WarTrack {
     }
 
     public boolean isBattleOfCentralia() {
-        return counterPosition == BATTLE_OF_CENTRALIA_SPACE;
+        return counterPosition <= BATTLE_OF_CENTRALIA_SPACE;
     }
 
     public boolean isBattleAtRebelStronghold() {
-        return counterPosition == BATTLE_AT_REBEL_STRONGHOLD_SPACE;
+        return counterPosition >= BATTLE_AT_REBEL_STRONGHOLD_SPACE;
     }
 
     public BattleBoard replaceBoard(BattleBoard bb) {
