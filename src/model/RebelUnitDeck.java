@@ -1,6 +1,7 @@
 package model;
 
 import model.cards.*;
+import model.cards.units.*;
 import view.ScreenHandler;
 
 public class RebelUnitDeck extends Deck<RebelUnitCard> {

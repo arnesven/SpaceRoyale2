@@ -2,6 +2,14 @@ package model;
 
 import model.board.GameBoard;
 import model.cards.*;
+import model.cards.alignment.AlignmentCard;
+import model.cards.events.EventCard;
+import model.cards.events.EventDeck;
+import model.cards.tactics.TacticsCard;
+import model.cards.tactics.TacticsDeck;
+import model.cards.units.CommonEmpireUnitDeck;
+import model.cards.units.EmpireUnitCard;
+import model.cards.units.RebelUnitCard;
 
 import java.util.ArrayList;
 import java.util.List;

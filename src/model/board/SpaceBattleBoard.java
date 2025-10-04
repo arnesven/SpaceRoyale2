@@ -2,10 +2,10 @@ package model.board;
 
 import model.Model;
 import model.Player;
-import model.cards.AlignmentCard;
-import model.cards.EmpireUnitCard;
-import model.cards.RebelUnitCard;
-import model.cards.UnitCard;
+import model.cards.alignment.AlignmentCard;
+import model.cards.units.EmpireUnitCard;
+import model.cards.units.RebelUnitCard;
+import model.cards.units.UnitCard;
 import util.MyLists;
 
 import java.util.ArrayList;

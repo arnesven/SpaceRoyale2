@@ -3,7 +3,7 @@ package model.board;
 import model.GameOverException;
 import model.Model;
 import model.Player;
-import model.cards.RebelUnitCard;
+import model.cards.units.RebelUnitCard;
 import model.states.PlayerActionState;
 import util.MyLists;
 import view.MultipleChoice;

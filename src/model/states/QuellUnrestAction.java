@@ -2,9 +2,9 @@ package model.states;
 
 import model.Model;
 import model.Player;
-import model.cards.AgentUnitCard;
-import model.cards.EmpireUnitCard;
-import model.cards.UnitCard;
+import model.cards.units.AgentUnitCard;
+import model.cards.units.EmpireUnitCard;
+import model.cards.units.UnitCard;
 import util.MyLists;
 import view.MultipleChoice;
 

@@ -3,6 +3,9 @@ package model.board;
 import model.Model;
 import model.Player;
 import model.cards.*;
+import model.cards.alignment.AlignmentCard;
+import model.cards.tactics.TacticsCard;
+import model.cards.units.*;
 import util.MyLists;
 import view.MultipleChoice;
 

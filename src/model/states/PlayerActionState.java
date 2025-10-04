@@ -5,7 +5,12 @@ import model.Player;
 import model.board.BattleBoard;
 import model.board.BoardLocation;
 import model.board.PrisonPlanetLocation;
-import model.cards.*;
+import model.cards.events.EventCard;
+import model.cards.tactics.TacticsCard;
+import model.cards.units.AgentUnitCard;
+import model.cards.units.EmpireUnitCard;
+import model.cards.units.RebelUnitCard;
+import model.cards.units.ShuttleCard;
 import util.MyLists;
 import view.MultipleChoice;
 
