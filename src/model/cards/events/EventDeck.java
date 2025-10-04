@@ -1,6 +1,7 @@
 package model.cards.events;
 
 import model.cards.*;
+import view.ScreenHandler;
 
 import java.util.List;
 
@@ -35,6 +36,15 @@ public class EventDeck extends Deck<EventCard> {
     public EventDeck(List<EventCard> cards) {
         for (EventCard c : cards) {
             addCard(c);
+        }
+    }
+
+    public void drawYourself(ScreenHandler screenHandler, int x, int y) {
+        if (!isEmpty()) {
+            screenHandler.drawText(".--.", x, y);
+            screenHandler.drawText("|Ev|" + size(), x, y + 1);
+            screenHandler.drawText("|nt|", x, y + 2);
+            screenHandler.drawText("'¨¨'", x, y + 2);
         }
     }
 }

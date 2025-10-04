@@ -5,6 +5,7 @@ import model.Player;
 import model.board.BattleBoard;
 import model.cards.GameCard;
 import model.cards.units.EmpireUnitCard;
+import util.MyLists;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
@@ -18,13 +19,20 @@ public class RebelSabotageEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
+        if (noUnitsOnBattles(model)) {
+            model.getScreenHandler().println("No Empire units on battles. Event has no effect.");
+            return;
+        }
+
         final BattleBoard[] selectedBattle = {null};
         MultipleChoice multipleChoice = new MultipleChoice();
         for (BattleBoard bb : model.getBattles()) {
-            multipleChoice.addOption(bb.getName() + " (" + bb.getEmpireUnits().size() + " cards)", (m, _) -> {
-                m.getScreenHandler().println("Discarding Empire Units from " + bb.getName() + ".");
-                selectedBattle[0] = bb;
-            });
+            if (!bb.getEmpireUnits().isEmpty()) {
+                multipleChoice.addOption(bb.getName() + " (" + bb.getEmpireUnits().size() + " cards)", (m, _) -> {
+                    m.getScreenHandler().println("Discarding Empire Units from " + bb.getName() + ".");
+                    selectedBattle[0] = bb;
+                });
+            }
         }
         multipleChoice.promptAndDoAction(model, "Discard Empire Unit cards from which battle?", player);
         assert selectedBattle[0] != null;
@@ -44,6 +52,15 @@ public class RebelSabotageEventCard extends EventCard {
         model.getScreenHandler().println("Discarding " + selectedCards.size() + " Empire unit cards from " +
                 selectedBattle[0].getName() + ".");
         model.discardEmpireCards(selectedCards);
+    }
+
+    private boolean noUnitsOnBattles(Model model) {
+        for (BattleBoard bb : model.getBattles()) {
+            if (!bb.getEmpireUnits().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
