@@ -113,4 +113,8 @@ public class GameTracks {
     public void setUnrest(int i) {
         unrest = i;
     }
+
+    public void setEmperorHealth(int health) {
+        this.health = health;
+    }
 }

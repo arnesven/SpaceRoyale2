@@ -30,6 +30,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new PrisonBreakEventCard());
         addCard(new SuperTitanEventCard());
         addCard(new ChampionOfLightEventCard());
+        addCard(new SuddenDeathEventCard());
         shuffle();
     }
 

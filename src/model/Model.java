@@ -275,7 +275,7 @@ public class Model {
     public void advanceHealthCounter(int i) {
         gameData.gameTracks.addToHealth(i);
         if (gameData.gameTracks.isEmperorDeath()) {
-            // TODO: Emperor death ending.
+            throw new GameOverException();
         }
     }
 
@@ -393,5 +393,9 @@ public class Model {
 
     public List<EventCard> getEventCardsInPlay() {
         return gameData.eventCardsInPlay;
+    }
+
+    public void setEmperorHealth(int health) {
+        gameData.gameTracks.setEmperorHealth(health);
     }
 }
