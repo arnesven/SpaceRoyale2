@@ -25,6 +25,7 @@ public abstract class BattleBoard extends BoardLocation {
     private List<RebelUnitCard> rebelUnits = new ArrayList<>();
     private List<EmpireUnitCard> empireUnits = new ArrayList<>();
     private boolean minesEffective = true;
+    private boolean imperialWin = false;
 
     public BattleBoard(String name, char identifier) {
         this.name = name;
@@ -93,7 +94,7 @@ public abstract class BattleBoard extends BoardLocation {
 
         List<Player> playersInBattle = getPlayersInBattle(model);
         boolean imperialWin = battleSpecificResolve(model, playersInBattle, empireWinsSpace, empireWinsGroundDomain);
-
+        this.setImperialWin(imperialWin);
         playLateTacticsCards(model);
 
         if (imperialWin) {
@@ -114,6 +115,10 @@ public abstract class BattleBoard extends BoardLocation {
         } else {
             discardRebelCards(model, rebelUnits, imperialWin);
         }
+    }
+
+    private void setImperialWin(boolean imperialWin) {
+        this.imperialWin = imperialWin;
     }
 
     private void upgradeTitan(Model model) {
@@ -352,5 +357,9 @@ public abstract class BattleBoard extends BoardLocation {
 
     public boolean canUseBombardment() {
         return true;
+    }
+
+    public boolean isEmpireVictorious() {
+        return imperialWin;
     }
 }
