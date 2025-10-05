@@ -45,14 +45,15 @@ public class NewTechRollOutEventCard extends EventCard {
 
         Set<Player> alreadyGivenTo = new HashSet<>();
         alreadyGivenTo.add(player);
+        player.addCardToHand(tc);
         model.getScreenHandler().println("Found " + cardsOfSameType.size() + " other copies of " + tc.getName() + ".");
         for (TacticsCard tc2 : cardsOfSameType) {
             MultipleChoice multipleChoice = new MultipleChoice();
             for (Player p : model.getPlayers()) {
-                if (alreadyGivenTo.contains(p)) {
+                if (!alreadyGivenTo.contains(p)) {
                     multipleChoice.addOption(p.getName(), (m, p2) -> {
                         p2.addCardToHand(tc2);
-                        m.getScreenHandler().println(player.getName() + " gives " + p2.getName() + " a " + tc2.getName() + ".");
+                        m.getScreenHandler().println(p2.getName() + " gives " + p.getName() + " a " + tc2.getName() + ".");
                         alreadyGivenTo.add(p2);
                     });
                 }
