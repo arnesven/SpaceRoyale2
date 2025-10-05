@@ -195,6 +195,13 @@ public class Model {
             screenHandler.drawText("Ev" + gameData.eventDiscard.size(), x + 21, y + 5);
             screenHandler.drawText("nt", x + 21, y + 6);
         }
+
+        if (!gameData.eventCardsInPlay.isEmpty()) {
+            screenHandler.drawText("-= Events in play =-", 64, 0);
+            for (EventCard ev : gameData.eventCardsInPlay) {
+                screenHandler.drawText(ev.getName(), 65, 1);
+            }
+        }
     }
 
     public Player getCurrentPlayer() {
