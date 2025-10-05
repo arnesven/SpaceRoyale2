@@ -38,6 +38,7 @@ public class QuellUnrestAction {
         model.getScreenHandler().println(MyLists.commaAndJoin(involvedPlayers, Player::getName) +
                 " will attempt to quell the unrest.");
         model.getScreenHandler().println("Each player must contribute one Empire Unit Card.");
+        model.getScreenHandler().println("Ground units and Agents contribute, anything else will fail the attempt.");
 
         List<EmpireUnitCard> contributedCards = new ArrayList<>();
         for (Player p : involvedPlayers) {
