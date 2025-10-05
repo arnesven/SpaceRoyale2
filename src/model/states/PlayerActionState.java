@@ -152,7 +152,7 @@ public class PlayerActionState extends GameState {
             MultipleChoice multipleChoice2 = new MultipleChoice();
             addNonMoveActions(multipleChoice2, model, current);
             multipleChoice2.promptAndDoAction(model, "Select an action for " + current.getName() + ":", current);
-        } else {
+        } else if (!multipleChoice.getSelectedOptionName().equals("Pass")) {
             MultipleChoice multipleChoice2 = new MultipleChoice();
             if (!isOnPrisonPlanet(current)) {
                 multipleChoice2.addOption("Move", this::movePlayer);

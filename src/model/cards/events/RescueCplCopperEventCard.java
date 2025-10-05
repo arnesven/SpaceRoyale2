@@ -43,7 +43,7 @@ public class RescueCplCopperEventCard extends EventCard {
                 multipleChoice.addOption("Pass", (m, p2) -> {
                     done[0] = true;
                 });
-                while (multipleChoice.getNumberOfChoices() > 1 || !done[0]) {
+                while (multipleChoice.getNumberOfChoices() > 1 && !done[0]) {
                     multipleChoice.promptAndDoAction(model, "Which card does " + p.getName() + " commit to the event?", p);
                     multipleChoice.removeSelectedOption();
                 }
