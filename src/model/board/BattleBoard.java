@@ -7,6 +7,7 @@ import model.cards.alignment.AlignmentCard;
 import model.cards.events.ChampionOfLightEventCard;
 import model.cards.events.EventCard;
 import model.cards.events.SuperTitanEventCard;
+import model.cards.events.TacticsImprovementEventCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.*;
 import util.MyLists;
@@ -166,13 +167,27 @@ public abstract class BattleBoard extends BoardLocation {
                 if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playedAfterReveal()) {
                     multipleChoice.addOption(tc.getName(), (m, p) -> {
                         tc.resolve(model, p, this);
-                        player.discardCard(model, tc);
+                        possiblyDiscardTacticsCard(model, p, tc);
                     });
                 }
             }
             multipleChoice.addOption("Pass", (_, _) -> {});
             multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
         }
+    }
+
+    private void possiblyDiscardTacticsCard(Model model, Player player, TacticsCard tc) {
+        List<TacticsImprovementEventCard> tacticsImprovements = MyLists.transform(MyLists.filter(model.getEventCardsInPlay(),
+                        ev -> ev instanceof TacticsImprovementEventCard),
+                ev -> (TacticsImprovementEventCard)ev);
+        if (!tacticsImprovements.isEmpty()) {
+            if (MyLists.any(tacticsImprovements, ti -> ti.getAffectedTactics().contains(tc.getName()))) {
+                if (TacticsImprovementEventCard.doesKeepCard(model, player, tc)) {
+                    return;
+                }
+            }
+        }
+        player.discardCard(model, tc);
     }
 
     private void playLateTacticsCards(Model model) {

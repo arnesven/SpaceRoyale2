@@ -34,6 +34,10 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new NewTechRollOutEventCard());
         addCard(new RescueCplCopperEventCard());
         addCard(new ImperialSpyEventCard());
+        addCard(new NeutrinoBombsEventCard());
+        addCard(new AdamantiumAlloyEventCard());
+        addCard(new TachyonDrivesEventCard());
+        addCard(new QuantumComputationEventCard());
         addCard(new DarkPowerEventCard());
         addCard(new WitchHuntEventCard());
         shuffle();
