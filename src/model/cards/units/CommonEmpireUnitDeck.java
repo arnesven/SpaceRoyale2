@@ -16,9 +16,9 @@ public class CommonEmpireUnitDeck extends Deck<EmpireUnitCard> {
 
     public void drawYourself(ScreenHandler screenHandler, int x, int y) {
         if (!isEmpty()) {
-            screenHandler.drawText(".-.", x, y + 1);
-            screenHandler.drawText("|E|" + size(), x, y + 2);
-            screenHandler.drawText("'¨'", x, y + 3);
+            screenHandler.drawText(".-.", x, y);
+            screenHandler.drawText("|E|" + size(), x, y + 1);
+            screenHandler.drawText("'¨'", x, y + 2);
         }
     }
 }
