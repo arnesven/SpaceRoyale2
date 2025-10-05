@@ -36,6 +36,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new ImperialSpyEventCard());
         addCard(new NeutrinoBombsEventCard());
         addCard(new AdamantiumAlloyEventCard());
+        addCard(new AdvancedLogisticsEventCard());
         addCard(new TachyonDrivesEventCard());
         addCard(new QuantumComputationEventCard());
         addCard(new DarkPowerEventCard());
