@@ -13,6 +13,10 @@ public class MiraculousRecoveryEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
+        if (model.getEmperorHealth() == 0) {
+            model.getScreenHandler().println("Emperor health at 0, event has no effect.");
+            return;
+        }
         int dieRoll = MyRandom.rollD10();
         model.getScreenHandler().println("The die is rolled, it's a " + dieRoll + ".");
         model.getScreenHandler().print("The Health counter retreats ");

@@ -402,6 +402,9 @@ public class Model {
 
     public EventCard drawEventCard() {
         if (gameData.eventDeck.isEmpty()) {
+            if (gameData.eventDiscard.isEmpty()) {
+                throw new DeckIsEmptyException();
+            }
             gameData.eventDeck = new EventDeck(gameData.eventDiscard);
             gameData.eventDiscard.clear();
         }
