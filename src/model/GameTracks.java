@@ -1,6 +1,7 @@
 package model;
 
 import model.board.BattleBoard;
+import model.tracks.HealthCategory;
 import model.tracks.WarTrack;
 import view.ScreenHandler;
 
@@ -39,14 +40,14 @@ public class GameTracks {
         model.getScreenHandler().drawText("War Advantage: " + war.asString(), x, y+3);
     }
 
-    private String healthCategory(int health) {
+    private HealthCategory healthCategory(int health) {
         if (health < 8) {
-            return "(Healthy)";
+            return HealthCategory.HEALTHY;
         }
         if (health >= MAX_HEALTH) {
-            return "(Dead)";
+            return HealthCategory.DEATH;
         }
-        return "(Decline)";
+        return HealthCategory.DECLINE;
     }
 
     public void addToUnrest(int i) {
@@ -116,5 +117,9 @@ public class GameTracks {
 
     public void setEmperorHealth(int health) {
         this.health = health;
+    }
+
+    public boolean isEmperorHealthy() {
+        return healthCategory(health) == HealthCategory.HEALTHY;
     }
 }

@@ -172,4 +172,12 @@ public class Player {
     public int getPopularInfluence() {
         return popularInfluence;
     }
+
+    public int getTotalCardsInHand() {
+        return getUnitCardsInHand().size() + getTacticsCardsInHand().size();
+    }
+
+    public int getEmperorInfluence() {
+        return emperorInfluence;
+    }
 }

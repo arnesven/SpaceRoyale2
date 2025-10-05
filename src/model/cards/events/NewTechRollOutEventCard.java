@@ -5,7 +5,6 @@ import model.Player;
 import model.cards.DeckIsEmptyException;
 import model.cards.GameCard;
 import model.cards.tactics.TacticsCard;
-import model.cards.tactics.TacticsDeck;
 import view.MultipleChoice;
 
 import java.util.ArrayList;

@@ -37,9 +37,52 @@ public class Model {
     }
 
     public void runGameScript() {
-        while (!gameIsOver()) {
-            GameState nextState = currentState.run(this);
-            currentState = nextState;
+        try {
+            while (!gameIsOver()) {
+                GameState nextState = currentState.run(this);
+                currentState = nextState;
+            }
+        } catch (GameOverException goe) {
+            // Intentional fall through.
+        }
+        handleGameEnding();
+    }
+
+    private void handleGameEnding() {
+        screenHandler.print("Game has ended, type of ending: ");
+        if (gameData.gameTracks.isEmperorDeath()) {
+            screenHandler.println("Emperor Death");
+            printWinnersAndLosers(EmperorDeathEnding.makeWinCondition(this));
+        } else if (gameData.gameTracks.getTurn() == GameTracks.MAX_GAME_TURN) {
+            if (gameData.gameTracks.isEmperorHealthy()) {
+                screenHandler.println("Default Ending (turn 8 ending, Emperor healthy)");
+                printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof EmpireAlignmentCard);
+            } else { // Emperor health in decline (Can't be death, handled above)
+                screenHandler.println("Succession Ending (turn 8 ending, Emperor decline)");
+                printWinnersAndLosers(SuccessionEnding.makeWinCondition(this));
+            }
+        } else if (gameData.gameTracks.isUnrestMaxedOut()) {
+            screenHandler.println("Revolution (unrest = max)");
+            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof RebelAlignmentCard);
+        } else if (gameData.gameTracks.isBattleOfCentralia()) {
+            screenHandler.println("Defeat at Battle of Centralia");
+            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof RebelAlignmentCard);
+        } else if (gameData.gameTracks.isBattleAtTheRebelStronghold()) {
+            screenHandler.println("Victory at Battle at the Rebel Stronghold");
+            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof EmpireAlignmentCard);
+        } else {
+            drawBoard();
+            System.err.println("Unknown win condition!");
+        }
+    }
+
+    private void printWinnersAndLosers(WinCondition condition) {
+        for (Player p : getPlayers()) {
+            if (condition.hasWonGame(p)) {
+                screenHandler.println(p.getName() + " is a winner.");
+            } else {
+                screenHandler.println(p.getName() + " is a loser.");
+            }
         }
     }
 
