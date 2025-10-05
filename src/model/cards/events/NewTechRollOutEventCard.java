@@ -51,9 +51,9 @@ public class NewTechRollOutEventCard extends EventCard {
             for (Player p : model.getPlayers()) {
                 if (!alreadyGivenTo.contains(p)) {
                     multipleChoice.addOption(p.getName(), (m, p2) -> {
-                        p2.addCardToHand(tc2);
+                        p.addCardToHand(tc2);
                         m.getScreenHandler().println(p2.getName() + " gives " + p.getName() + " a " + tc2.getName() + ".");
-                        alreadyGivenTo.add(p2);
+                        alreadyGivenTo.add(p);
                     });
                 }
             }
