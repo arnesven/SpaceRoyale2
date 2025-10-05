@@ -24,7 +24,7 @@ public abstract class TacticsImprovementEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
-        model.getScreenHandler().println("Neutrino Bombs put into play. " + getAffectedTactics() +
+        model.getScreenHandler().println(getName() + " put into play. " + getAffectedTactics() +
                 " tactics cards will now be retained on die rolls of 6 or higher.");
     }
 

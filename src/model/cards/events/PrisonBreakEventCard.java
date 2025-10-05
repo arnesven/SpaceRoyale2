@@ -16,7 +16,7 @@ public class PrisonBreakEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
-        if (!MyLists.any(model.getPlayers(), p -> p.getCurrentLocation() == model.getCentralia())) {
+        if (!MyLists.any(model.getPlayers(), p -> p.getCurrentLocation() == model.getPrisonPlanet())) {
             model.getScreenHandler().println("No players on Prison planet, event has no effect.");
             return;
         }

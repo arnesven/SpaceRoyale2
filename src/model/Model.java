@@ -181,7 +181,7 @@ public class Model {
         gameData.rebelUnitDeck.drawYourself(screenHandler, x + 14, y + 1);
         gameData.eventDeck.drawYourself(screenHandler, x + 21, y + 1);
 
-        screenHandler.drawText("-= Discards =-", x+4, y+4);
+        screenHandler.drawText("-= Discards =-", x+6, y+4);
         if (!gameData.tacticsDiscard.isEmpty()) {
             screenHandler.drawText("T " + gameData.tacticsDiscard.size(), x, y + 5);
         }
@@ -397,6 +397,7 @@ public class Model {
 
     public void addBattleChanceCard(AlignmentCard card) {
         gameData.battleChanceDeck.addCard(card);
+        gameData.battleChanceDeck.shuffle();
     }
 
     public List<EventCard> getEventCardsInPlay() {
