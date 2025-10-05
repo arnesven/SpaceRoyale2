@@ -168,4 +168,8 @@ public class Player {
         model.getScreenHandler().drawText(" " + unitDeck.size(), x, y+5);
 
     }
+
+    public int getPopularInfluence() {
+        return popularInfluence;
+    }
 }
