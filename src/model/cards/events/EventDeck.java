@@ -34,6 +34,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new NewTechRollOutEventCard());
         addCard(new RescueCplCopperEventCard());
         addCard(new ImperialSpyEventCard());
+        addCard(new DarkPowerEventCard());
         shuffle();
     }
 
