@@ -198,8 +198,9 @@ public class Model {
 
         if (!gameData.eventCardsInPlay.isEmpty()) {
             screenHandler.drawText("-= Events in play =-", 64, 0);
+            int yOff = 1;
             for (EventCard ev : gameData.eventCardsInPlay) {
-                screenHandler.drawText(ev.getName(), 65, 1);
+                screenHandler.drawText(ev.getName(), 65, yOff++);
             }
         }
     }

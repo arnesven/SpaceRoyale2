@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class ScreenHandler {
 
-    private static final String EIGHTY_CHARS =
-            "                                                                                ";
+    private static final String DRAW_AREA_ROW =
+            "                                                                                          ";
     private static final int DRAWING_AREA_HEIGHT = 16;
     private StringBuffer[] drawingArea;
 
@@ -38,7 +38,7 @@ public class ScreenHandler {
     public void clearDrawingArea() {
         drawingArea = new StringBuffer[DRAWING_AREA_HEIGHT];
         for (int i = 0; i < drawingArea.length; ++i) {
-            drawingArea[i] = new StringBuffer(EIGHTY_CHARS);
+            drawingArea[i] = new StringBuffer(DRAW_AREA_ROW);
         }
     }
 
