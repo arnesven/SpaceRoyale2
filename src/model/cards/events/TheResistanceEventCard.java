@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TheResistanceEventCard extends EventCard {
     public TheResistanceEventCard() {
-        super("The Resistance", true,
+        super("The Resistance", false,
                 "Increase Unrest by one. All players must close their eyes. " +
                 "Then, all players with Rebel loyalty can open their eyes to identify" +
                         " each other. Then everybody closes their eyes again.");
