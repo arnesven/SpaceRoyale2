@@ -156,7 +156,6 @@ public abstract class BattleBoard extends BoardLocation {
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
-        print(model, String.format("Empire %8d%8d", empireSpace, empireGround));
         print(model,"Tallies:  Rebel  Empire");
         print(model, String.format("Space %8d%s %6d%s", rebelSpace, winAsteriskRebel(rebelSpace, empireSpace), empireSpace, winAsteriskEmpire(empireSpace, rebelSpace)));
         print(model, String.format("ground %7d%s %6d%s", rebelGround, winAsteriskRebel(rebelGround, empireGround), empireGround, winAsteriskEmpire(empireGround, rebelGround)));
@@ -193,8 +192,12 @@ public abstract class BattleBoard extends BoardLocation {
                     });
                 }
             }
-            multipleChoice.addOption("Pass", (_, _) -> {});
-            multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
+            boolean[] done = new boolean[]{false};
+            multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
+            while (!done[0]) {
+                multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
+                multipleChoice.removeSelectedOption();
+            }
         }
     }
 
@@ -223,8 +226,12 @@ public abstract class BattleBoard extends BoardLocation {
                     });
                 }
             }
-            multipleChoice.addOption("Pass", (_, _) -> {});
-            multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
+            boolean[] done = new boolean[]{false};
+            multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
+            while (!done[0]) {
+                multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
+                multipleChoice.removeSelectedOption();
+            }
         }
     }
 
