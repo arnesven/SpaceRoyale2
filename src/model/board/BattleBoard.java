@@ -225,7 +225,7 @@ public abstract class BattleBoard extends BoardLocation {
                 if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playAfterBattle()) {
                     multipleChoice.addOption(tc.getName(), (m, p) -> {
                         tc.resolve(model, p, this);
-                        player.discardCard(model, tc);
+                        possiblyDiscardTacticsCard(model, p, tc);
                     });
                 }
             }

@@ -39,6 +39,7 @@ public class EvasiveManeuversCard extends TacticsCard {
                 p.addCardToHand(eu);
             });
         }
+        // TODO: Should really add option to pass here.
         for (int i = 0; i < 3 && multipleChoice.getNumberOfChoices() > 0; ++i) {
             multipleChoice.promptAndDoAction(model, "Which card do you want to pick up?", player);
             multipleChoice.removeSelectedOption();
