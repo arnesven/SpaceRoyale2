@@ -11,7 +11,7 @@ public class TitanUnitCard extends UpgradeableRebelUnitCard {
     @Override
     public String getName() {
         if (isUpgraded()) {
-            return "Super " + getName();
+            return "Super " + super.getName();
         }
         return super.getName();
     }
