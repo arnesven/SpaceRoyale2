@@ -41,6 +41,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new QuantumComputationEventCard());
         addCard(new DarkPowerEventCard());
         addCard(new WitchHuntEventCard());
+        addCard(new TheResistanceEventcard());
         shuffle();
     }
 
