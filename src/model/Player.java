@@ -116,7 +116,7 @@ public class Player {
     }
 
     public void addToEmperorInfluence(int i) {
-        emperorInfluence -= i;
+        emperorInfluence += i;
     }
 
     public AlignmentCard getLoyaltyCard() {

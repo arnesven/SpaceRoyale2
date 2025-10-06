@@ -3,6 +3,7 @@ package model.cards.tactics;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import model.board.DefendPlanetBattleBoard;
 import model.cards.GameCard;
 import model.cards.units.RebelUnitCard;
 import model.cards.units.UnitCard;
@@ -50,6 +51,12 @@ public class BombardmentCard extends TacticsCard {
         model.discardRebelCards(cardsToDiscard);
         player.addToPopularInfluence(-1);
         model.getScreenHandler().println(player.getName() + " gets -1 Popular Influence.");
+        if (battle instanceof DefendPlanetBattleBoard) {
+            player.addToPopularInfluence(-1);
+            model.getScreenHandler().println("Since this was a Defend Planet battle, " +
+                    player.getName() + " gets an additional -1 Popular Influence.");
+            player.addToPopularInfluence(-1);
+        }
     }
 
     private boolean isDestroyableGroundUnit(RebelUnitCard rebelUnitCard) {

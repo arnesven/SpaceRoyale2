@@ -26,7 +26,7 @@ public class RescueCplCopperEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
-        model.getScreenHandler().println("Each player may commit cards to the event.");
+        model.getScreenHandler().println("Each player may commit cards to the event, Ground Units and Agents contribute.");
         List<EmpireUnitCard> committedCards = new ArrayList<>();
         for (Player p : model.getPlayersStartingFrom(player)) {
             if (p.getUnitCardsInHand().isEmpty()) {
