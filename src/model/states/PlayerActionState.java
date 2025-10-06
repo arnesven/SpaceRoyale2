@@ -31,7 +31,7 @@ public class PlayerActionState extends GameState {
             println(model, current.getName() + "'s turn. ");
             println(model, "Location: " + current.getCurrentLocation().getName() + ".");
             println(model, "Loyalty: " + current.getLoyaltyCard().getName());
-            println(model, "Cards in hand: ");
+            println(model, "Cards in hand (" + current.getTotalCardsInHand() + "):");
             current.printHand(model.getScreenHandler());
             if (!isOnPrisonPlanet(current)) {
                 doNegativeAction(model, current);
