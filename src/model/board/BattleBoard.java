@@ -152,17 +152,34 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     private void printTallies(Model model) {
-        printRebelTally(model);
+        int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
+        int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
         print(model, String.format("Empire %8d%8d", empireSpace, empireGround));
+        print(model,"Tallies:  Rebel  Empire");
+        print(model, String.format("Space %8d%s %6d%s", rebelSpace, winAsteriskRebel(rebelSpace, empireSpace), empireSpace, winAsteriskEmpire(empireSpace, rebelSpace)));
+        print(model, String.format("ground %7d%s %6d%s", rebelGround, winAsteriskRebel(rebelGround, empireGround), empireGround, winAsteriskEmpire(empireGround, rebelGround)));
+    }
+
+    private String winAsteriskEmpire(int empire, int rebel) {
+        if (empire >= rebel) {
+            return "*";
+        }
+        return " ";
+    }
+
+    private String winAsteriskRebel(int rebel, int empire) {
+        if (rebel > empire) {
+            return "*";
+        }
+        return " ";
     }
 
     public void printRebelTally(Model model) {
-        print(model, "Tallies:  Space  Ground");
         int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
-        print(model, String.format("Rebel %9d%8d", rebelSpace, rebelGround));
+        print(model, String.format("Rebels tallies: %d Space, %d Ground", rebelSpace, rebelGround));
     }
 
     private void playEarlyTacticsCards(Model model) {
