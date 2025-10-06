@@ -295,6 +295,9 @@ public abstract class BattleBoard extends BoardLocation {
         int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength) + getSpaceBonus(battleChance);
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
 
+        if (getSpaceBonus(battleChance) > 0) {
+            print(model, "Rebels get +" + getSpaceBonus(battleChance) + " from the Battle Chance card.");
+        }
         print(model, "Space total (R vs E): " + rebelSpace + " vs " + empireSpace);
         if (rebelSpace > empireSpace || !MyLists.any(empireUnits, UnitCard::isSpaceUnit)) {
             print(model, "The rebels are victorious in the space domain.");
@@ -323,6 +326,9 @@ public abstract class BattleBoard extends BoardLocation {
     protected boolean resolveGroundDomain(Model model, List<RebelUnitCard> rebelUnits, List<EmpireUnitCard> empireUnits, AlignmentCard battleChance) {
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength) + getGroundBonus(battleChance);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
+        if (getGroundBonus(battleChance) > 0) {
+            print(model, "Rebels get +" + getGroundBonus(battleChance) + " from the Battle Chance card.");
+        }
         print(model, "Ground total (R vs E): " + rebelGround + " vs " + empireGround);
         if (rebelGround > empireGround || !MyLists.any(empireUnits, UnitCard::isGroundUnit)) {
             print(model, "The rebels are victorious in the ground domain.");

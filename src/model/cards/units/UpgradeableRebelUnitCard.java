@@ -11,7 +11,7 @@ public abstract class UpgradeableRebelUnitCard extends RebelUnitCard {
     @Override
     public int getStrength() {
         if (isUpgraded()) {
-            return getStrength() * 2;
+            return super.getStrength() * 2;
         }
         return super.getStrength();
     }
