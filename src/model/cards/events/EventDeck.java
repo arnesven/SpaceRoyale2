@@ -43,6 +43,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new WitchHuntEventCard());
         addCard(new TheResistanceEventCard());
         addCard(new OppresiveBureaucracyEventCard());
+        addCard(new DisarmamentEventCard());
         shuffle();
     }
 
