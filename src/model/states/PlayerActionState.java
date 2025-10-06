@@ -7,10 +7,7 @@ import model.board.BoardLocation;
 import model.board.PrisonPlanetLocation;
 import model.cards.events.EventCard;
 import model.cards.tactics.TacticsCard;
-import model.cards.units.AgentUnitCard;
-import model.cards.units.EmpireUnitCard;
-import model.cards.units.RebelUnitCard;
-import model.cards.units.ShuttleCard;
+import model.cards.units.*;
 import util.MyLists;
 import view.MultipleChoice;
 
@@ -181,6 +178,12 @@ public class PlayerActionState extends GameState {
             multipleChoice.addOption("Escape prison", ArrestAction::escapeFromPrison);
         } else if (!current.getUnitCardsInHand().isEmpty()) {
             multipleChoice.addOption("Add Cards to Battle", PlayerActionState::addCardsToBattle);
+        }
+        UnitCard agent = MyLists.find(current.getUnitCardsInHand(), eu -> eu instanceof AgentUnitCard);
+        if (agent != null) {
+            multipleChoice.addOption("Play Agent", (m, p) -> {
+                ((AgentUnitCard)agent).playAsAction(m, p);
+            });
         }
         multipleChoice.addOption("Pass", (_, _) -> {});
     }
