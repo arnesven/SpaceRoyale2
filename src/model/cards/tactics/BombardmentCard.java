@@ -5,6 +5,7 @@ import model.Player;
 import model.board.BattleBoard;
 import model.board.DefendPlanetBattleBoard;
 import model.cards.GameCard;
+import model.cards.units.EmpireUnitCard;
 import model.cards.units.RebelUnitCard;
 import model.cards.units.UnitCard;
 import model.cards.units.UpgradeableRebelUnitCard;
@@ -30,25 +31,29 @@ public class BombardmentCard extends TacticsCard {
             model.getScreenHandler().println("Bombardment has no effect in Space battles.");
             return;
         }
-        List<RebelUnitCard> cardsToDiscard = new ArrayList<>();
-        List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), this::isDestroyableGroundUnit);
-        if (ground.size() <= 3) {
-            cardsToDiscard.addAll(ground);
-        } else {
-            MultipleChoice multipleChoice = new MultipleChoice();
-            for (RebelUnitCard ru : ground) {
-                multipleChoice.addOption(ru.getName(), (m, p) -> {cardsToDiscard.add(ru);});
-            }
-            while (cardsToDiscard.size() < 3) {
-                multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);
-                multipleChoice.removeSelectedOption();
+        List<UnitCard> cardsToDiscard = new ArrayList<>();
+        MultipleChoice multipleChoice = new MultipleChoice();
+        for (RebelUnitCard ru : MyLists.filter(battle.getRebelUnits(), this::isDestroyableGroundUnit)) {
+            multipleChoice.addOption(ru.getName(), (m, p) -> {cardsToDiscard.add(ru);});
+        }
+        for (EmpireUnitCard eu : MyLists.filter(battle.getEmpireUnits(), UnitCard::isGroundUnit)) {
+            multipleChoice.addOption(eu.getName() + "(Empire)", (m, p) -> cardsToDiscard.add(eu));
+        }
+        while (cardsToDiscard.size() < 3) {
+            multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);
+            multipleChoice.removeSelectedOption();
+        }
+
+        for (UnitCard uc : cardsToDiscard) {
+            model.getScreenHandler().println("Discarding " + uc.getName() + ".");
+            if (uc instanceof RebelUnitCard) {
+                battle.removeUnit((RebelUnitCard) uc);
+                model.discardRebelCards(List.of((RebelUnitCard)uc));
+            } else {
+                battle.removeUnit((EmpireUnitCard) uc);
+                model.discardEmpireCards(List.of((EmpireUnitCard)uc));
             }
         }
-        for (RebelUnitCard ru : cardsToDiscard) {
-            model.getScreenHandler().println("Discarding " + ru.getName() + ".");
-            battle.removeUnit(ru);
-        }
-        model.discardRebelCards(cardsToDiscard);
         player.addToPopularInfluence(-1);
         model.getScreenHandler().println(player.getName() + " gets -1 Popular Influence.");
         if (battle instanceof DefendPlanetBattleBoard) {
