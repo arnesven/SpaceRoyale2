@@ -1,5 +1,6 @@
 package model.board;
 
+import model.DefectedPlayer;
 import model.GameOverException;
 import model.Model;
 import model.Player;
@@ -26,7 +27,7 @@ public class BattleOfCentralia extends DefendPlanetBattleBoard {
         for (int i = 0; i < CARDS_TO_DRAW; ++i) {
             addRebelCard(model.drawRebelUnitCard());
         }
-        for (Player p : model.getPlayers()) {
+        for (Player p : model.getPlayersNotDefectors()) {
             if (p.getCurrentLocation() != model.getCentralia()) {
                 MultipleChoice multipleChoice = new MultipleChoice();
                 multipleChoice.addOption("Move to Centralia", (m, p2) -> p2.moveToLocation(this));
@@ -39,8 +40,12 @@ public class BattleOfCentralia extends DefendPlanetBattleBoard {
                 p.moveToLocation(this);
             }
         }
-        for (Player p : MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == this)) {
-            PlayerActionState.addCardsToBattle(model, p);
+        for (Player p : model.getPlayers()) {
+            if (p instanceof DefectedPlayer) {
+                ((DefectedPlayer)p).addUnitsToBattle(model, this);
+            } else if (p.getCurrentLocation() == this) {
+                PlayerActionState.addCardsToBattle(model, p);
+            }
         }
     }
 

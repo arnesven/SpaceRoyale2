@@ -1,5 +1,6 @@
 package model.cards.events;
 
+import model.DefectedPlayer;
 import model.Model;
 import model.Player;
 import model.cards.GameCard;
@@ -18,7 +19,8 @@ public class WitchHuntEventCard extends EventCard {
         int leastPopularInfluence = MyLists.minimum(model.getPlayers(), Player::getPopularInfluence);
         for (Player p : MyLists.filter(model.getPlayersStartingFrom(player),
                 p -> p.getPopularInfluence() == leastPopularInfluence &&
-                p.getCurrentLocation() != model.getPrisonPlanet())) {
+                p.getCurrentLocation() != model.getPrisonPlanet() &&
+                !(p instanceof DefectedPlayer))) {
             int dieRoll = MyRandom.rollD10();
             model.getScreenHandler().print(p.getName() + " rolls a die, it is " + dieRoll + ", ");
             if (dieRoll <= 4) {

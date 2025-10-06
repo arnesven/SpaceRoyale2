@@ -1,5 +1,6 @@
 package model;
 
+import model.board.BattleAtTheRebelStronghold;
 import model.board.BattleBoard;
 import model.cards.alignment.NoAlignmentCard;
 import model.cards.events.EventCard;
@@ -132,15 +133,22 @@ public class DefectedPlayer extends Player {
         }
         multipleChoice.promptAndDoAction(model, "Add units to which battle?", this);
 
+        addUnitsToBattle(model, chosenBattle[0]);
+        if (chosenBattle[0].battleIsTriggered()) {
+            model.resolveBattle(chosenBattle[0]);
+        }
+    }
+
+    public void addUnitsToBattle(Model model, BattleBoard battleBoard) {
         RebelUnitCard operative = MyLists.find(getRebelUnitCards(), ru -> ru instanceof RebelOperativeUnitCard);
         if (operative != null) {
-            ((RebelOperativeUnitCard)operative).askToUse(model, chosenBattle[0], this);
+            ((RebelOperativeUnitCard)operative).askToUse(model, battleBoard, this);
         }
 
-        multipleChoice = new MultipleChoice();
+        MultipleChoice multipleChoice = new MultipleChoice();
         for (RebelUnitCard ru : getRebelUnitCards()) {
             multipleChoice.addOption(ru.getNameAndStrength(), (m, p) -> {
-                chosenBattle[0].addRebelCard(ru);
+                battleBoard.addRebelCard(ru);
                 discardCard(m, ru);
             });
         }
@@ -148,13 +156,10 @@ public class DefectedPlayer extends Player {
 
         int count = 0;
         do  {
-            multipleChoice.promptAndDoAction(model, "Which card does " + getName() + " add to " + chosenBattle[0].getName() + "?", this);
+            multipleChoice.promptAndDoAction(model, "Which card does " + getName() + " add to " + battleBoard.getName() + "?", this);
             multipleChoice.removeSelectedOption();
             count++;
         } while (count < 2 && multipleChoice.getNumberOfChoices() > 0 &&
                 !multipleChoice.getSelectedOptionName().equals("Pass"));
-        if (chosenBattle[0].battleIsTriggered()) {
-            model.resolveBattle(chosenBattle[0]);
-        }
     }
 }

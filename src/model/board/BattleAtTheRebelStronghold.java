@@ -1,5 +1,6 @@
 package model.board;
 
+import model.DefectedPlayer;
 import model.GameOverException;
 import model.Model;
 import model.Player;
@@ -26,7 +27,7 @@ public class BattleAtTheRebelStronghold extends InvasionBattleBoard {
         for (int i = 0; i < CARDS_TO_DRAW; ++i) {
             addRebelCard(model.drawRebelUnitCard());
         }
-        for (Player p : model.getPlayers()) {
+        for (Player p : model.getPlayersNotDefectors()) {
             MultipleChoice multipleChoice = new MultipleChoice();
             multipleChoice.addOption("Move to Rebel Stronghold", (m, p2) -> p2.moveToLocation(this));
             multipleChoice.addOption("Stay in location", (m, p2) -> {
@@ -36,8 +37,12 @@ public class BattleAtTheRebelStronghold extends InvasionBattleBoard {
             model.getScreenHandler().println("Does " + p.getName() + " participate in the assault?");
             multipleChoice.promptAndDoAction(model, "(Declining incurs at a -1 Emperor Influence penalty.)", p);
         }
-        for (Player p : MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == this)) {
-            PlayerActionState.addCardsToBattle(model, p);
+        for (Player p : model.getPlayers()) {
+            if (p instanceof DefectedPlayer) {
+                ((DefectedPlayer)p).addUnitsToBattle(model, this);
+            } else if (p.getCurrentLocation() == this) {
+                PlayerActionState.addCardsToBattle(model, p);
+            }
         }
     }
 

@@ -505,4 +505,8 @@ public class Model {
 
         gameData.players.set(gameData.players.indexOf(player), defector);
     }
+
+    public List<Player> getPlayersNotDefectors() {
+        return MyLists.filter(getPlayers(), p -> !(p instanceof DefectedPlayer));
+    }
 }

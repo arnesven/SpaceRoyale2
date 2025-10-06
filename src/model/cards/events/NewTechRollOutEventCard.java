@@ -48,7 +48,7 @@ public class NewTechRollOutEventCard extends EventCard {
         model.getScreenHandler().println("Found " + cardsOfSameType.size() + " other copies of " + tc.getName() + ".");
         for (TacticsCard tc2 : cardsOfSameType) {
             MultipleChoice multipleChoice = new MultipleChoice();
-            for (Player p : model.getPlayers()) {
+            for (Player p : model.getPlayersNotDefectors()) {
                 if (!alreadyGivenTo.contains(p)) {
                     multipleChoice.addOption(p.getName(), (m, p2) -> {
                         p.addCardToHand(tc2);
@@ -57,7 +57,9 @@ public class NewTechRollOutEventCard extends EventCard {
                     });
                 }
             }
-            multipleChoice.promptAndDoAction(model, "Who does " + player.getName() + " give the a card to?", player);
+            if (multipleChoice.getNumberOfChoices() > 0) {
+                multipleChoice.promptAndDoAction(model, "Who does " + player.getName() + " give the a card to?", player);
+            }
         }
 
     }

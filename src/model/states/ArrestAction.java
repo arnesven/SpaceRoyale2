@@ -18,7 +18,7 @@ public class ArrestAction {
     public static void arrestAction(Model model, Player player) {
         Player[] targetedPlayer = new Player[1];
         MultipleChoice multipleChoice = new MultipleChoice();
-        for (Player p : MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() != model.getPrisonPlanet())) {
+        for (Player p : MyLists.filter(model.getPlayersNotDefectors(), p -> p.getCurrentLocation() != model.getPrisonPlanet())) {
             if (p != player) {
                 multipleChoice.addOption(p.getName(), (_, _) -> targetedPlayer[0] = p);
             }
@@ -84,7 +84,7 @@ public class ArrestAction {
     public static void releaseFromPrison(Model model, Player player) {
         Player[] targetedPlayer = new Player[1];
         MultipleChoice multipleChoice = new MultipleChoice();
-        for (Player p : MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getPrisonPlanet())) {
+        for (Player p : MyLists.filter(model.getPlayersNotDefectors(), p -> p.getCurrentLocation() == model.getPrisonPlanet())) {
             multipleChoice.addOption(p.getName(), (_, _) -> targetedPlayer[0] = p);
         }
         multipleChoice.promptAndDoAction(model, "Who do you want to attempt to break out of prison?", player);
@@ -114,6 +114,6 @@ public class ArrestAction {
     }
 
     public static boolean anybodyArrestable(Model model, Player current) {
-        return MyLists.any(model.getPlayers(), p -> p != current && p.getCurrentLocation() != model.getPrisonPlanet());
+        return MyLists.any(model.getPlayersNotDefectors(), p -> p != current && p.getCurrentLocation() != model.getPrisonPlanet());
     }
 }

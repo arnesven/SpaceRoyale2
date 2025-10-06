@@ -14,7 +14,7 @@ public class DisastrousMoraleEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
-        for (Player p : model.getPlayers()) {
+        for (Player p : model.getPlayersNotDefectors()) {
             MultipleChoice multipleChoice = new MultipleChoice();
             for (EmpireUnitCard eu : p.getUnitCardsInHand()) {
                 multipleChoice.addOption(eu.getNameAndStrength(), (m, performer) -> performer.discardCard(m, eu));

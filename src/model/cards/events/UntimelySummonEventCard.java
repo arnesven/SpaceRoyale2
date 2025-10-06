@@ -1,5 +1,6 @@
 package model.cards.events;
 
+import model.DefectedPlayer;
 import model.Model;
 import model.Player;
 import model.cards.GameCard;
@@ -19,7 +20,9 @@ public class UntimelySummonEventCard extends EventCard {
         }
         model.getScreenHandler().println("Each player must return to Centralia or lose 1 Emperor Influence.");
         for (Player p : MyLists.filter(model.getPlayersStartingFrom(player),
-                p -> p.getCurrentLocation() != model.getCentralia())) {
+                p -> p.getCurrentLocation() != model.getCentralia() &&
+                        p.getCurrentLocation() != model.getPrisonPlanet() &&
+                        !(p instanceof DefectedPlayer))) {
             MultipleChoice multipleChoice = new MultipleChoice();
             multipleChoice.addOption("Return to Centralia", (m, p2) -> {
                 p2.moveToLocation(m.getCentralia());
