@@ -39,7 +39,7 @@ public class EvasiveManeuversCard extends TacticsCard {
                 p.addCardToHand(eu);
             });
         }
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3 && multipleChoice.getNumberOfChoices() > 0; ++i) {
             multipleChoice.promptAndDoAction(model, "Which card do you want to pick up?", player);
             multipleChoice.removeSelectedOption();
         }
