@@ -154,7 +154,7 @@ public abstract class BattleBoard extends BoardLocation {
         }
     }
 
-    private void printTallies(Model model) {
+    public void printTallies(Model model) {
         int rebelSpace = MyLists.intAccumulate(rebelUnits, this::getSpaceStrength);
         int rebelGround = MyLists.intAccumulate(rebelUnits, this::getGroundStrength);
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
@@ -340,6 +340,10 @@ public abstract class BattleBoard extends BoardLocation {
 
     public void printRebelUnits(Model model) {
         print(model, "Rebel Units: " + freqListOrNone(rebelUnits));
+    }
+
+    public void printEmpireUnits(Model model) {
+        print(model, "Empire Units: " + freqListOrNone(empireUnits));
     }
 
     public void movePlayersAfterBattle(Model model) {

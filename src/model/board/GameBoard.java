@@ -6,9 +6,10 @@ import model.tracks.WarTrack;
 import java.util.List;
 
 public class GameBoard {
-    BoardLocation centralia = new CentraliaLocation();
     private final BattleBoard[] battles;
-    private BoardLocation prisonPlanet = new PrisonPlanetLocation();
+    private final BoardLocation centralia = new CentraliaLocation();
+    private final BoardLocation prisonPlanet = new PrisonPlanetLocation();
+    private final BoardLocation rebelStronghold = new RebelStrongholdLocation();
 
     public GameBoard() {
         battles = new BattleBoard[3];
@@ -47,5 +48,9 @@ public class GameBoard {
 
     public BoardLocation getPrisonPlanet() {
         return prisonPlanet;
+    }
+
+    public BoardLocation getRebelStronghold() {
+        return rebelStronghold;
     }
 }

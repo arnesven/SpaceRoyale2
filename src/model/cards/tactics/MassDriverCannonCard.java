@@ -4,10 +4,7 @@ import model.Model;
 import model.Player;
 import model.board.BattleBoard;
 import model.cards.GameCard;
-import model.cards.units.EmpireUnitCard;
-import model.cards.units.RebelUnitCard;
-import model.cards.units.UnitCard;
-import model.cards.units.UpgradeableRebelUnitCard;
+import model.cards.units.*;
 import util.MyLists;
 import view.MultipleChoice;
 
@@ -54,6 +51,9 @@ public class MassDriverCannonCard extends TacticsCard {
         }
         if (rebelUnitCard instanceof UpgradeableRebelUnitCard) {
             return !((UpgradeableRebelUnitCard) rebelUnitCard).isUpgraded();
+        }
+        if (rebelUnitCard instanceof FighterAceUnitCard) {
+            return false;
         }
         return true;
     }

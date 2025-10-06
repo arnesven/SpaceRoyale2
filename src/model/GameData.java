@@ -1,5 +1,6 @@
 package model;
 
+import model.board.BoardLocation;
 import model.board.GameBoard;
 import model.cards.*;
 import model.cards.alignment.AlignmentCard;

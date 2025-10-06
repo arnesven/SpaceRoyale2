@@ -7,6 +7,7 @@ import model.cards.tactics.TacticsCard;
 import model.cards.units.EmpireUnitCard;
 import model.cards.units.EmpireUnitPlayerDeck;
 import model.cards.units.UnitCard;
+import model.states.PlayerActionState;
 import util.MyLists;
 import view.ScreenHandler;
 
@@ -16,10 +17,10 @@ public class Player {
     private final MyColors color;
     private final String name;
     private final char shortName;
+    private BoardLocation currentLocation = null;
     private final EmpireUnitPlayerDeck unitDeck;
     private int emperorInfluence;
     private int popularInfluence;
-    private BoardLocation currentLocation = null;
     private AlignmentCard loyalty;
     private List<EmpireUnitCard> unitCardsInHand = new ArrayList<>();
     private List<TacticsCard> tacticsCardsInHand = new ArrayList<>();
@@ -39,6 +40,10 @@ public class Player {
 
     public String getNameWithShort() {
         return getName() + " (" + shortName + ")";
+    }
+
+    public MyColors getColor() {
+        return color;
     }
 
     public void moveToLocation(BoardLocation location) {
@@ -142,24 +147,22 @@ public class Player {
         tacticsCardsInHand.add(tc);
     }
 
+    private String makeSimpleName() {
+        return getName().replace("General ", "").replace("Admiral ", "");
+    }
+
     public void drawYourselfHorizontally(Model model, int x, int y) {
         model.getScreenHandler().drawText(makeSimpleName() + " E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
         model.getScreenHandler().drawText("EI:" + emperorInfluence + " PI:" + popularInfluence + " Deck:" + unitDeck.size(), x, y+1);
     }
 
-    private String makeSimpleName() {
-        return getName().replace("General ", "").replace("Admiral ", "");
-    }
-
     public void drawYourselfVertically(Model model, int x, int y) {
-        
         model.getScreenHandler().drawText(makeSimpleName(), x, y);
         model.getScreenHandler().drawText("E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y+1);
         model.getScreenHandler().drawText("EI:" + emperorInfluence, x, y+2);
         model.getScreenHandler().drawText("PI:" + popularInfluence, x, y+3);
         model.getScreenHandler().drawText("Deck:", x, y+4);
         model.getScreenHandler().drawText(" " + unitDeck.size(), x, y+5);
-
     }
 
     public int getPopularInfluence() {
@@ -172,5 +175,9 @@ public class Player {
 
     public int getEmperorInfluence() {
         return emperorInfluence;
+    }
+
+    public boolean takeTurn(Model model, PlayerActionState playerActionState) {
+        return playerActionState.takeNormalPlayerTurn(model, this);
     }
 }

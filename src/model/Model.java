@@ -11,12 +11,11 @@ import model.cards.events.EventCard;
 import model.cards.events.EventDeck;
 import model.cards.tactics.TacticsCard;
 import model.cards.tactics.TacticsDeck;
-import model.cards.units.CommonEmpireUnitDeck;
-import model.cards.units.EmpireUnitCard;
-import model.cards.units.RebelUnitCard;
+import model.cards.units.*;
 import model.states.GameState;
 import model.states.InitialGameState;
 import util.Arithmetics;
+import util.MyLists;
 import util.MyPair;
 import view.ScreenHandler;
 
@@ -469,5 +468,41 @@ public class Model {
 
     public AlignmentCard peekAtBattleChanceCard() {
         return gameData.battleChanceDeck.peek();
+    }
+
+    public void playerDefects(Player player) {
+        screenHandler.println(player.getName() + " defects to the rebel side!");
+        screenHandler.println(player.getName() + "'s Rebel Alignment card is placed in the Battle Chance deck.");
+        addBattleChanceCard(player.getLoyaltyCard());
+        DefectedPlayer defector = new DefectedPlayer(player);
+        if (player.getCurrentLocation() == getPrisonPlanet()) {
+            getScreenHandler().println("Since " + player.getName() +
+                    " is on the Prison planet, no special Rebel Unit cards can be claimed.");
+        } else {
+            defector.tradeInUnits(this, player);
+        }
+        getScreenHandler().println(player.getName() + " discards " + player.getUnitCardsInHand().size() + " Unit cards.");
+        for (EmpireUnitCard eu : new ArrayList<>(player.getUnitCardsInHand())) {
+            player.discardCard(this, eu);
+        }
+        getScreenHandler().println(player.getName() + " discards " + player.getTacticsCardsInHand().size() + " Tactics cards.");
+        for (TacticsCard tc : new ArrayList<>(player.getTacticsCardsInHand())) {
+            player.discardCard(this, tc);
+        }
+        while (!player.getUnitDeck().isEmpty()) {
+            discardEmpireCards(List.of(player.getUnitDeck().drawOne()));
+        }
+
+        for (int i = 0; i < 2; ++i) {
+            defector.addCardToHand(gameData.rebelUnitDeck.drawOne());
+        }
+        getScreenHandler().println(player.getName() + " draws 2 Rebel Units:");
+        defector.printHand(screenHandler);
+
+        defector.drawEventCards(this);
+        player.moveToLocation(gameData.gameBoard.getRebelStronghold());
+        defector.moveToLocation(gameData.gameBoard.getRebelStronghold());
+
+        gameData.players.set(gameData.players.indexOf(player), defector);
     }
 }

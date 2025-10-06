@@ -1,10 +1,12 @@
 package model.states;
 
+import model.DefectedPlayer;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
 import model.board.BoardLocation;
 import model.board.PrisonPlanetLocation;
+import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.*;
@@ -30,22 +32,31 @@ public class PlayerActionState extends GameState {
             println(model, "Loyalty: " + current.getLoyaltyCard().getName());
             println(model, "Cards in hand (" + current.getTotalCardsInHand() + "):");
             current.printHand(model.getScreenHandler());
-            if (!isOnPrisonPlanet(current)) {
-                doNegativeAction(model, current);
-            }
-            if (model.gameIsOver()) {
+            if (current.takeTurn(model, this)) {
                 break;
             }
-            doPlayerAction(model, current);
-            if (model.gameIsOver()) {
-                break;
-            }
-            drawThreeCards(model, current);
-            discardIfOverLimit(model, current);
             model.stepCurrentPlayer();
             model.drawBoard();
         }
         return new EmperorHealthDeclineState();
+    }
+
+    public boolean takeNormalPlayerTurn(Model model, Player current) {
+        if (!isOnPrisonPlanet(current)) {
+            doNegativeAction(model, current);
+        }
+        if (model.gameIsOver()) {
+            return true;
+        }
+        doPlayerAction(model, current);
+        if (model.getPlayers().contains(current)) { // player hasn't defected
+            if (model.gameIsOver()) {
+                return true;
+            }
+            drawThreeCards(model, current);
+            discardIfOverLimit(model, current);
+        }
+        return false;
     }
 
     private void doNegativeAction(Model model, Player current) {
@@ -144,6 +155,9 @@ public class PlayerActionState extends GameState {
         }
         addNonMoveActions(multipleChoice, model, current);
         multipleChoice.promptAndDoAction(model, "Select an action for " + current.getName() + ":", current);
+        if (!model.getPlayers().contains(current)) {
+            return; // Player defected
+        }
 
         if (multipleChoice.getSelectedOptionName().equals("Move")) {
             MultipleChoice multipleChoice2 = new MultipleChoice();
@@ -183,6 +197,11 @@ public class PlayerActionState extends GameState {
         if (agent != null) {
             multipleChoice.addOption("Play Agent", (m, p) -> {
                 ((AgentUnitCard)agent).playAsAction(m, p);
+            });
+        }
+        if (current.getLoyaltyCard() instanceof RebelAlignmentCard) {
+            multipleChoice.addOption("Defect", (m, p) -> {
+                m.playerDefects(p);
             });
         }
         multipleChoice.addOption("Pass", (_, _) -> {});
@@ -323,5 +342,48 @@ public class PlayerActionState extends GameState {
             multipleChoice.promptAndDoAction(model,"Select a card to discard:", current);
             multipleChoice.removeSelectedOption();
         }
+    }
+
+    public boolean takeDefectorTurn(Model model, DefectedPlayer defector) {
+        MultipleChoice multipleChoice = new MultipleChoice();
+        multipleChoice.addOption("Increase Unrest", this::increaseUnrest);
+        if (defector.getHeldEvent() != null) {
+            multipleChoice.addOption("Resolve Held Event", (m, p) -> {
+                resolveEventThenDiscard(model, defector, defector.getHeldEvent());
+                defector.removeHeldEvent();
+            });
+        }
+        if (!defector.getRebelUnitCards().isEmpty()) {
+            multipleChoice.addOption("Add 2 Units to battle", (m, p) -> {
+                ((DefectedPlayer) p).addUnitsToBattle(model);
+            });
+        }
+        multipleChoice.promptAndDoAction(model, "Select an action for " + defector.getName() + ".", defector);
+
+        if (model.gameIsOver()) {
+            return true;
+        }
+
+        // Draw Cards
+        for (int i = 0; i < 2; ++i) {
+            defector.addCardToHand(model.drawRebelUnitCard());
+        }
+        model.getScreenHandler().println(defector.getName() + " draws 2 Rebel Units:");
+        defector.printHand(model.getScreenHandler());
+
+        // Discard if over hand limit
+        multipleChoice = new MultipleChoice();
+        for (RebelUnitCard ru : defector.getRebelUnitCards()) {
+            multipleChoice.addOption(ru.getNameAndStrength(), (m, performer) -> ((DefectedPlayer)performer).discardCard(m, ru));
+        }
+        if (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
+            println(model, defector.getName() + " has too many cards in hand.");
+        }
+        while (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
+            multipleChoice.promptAndDoAction(model,"Select a card to discard:", defector);
+            multipleChoice.removeSelectedOption();
+        }
+
+        return false;
     }
 }
