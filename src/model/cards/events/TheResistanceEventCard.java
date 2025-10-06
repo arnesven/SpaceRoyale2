@@ -8,8 +8,8 @@ import util.MyLists;
 
 import java.util.List;
 
-public class TheResistanceEventcard extends EventCard {
-    public TheResistanceEventcard() {
+public class TheResistanceEventCard extends EventCard {
+    public TheResistanceEventCard() {
         super("The Resistance", true,
                 "Increase Unrest by one. All players must close their eyes. " +
                 "Then, all players with Rebel loyalty can open their eyes to identify" +
@@ -36,6 +36,6 @@ public class TheResistanceEventcard extends EventCard {
 
     @Override
     public GameCard copy() {
-        return new TheResistanceEventcard();
+        return new TheResistanceEventCard();
     }
 }
