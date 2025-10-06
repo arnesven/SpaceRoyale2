@@ -45,7 +45,9 @@ public class DefendPlanetBattleBoard extends BattleBoard {
                 p.addToPopularInfluence(+1);
                 MultipleChoice multipleChoice = new MultipleChoice();
                 multipleChoice.addOption("Draw Unit Card", (m, _) -> p.drawUnitCard(m));
-                multipleChoice.addOption("Draw Tactics Card", (m, _) -> p.drawTacticsCard(m));
+                if (!model.getTacticsDeck().isEmpty()) {
+                    multipleChoice.addOption("Draw Tactics Card", (m, _) -> p.drawTacticsCard(m));
+                }
                 multipleChoice.promptAndDoAction(model, p.getName() + " gets one card as a reward:", p);
             }
         }
