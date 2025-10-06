@@ -263,6 +263,7 @@ public class Model {
                 gameData.rebelUnitDeck.addCard(c);
             }
             gameData.rebelUnitDeck.shuffle();
+            gameData.rebelUnitDiscard.clear();
         }
         return gameData.rebelUnitDeck.drawOne();
     }
@@ -460,6 +461,7 @@ public class Model {
                 throw new DeckIsEmptyException();
             }
             gameData.tacticsDeck = new TacticsDeck(gameData.tacticsDiscard);
+            gameData.tacticsDiscard.clear();
             screenHandler.println("The tactics deck is reshuffled.");
         }
         return getTacticsDeck().drawOne();
