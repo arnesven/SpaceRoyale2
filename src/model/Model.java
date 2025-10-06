@@ -62,10 +62,10 @@ public class Model {
             }
         } else if (gameData.gameTracks.isUnrestMaxedOut()) {
             screenHandler.println("Revolution (unrest = max)");
-            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof RebelAlignmentCard);
+            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof RebelAlignmentCard || p instanceof DefectedPlayer);
         } else if (gameData.gameTracks.isBattleOfCentralia()) {
             screenHandler.println("Defeat at Battle of Centralia");
-            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof RebelAlignmentCard);
+            printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof RebelAlignmentCard || p instanceof DefectedPlayer);
         } else if (gameData.gameTracks.isBattleAtTheRebelStronghold()) {
             screenHandler.println("Victory at Battle at the Rebel Stronghold");
             printWinnersAndLosers(p -> p.getLoyaltyCard() instanceof EmpireAlignmentCard);

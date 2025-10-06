@@ -18,6 +18,7 @@ public class SuccessionEnding {
 
     public static WinCondition makeWinCondition(Model model) {
         List<Player> playersSorted = new ArrayList<>(model.getPlayers());
+        playersSorted.removeIf(p -> p instanceof DefectedPlayer);
         playersSorted.sort(SuccessionEnding::comparePlayers);
         for (Player p : playersSorted) {
             model.getScreenHandler().println(p.getName() + " has " + p.getEmperorInfluence() + " EI, " +
