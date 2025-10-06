@@ -287,7 +287,7 @@ public class PlayerActionState extends GameState {
             println(model, performer.getName() + " draws 3 cards.");
         }
         multipleChoice.promptAndDoAction(model, "Select an option:", performer);
-        print(model, performer.getName() + "'s hand: ");
+        println(model, performer.getName() + "'s hand: ");
         performer.printHand(model.getScreenHandler());
     }
 
@@ -299,7 +299,7 @@ public class PlayerActionState extends GameState {
         });
         println(model, performer.getName() + " is about to draw cards.");
         multipleChoice.promptAndDoAction(model, "Select an option:", performer);
-        print(model, performer.getName() + "'s hand: ");
+        println(model, performer.getName() + "'s hand: ");
         performer.printHand(model.getScreenHandler());
     }
 
