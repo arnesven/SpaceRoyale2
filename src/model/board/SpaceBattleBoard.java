@@ -41,14 +41,20 @@ public class SpaceBattleBoard extends BattleBoard {
     protected boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGroundDomain) {
         if (empireWinsSpace) {
             model.getScreenHandler().println("The Empire won the battle.");
-            for (Player p : playersInBattle) {
-                model.getScreenHandler().println(p.getName() + " gains 1 Emperor Influence.");
-                p.addToEmperorInfluence(1);
-            }
             return true;
         }
         model.getScreenHandler().println("The rebels won the battle.");
         return false;
+    }
+
+    @Override
+    protected void battleSpecificRewards(Model model, List<Player> playersInBattle, boolean imperialWin) {
+        if (imperialWin) {
+            for (Player p : playersInBattle) {
+                model.getScreenHandler().println(p.getName() + " gains 1 Emperor Influence.");
+                p.addToEmperorInfluence(1);
+            }
+        }
     }
 
     @Override

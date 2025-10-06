@@ -38,6 +38,8 @@ public abstract class BattleBoard extends BoardLocation {
 
     protected abstract boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGround);
 
+    protected abstract void battleSpecificRewards(Model model, List<Player> playersInBattle, boolean imperialWin);
+
     public abstract BattleBoard flipBattleBoard();
 
     @Override
@@ -106,6 +108,7 @@ public abstract class BattleBoard extends BoardLocation {
                 p.addToEmperorInfluence(-1);
             }
         }
+        battleSpecificRewards(model, playersInBattle, imperialWin);
         model.discardEmpireCards(empireUnits);
         resetUpgradedCards(model);
         if (model.checkForBattleOfCentralia()) {

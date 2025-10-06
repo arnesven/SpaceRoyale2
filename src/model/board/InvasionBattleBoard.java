@@ -19,10 +19,6 @@ public class InvasionBattleBoard extends BattleBoard {
     protected boolean battleSpecificResolve(Model model, List<Player> playersInBattle, boolean empireWinsSpace, boolean empireWinsGround) {
         if (empireWinsSpace && empireWinsGround) {
             model.getScreenHandler().println("The empire has successfully invaded the planet.");
-            for (Player p : playersInBattle) {
-                model.getScreenHandler().println(p.getName() + " gains 2 Emperor Influence.");
-                p.addToEmperorInfluence(2);
-            }
             return true;
         }
         if (empireWinsSpace) {
@@ -34,6 +30,16 @@ public class InvasionBattleBoard extends BattleBoard {
         }
         model.getScreenHandler().println("The rebels have thwarted the imperial invasion.");
         return false;
+    }
+
+    @Override
+    protected void battleSpecificRewards(Model model, List<Player> playersInBattle, boolean imperialWin) {
+        if (imperialWin) {
+            for (Player p : playersInBattle) {
+                model.getScreenHandler().println(p.getName() + " gains 2 Emperor Influence.");
+                p.addToEmperorInfluence(2);
+            }
+        }
     }
 
     @Override

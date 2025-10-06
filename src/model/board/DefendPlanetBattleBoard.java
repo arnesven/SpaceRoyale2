@@ -31,6 +31,15 @@ public class DefendPlanetBattleBoard extends BattleBoard {
                 model.getScreenHandler().println("Their supply lines are however cut off by the imperial fleet which dominates the skies.");
             }
             model.getScreenHandler().println("The Imperial forces have successfully defended the planet.");
+            return true;
+        }
+        model.getScreenHandler().println("The planet has fallen to the rebels.");
+        return false;
+    }
+
+    @Override
+    protected void battleSpecificRewards(Model model, List<Player> playersInBattle, boolean imperialWin) {
+        if (imperialWin) {
             for (Player p : playersInBattle) {
                 model.getScreenHandler().println(p.getName() + " gains 1 Popular Influence.");
                 p.addToPopularInfluence(+1);
@@ -39,10 +48,7 @@ public class DefendPlanetBattleBoard extends BattleBoard {
                 multipleChoice.addOption("Draw Tactics Card", (m, _) -> p.drawTacticsCard(m));
                 multipleChoice.promptAndDoAction(model, p.getName() + " gets one card as a reward:", p);
             }
-            return true;
         }
-        model.getScreenHandler().println("The planet has fallen to the rebels.");
-        return false;
     }
 
     @Override
