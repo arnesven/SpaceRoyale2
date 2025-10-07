@@ -2,7 +2,9 @@ package model.states;
 
 import model.Model;
 
-public abstract class GameState {
+import java.io.Serializable;
+
+public abstract class GameState implements Serializable {
     public abstract GameState run(Model model);
 
     protected void println(Model model, String text) {

@@ -17,34 +17,70 @@ import model.states.InitialGameState;
 import util.Arithmetics;
 import util.MyLists;
 import util.MyPair;
+import view.MultipleChoice;
 import view.ScreenHandler;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Model {
     private final ScreenHandler screenHandler;
-    private final GameData gameData;
-    private GameState currentState;
+    private GameData gameData;
     private boolean gameIsOver = false;
 
     public Model(ScreenHandler screenHandler) {
         this.screenHandler = screenHandler;
         gameData = new GameData();
-        currentState = new InitialGameState();
     }
 
     public void runGameScript() {
+        askToLoadGame();
         try {
             while (!gameIsOver()) {
-                GameState nextState = currentState.run(this);
-                currentState = nextState;
+                GameState nextState = gameData.currentState.run(this);
+                gameData.currentState = nextState;
+                saveGame();
             }
         } catch (GameOverException goe) {
             // Intentional fall through.
         }
         handleGameEnding();
+    }
+
+    private void askToLoadGame() {
+        MultipleChoice multipleChoice = new MultipleChoice();
+        multipleChoice.addOption("New game", (_,_) -> {});
+        multipleChoice.addOption("Load game", (m, p) -> {loadGameFromSave();});
+        multipleChoice.promptAndDoAction(this, "Welcome to Space Royale 2 Simulator!", null);
+    }
+
+
+    private void saveGame() {
+        getScreenHandler().println("* Saving Game *");
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("save_data.sr2"));
+            oos.writeObject(gameData);
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private void loadGameFromSave() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("save_data.sr2"));
+            gameData = (GameData) ois.readObject();
+            ois.close();
+            getScreenHandler().println("* Game Loaded *");
+            drawBoard();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void handleGameEnding() {

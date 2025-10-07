@@ -5,7 +5,9 @@ import model.tracks.HealthCategory;
 import model.tracks.WarTrack;
 import view.ScreenHandler;
 
-public class GameTracks {
+import java.io.Serializable;
+
+public class GameTracks implements Serializable {
     public static final int MAX_GAME_TURN = 8;
     private static final int MAX_HEALTH = 14;
     private static final int MAX_UNREST = 10;

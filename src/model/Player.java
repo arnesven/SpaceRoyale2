@@ -11,9 +11,10 @@ import model.states.PlayerActionState;
 import util.MyLists;
 import view.ScreenHandler;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
     private final MyColors color;
     private final String name;
     private final char shortName;

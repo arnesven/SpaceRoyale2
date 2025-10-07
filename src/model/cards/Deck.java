@@ -1,10 +1,11 @@
 package model.cards;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Deck<T extends GameCard> {
+public class Deck<T extends GameCard> implements Serializable {
     private List<T> cards;
 
     public Deck() {

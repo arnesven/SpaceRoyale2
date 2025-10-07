@@ -5,9 +5,10 @@ import model.board.DefendPlanetBattleBoard;
 import model.board.InvasionBattleBoard;
 import model.board.SpaceBattleBoard;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class WarTrack {
+public class WarTrack implements Serializable {
 
     /**
      * TURN 1-3:

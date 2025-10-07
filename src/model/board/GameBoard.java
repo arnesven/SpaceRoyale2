@@ -3,9 +3,10 @@ package model.board;
 import model.Model;
 import model.tracks.WarTrack;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GameBoard {
+public class GameBoard implements Serializable {
     private final BattleBoard[] battles;
     private final BoardLocation centralia = new CentraliaLocation();
     private final BoardLocation prisonPlanet = new PrisonPlanetLocation();

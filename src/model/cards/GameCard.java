@@ -1,6 +1,8 @@
 package model.cards;
 
-public abstract class GameCard {
+import java.io.Serializable;
+
+public abstract class GameCard implements Serializable {
 
     private String name;
 

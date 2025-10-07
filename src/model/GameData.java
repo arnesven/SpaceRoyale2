@@ -11,11 +11,14 @@ import model.cards.tactics.TacticsDeck;
 import model.cards.units.CommonEmpireUnitDeck;
 import model.cards.units.EmpireUnitCard;
 import model.cards.units.RebelUnitCard;
+import model.states.GameState;
+import model.states.InitialGameState;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameData {
+public class GameData implements Serializable {
     public GameBoard gameBoard;
     public List<Player> players;
     public Deck<AlignmentCard> battleChanceDeck;
@@ -31,4 +34,5 @@ public class GameData {
     public List<EventCard> eventDiscard = new ArrayList<>();
     public List<EventCard> eventCardsInPlay = new ArrayList<>();
     public int initialRebelUnitRate = 3;
+    public GameState currentState = new InitialGameState();
 }

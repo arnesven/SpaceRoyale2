@@ -3,12 +3,13 @@ package model.board;
 import model.Model;
 import model.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BoardLocation {
+public abstract class BoardLocation implements Serializable {
     private List<Player> occupants = new ArrayList<>();
 
     public void removePlayer(Player player) {
