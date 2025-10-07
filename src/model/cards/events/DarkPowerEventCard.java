@@ -23,7 +23,7 @@ public class DarkPowerEventCard extends EventCard {
     public void resolve(Model model, Player player) {
         List<EmpireUnitCard> unitsToDiscard = new ArrayList<>();
         List<TacticsCard> tacticsToDiscard = new ArrayList<>();
-        if (player.getUnitCardsInHand().size() + player.getTacticsCardsInHand().size() <= NO_OF_CARDS) {
+        if (player.getTotalCardsInHand() <= NO_OF_CARDS) {
             model.getScreenHandler().println(player.getName() + " has less than " + NO_OF_CARDS + ", discarding entire hand.");
             unitsToDiscard.addAll(player.getUnitCardsInHand());
             tacticsToDiscard.addAll(player.getTacticsCardsInHand());
@@ -41,6 +41,10 @@ public class DarkPowerEventCard extends EventCard {
                     tacticsToDiscard.add(tc);
                     model.getScreenHandler().println(tc.getName() + " selected, " + cardsLeft(unitsToDiscard, tacticsToDiscard) + " left to select.");
                 });
+            }
+            while (unitsToDiscard.size() < NO_OF_CARDS) {
+                multipleChoice.promptAndDoAction(model, "Discard which card?", player);
+                multipleChoice.removeSelectedOption();
             }
         }
 
