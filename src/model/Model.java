@@ -270,11 +270,11 @@ public class Model {
             screenHandler.drawText("E " + gameData.empireUnitDiscard.size(), x + 10, y + 5);
         }
         if (!gameData.rebelUnitDiscard.isEmpty()) {
-            screenHandler.drawText("R " + gameData.rebelUnitDiscard.size(), x + 17, y + 5);
+            screenHandler.drawText("R " + gameData.rebelUnitDiscard.size(), x + 16, y + 5);
         }
         if (!gameData.eventDiscard.isEmpty()) {
-            screenHandler.drawText("Ev" + gameData.eventDiscard.size(), x + 24, y + 5);
-            screenHandler.drawText("nt", x + 21, y + 6);
+            screenHandler.drawText("Ev" + gameData.eventDiscard.size(), x + 22, y + 5);
+            screenHandler.drawText("nt", x + 22, y + 6);
         }
 
         if (!gameData.eventCardsInPlay.isEmpty()) {
