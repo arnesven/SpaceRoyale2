@@ -21,7 +21,7 @@ public class QuellUnrestAction {
                 multipleChoice.addOption(p.getName(), (_, _) -> involvedPlayers.add(p));
             }
         }
-
+        int maxOthers = getMaxParticipants(model.getTurn()) - 1;
         boolean first = true;
         boolean[] isDone = new boolean[]{false};
         do {
@@ -31,7 +31,7 @@ public class QuellUnrestAction {
                 multipleChoice.addOption("Done", (_, _) -> isDone[0] = true);
                 first = false;
             }
-        } while (!isDone[0] && involvedPlayers.size() < 3 && multipleChoice.getNumberOfChoices() > 1);
+        } while (!isDone[0] && involvedPlayers.size() < maxOthers && multipleChoice.getNumberOfChoices() > 1);
 
 
         involvedPlayers.addFirst(player);
@@ -72,6 +72,16 @@ public class QuellUnrestAction {
         }
 
         model.discardEmpireCards(contributedCards);
+    }
+
+    private static int getMaxParticipants(int turn) {
+        if (turn < 4) {
+            return 4;
+        }
+        if (turn < 7) {
+            return 3;
+        }
+        return 2;
     }
 
     private static boolean isOnCentralia(Model model, Player player) {
