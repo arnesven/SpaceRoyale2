@@ -149,7 +149,7 @@ public class Player implements Serializable {
     }
 
     protected String getSimpleName() {
-        return getName().replace("General ", "").replace("Admiral ", "");
+        return name.replace("General ", "").replace("Admiral ", "");
     }
 
     public void drawYourselfHorizontally(Model model, int x, int y) {
@@ -157,13 +157,23 @@ public class Player implements Serializable {
         model.getScreenHandler().drawText("EI:" + emperorInfluence + " PI:" + popularInfluence + " Deck:" + unitDeck.size(), x, y+1);
     }
 
-    public void drawYourselfVertically(Model model, int x, int y) {
+    public void drawYourselfVertically(Model model, int x, int y, boolean compact) {
         model.getScreenHandler().drawText(getSimpleName(), x, y);
-        model.getScreenHandler().drawText("E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y+1);
-        model.getScreenHandler().drawText("EI:" + emperorInfluence, x, y+2);
-        model.getScreenHandler().drawText("PI:" + popularInfluence, x, y+3);
-        model.getScreenHandler().drawText("Deck:", x, y+4);
-        model.getScreenHandler().drawText(" " + unitDeck.size(), x, y+5);
+        model.getScreenHandler().drawText("E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y + 1);
+        if (compact) {
+            model.getScreenHandler().drawText(String.format("EI:%d PI:%d", emperorInfluence, popularInfluence), x, y + 2);
+            model.getScreenHandler().drawText("Deck:" + unitDeck.size(), x, y + 3);
+
+        } else {
+            model.getScreenHandler().drawText("EI:" + emperorInfluence, x, y + 2);
+            model.getScreenHandler().drawText("PI:" + popularInfluence, x, y + 3);
+            model.getScreenHandler().drawText("Deck:", x, y + 4);
+            model.getScreenHandler().drawText(" " + unitDeck.size(), x, y + 5);
+        }
+    }
+
+    public void drawYourselfVertically(Model model, int x, int y) {
+        drawYourselfVertically(model, x, y, false);
     }
 
     public int getPopularInfluence() {

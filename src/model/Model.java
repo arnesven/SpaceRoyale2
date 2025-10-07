@@ -219,9 +219,9 @@ public class Model {
     public void drawBoard() {
         screenHandler.println("");
         screenHandler.clearDrawingArea();
-        drawPlayers(gameData.players);
         gameData.gameBoard.drawYourself(this, 8, 2);
         drawDecks(22, 8);
+        drawPlayers(gameData.players);
         gameData.gameTracks.drawYourself(this, 54, 10);
         screenHandler.printDrawingArea();
         screenHandler.println("");
@@ -247,7 +247,7 @@ public class Model {
             players.get(i).drawYourselfHorizontally(this, topLocs.get(i-5).first, topLocs.get(i-5).second);
         }
         if (players.size() == 8) {
-            players.get(7).drawYourselfVertically(this, 64, 3);
+            players.get(7).drawYourselfVertically(this, 64, 3, true);
         }
     }
 
@@ -278,10 +278,10 @@ public class Model {
         }
 
         if (!gameData.eventCardsInPlay.isEmpty()) {
-            screenHandler.drawText("-= Events in play =-", 64, 0);
+            screenHandler.drawText("-= Events in play =-", 69, 0);
             int yOff = 1;
             for (EventCard ev : gameData.eventCardsInPlay) {
-                screenHandler.drawText(ev.getName(), 65, yOff++);
+                screenHandler.drawText(ev.getName(), 69, yOff++);
             }
         }
     }
