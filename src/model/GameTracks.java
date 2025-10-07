@@ -98,11 +98,11 @@ public class GameTracks implements Serializable {
     }
 
     public boolean isBattleOfCentralia() {
-        return war.isBattleOfCentralia();
+        return war.isBattleOfCentralia(turn);
     }
 
     public boolean isBattleAtTheRebelStronghold() {
-        return war.isBattleAtRebelStronghold();
+        return war.isBattleAtRebelStronghold(turn);
     }
 
     public void setWarCounter(int i) {

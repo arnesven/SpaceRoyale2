@@ -11,20 +11,6 @@ import java.util.List;
 public class WarTrack implements Serializable {
 
     /**
-     * TURN 1-3:
-     *  | BoC | -5 | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  5 |  BatRS  |
-     *       Rebel Advantage <                         > Empire Advantage
-     *
-     * TURN 4-6:
-     *       | BoC | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  BatRS  |
-     *            Rebel Advantage <               > Empire Advantage
-     *
-     * TURN 7-8:
-     *            | BoC | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  BatRS  |
-     *            Rebel Advantage <               > Empire Advantage
-     *
-     *
-     * PROPOSAL:
      *
      * TURN 1-3:
      *       | BoC | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  BatRS  |
@@ -47,9 +33,6 @@ public class WarTrack implements Serializable {
 
     private static final BattleBoard EMPIRE_ADVANTAGE_BOARD = new InvasionBattleBoard('D');
     private static final BattleBoard REBEL_ADVANTAGE_BOARD = new DefendPlanetBattleBoard('E');
-
-    private static final int BATTLE_OF_CENTRALIA_SPACE = -6;
-    private static final int BATTLE_AT_REBEL_STRONGHOLD_SPACE = 6;
 
     private int turn = 1;
     private int counterPosition = 0;
@@ -74,12 +57,12 @@ public class WarTrack implements Serializable {
         this.turn = turn;
     }
 
-    public boolean isBattleOfCentralia() {
-        return counterPosition <= BATTLE_OF_CENTRALIA_SPACE;
+    public boolean isBattleOfCentralia(int turn) {
+        return counterPosition <= -1 * getSpecialBattleSpace(turn);
     }
 
-    public boolean isBattleAtRebelStronghold() {
-        return counterPosition >= BATTLE_AT_REBEL_STRONGHOLD_SPACE;
+    public boolean isBattleAtRebelStronghold(int turn) {
+        return counterPosition >= getSpecialBattleSpace(turn);
     }
 
     public BattleBoard replaceBoard(BattleBoard bb) {
@@ -107,6 +90,16 @@ public class WarTrack implements Serializable {
         return bb.flipBattleBoard();
     }
 
+    private int getSpecialBattleSpace(int turn) {
+        if (turn < 4) {
+            return 5;
+        }
+        if (turn < 7) {
+            return 4;
+        }
+        return 3;
+    }
+
     private boolean isEmpireAdvantage() {
         return counterPosition >= getEmpireAdvantageThreshold(turn);
     }
@@ -121,9 +114,9 @@ public class WarTrack implements Serializable {
 
     private int getRebelAdvantageThreshold(int turn) {
         if (turn < 4) {
-            return -3;
+            return -2;
         }
-        return -2;
+        return -1;
     }
 
     public String asString() {
