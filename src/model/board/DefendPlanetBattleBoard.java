@@ -28,7 +28,7 @@ public class DefendPlanetBattleBoard extends BattleBoard {
                 model.getScreenHandler().println("but the imperial forces hold out until a relief force can break the siege.");
             } else if (!empireWinsGroundDomain) {
                 model.getScreenHandler().println("The Rebels quickly land troops and overrun the planet.");
-                model.getScreenHandler().println("Their supply lines are however cut off by the imperial fleet which dominates the skies.");
+                model.getScreenHandler().println("However, their supply lines are soon cut off by the imperial fleet which dominates the skies.");
             }
             model.getScreenHandler().println("The Imperial forces have successfully defended the planet.");
             return true;

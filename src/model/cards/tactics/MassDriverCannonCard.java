@@ -36,7 +36,7 @@ public class MassDriverCannonCard extends TacticsCard {
             });
         }
         for (EmpireUnitCard eu : MyLists.filter(battle.getEmpireUnits(), UnitCard::isSpaceUnit)) {
-            multipleChoice.addOption(eu.getName() + "(Empire)", (m, p) -> {
+            multipleChoice.addOption(eu.getName() + " (Empire)", (m, p) -> {
                 model.getScreenHandler().println("Discarding " + eu.getName() + ".");
                 battle.removeUnit(eu);
                 model.discardEmpireCards(List.of(eu));

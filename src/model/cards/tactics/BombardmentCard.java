@@ -34,7 +34,7 @@ public class BombardmentCard extends TacticsCard {
             multipleChoice.addOption(ru.getName(), (m, p) -> {cardsToDiscard.add(ru);});
         }
         for (EmpireUnitCard eu : MyLists.filter(battle.getEmpireUnits(), UnitCard::isGroundUnit)) {
-            multipleChoice.addOption(eu.getName() + "(Empire)", (m, p) -> cardsToDiscard.add(eu));
+            multipleChoice.addOption(eu.getName() + " (Empire)", (m, p) -> cardsToDiscard.add(eu));
         }
         while (cardsToDiscard.size() < 3) {
             multipleChoice.promptAndDoAction(model, "Select a ground unit to discard:", player);

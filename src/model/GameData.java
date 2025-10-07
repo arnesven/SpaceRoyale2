@@ -21,7 +21,7 @@ import java.util.Set;
 public class GameData implements Serializable {
     public GameBoard gameBoard;
     public List<Player> players;
-    public Deck<AlignmentCard> battleChanceDeck;
+    public BattleChanceDeck battleChanceDeck;
     public RebelUnitDeck rebelUnitDeck;
     public List<RebelUnitCard> rebelUnitDiscard = new ArrayList<>();
     public CommonEmpireUnitDeck commonEmpireUnitDeck;

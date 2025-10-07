@@ -177,7 +177,7 @@ public class Model {
 
         screenHandler.println("Preparing Alignment cards. Making a set with " + noOfPlayers +
                 " Empire cards and 2 Rebel cards.");
-        Deck<AlignmentCard> alignmentCards = new Deck<>();
+        BattleChanceDeck alignmentCards = new BattleChanceDeck();
         alignmentCards.addCopies(new EmpireAlignmentCard(), noOfPlayers);
         alignmentCards.addCopies(new RebelAlignmentCard(), 2);
         alignmentCards.shuffle();
@@ -252,26 +252,28 @@ public class Model {
     }
 
     private void drawDecks(int x, int y) {
-        screenHandler.drawText("-= Decks =-", x+7, y);
-        getTacticsDeck().drawYourself(screenHandler, x, y+1);
-        if (gameData.commonEmpireUnitDeck != null) {
-            gameData.commonEmpireUnitDeck.drawYourself(screenHandler, x + 7, y + 1);
-        }
-        gameData.rebelUnitDeck.drawYourself(screenHandler, x + 14, y + 1);
-        gameData.eventDeck.drawYourself(screenHandler, x + 21, y + 1);
+        screenHandler.drawText("<- DECKS ->", x+6, y);
 
-        screenHandler.drawText("-= Discards =-", x+6, y+4);
+        gameData.battleChanceDeck.drawYourself(screenHandler, x - 2, y - 1);
+        getTacticsDeck().drawYourself(screenHandler, x+3, y+1);
+        if (gameData.commonEmpireUnitDeck != null) {
+            gameData.commonEmpireUnitDeck.drawYourself(screenHandler, x + 9, y + 1);
+        }
+        gameData.rebelUnitDeck.drawYourself(screenHandler, x + 16, y + 1);
+        gameData.eventDeck.drawYourself(screenHandler, x + 20, y - 1);
+
+        screenHandler.drawText("_- DISCARDS -_", x+4, y+4);
         if (!gameData.tacticsDiscard.isEmpty()) {
-            screenHandler.drawText("T " + gameData.tacticsDiscard.size(), x, y + 5);
+            screenHandler.drawText("T " + gameData.tacticsDiscard.size(), x+3, y + 5);
         }
         if (!gameData.empireUnitDiscard.isEmpty()) {
-            screenHandler.drawText("E " + gameData.empireUnitDiscard.size(), x + 7, y + 5);
+            screenHandler.drawText("E " + gameData.empireUnitDiscard.size(), x + 10, y + 5);
         }
         if (!gameData.rebelUnitDiscard.isEmpty()) {
-            screenHandler.drawText("R " + gameData.rebelUnitDiscard.size(), x + 14, y + 5);
+            screenHandler.drawText("R " + gameData.rebelUnitDiscard.size(), x + 17, y + 5);
         }
         if (!gameData.eventDiscard.isEmpty()) {
-            screenHandler.drawText("Ev" + gameData.eventDiscard.size(), x + 21, y + 5);
+            screenHandler.drawText("Ev" + gameData.eventDiscard.size(), x + 24, y + 5);
             screenHandler.drawText("nt", x + 21, y + 6);
         }
 

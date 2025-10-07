@@ -58,7 +58,6 @@ public class EventDeck extends Deck<EventCard> {
         if (!isEmpty()) {
             screenHandler.drawText(".--.", x, y);
             screenHandler.drawText("|Ev|" + size(), x, y + 1);
-            screenHandler.drawText("|nt|", x, y + 2);
             screenHandler.drawText("'¨¨'", x, y + 2);
         }
     }
