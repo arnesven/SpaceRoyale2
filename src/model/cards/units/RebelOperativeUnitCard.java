@@ -32,6 +32,7 @@ public class RebelOperativeUnitCard extends RebelUnitCard {
             RebelOperativeUnitCard.this.peek(model, bb, defectedPlayer);
         });
         multipleChoice.addOption("Skip", (_,_) -> {});
+        multipleChoice.promptAndDoAction(model, "Do you want to play an Operative Card?", defectedPlayer);
     }
 
     private void peek(Model model, BattleBoard bb, DefectedPlayer player) {

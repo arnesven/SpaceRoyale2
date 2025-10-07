@@ -302,10 +302,10 @@ public abstract class BattleBoard extends BoardLocation {
         }
         print(model, "Space total (R vs E): " + rebelSpace + " vs " + empireSpace);
         if (rebelSpace > empireSpace || !MyLists.any(empireUnits, UnitCard::isSpaceUnit)) {
-            print(model, "The rebels are victorious in the space domain.");
+            print(model, "The Rebels are victorious in the space domain.");
             return false;
         }
-        print(model, "The empire is victorious in the space domain.");
+        print(model, "The Empire is victorious in the space domain.");
         return true;
     }
 

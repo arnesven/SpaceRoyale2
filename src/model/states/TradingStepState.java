@@ -30,6 +30,7 @@ public class TradingStepState extends GameState {
         for (Player p : model.getPlayersNotDefectors()) {
             PlayerActionState.discardIfOverLimit(model, p);
         }
+        model.drawBoard();
         return new PlayerActionState();
     }
 

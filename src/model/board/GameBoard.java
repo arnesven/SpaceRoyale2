@@ -5,6 +5,7 @@ import model.tracks.WarTrack;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class GameBoard implements Serializable {
     private final BattleBoard[] battles;
@@ -45,7 +46,8 @@ public class GameBoard implements Serializable {
                 return newBattleBoard;
             }
         }
-        return null;
+        throw new NoSuchElementException("The battle just resolved can not be replaced, " +
+                "because it is not currently on the board!");
     }
 
     public BoardLocation getPrisonPlanet() {
