@@ -199,7 +199,7 @@ public abstract class BattleBoard extends BoardLocation {
             }
             boolean[] done = new boolean[]{false};
             multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
-            while (!done[0]) {
+            while (!done[0] && player.getCurrentLocation() == this) { // If the player used FTL to move, no more cards can be played.
                 multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
                 multipleChoice.removeSelectedOption();
             }
