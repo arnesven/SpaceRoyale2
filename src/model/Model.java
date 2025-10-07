@@ -176,10 +176,13 @@ public class Model {
         Collections.shuffle(allPlayers);
 
         screenHandler.println("Preparing Alignment cards. Making a set with " + noOfPlayers +
-                " Empire cards and 2 Rebel cards.");
+                " Empire cards and " + (noOfPlayers < 8 ? 2 : 3) + " Rebel cards.");
         BattleChanceDeck alignmentCards = new BattleChanceDeck();
         alignmentCards.addCopies(new EmpireAlignmentCard(), noOfPlayers);
         alignmentCards.addCopies(new RebelAlignmentCard(), 2);
+        if (noOfPlayers == 8) {
+            alignmentCards.addCard(new RebelAlignmentCard());
+        }
         alignmentCards.shuffle();
 
         for (int i = 0; i < noOfPlayers; ++i) {

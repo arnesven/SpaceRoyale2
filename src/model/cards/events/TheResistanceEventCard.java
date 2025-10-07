@@ -27,7 +27,7 @@ public class TheResistanceEventCard extends EventCard {
         if (traitors.size() == 1) {
             model.getScreenHandler().println(traitors.getFirst().getName() + " opens their eyes and realizes they're alone.");
             model.getScreenHandler().println(traitors.getFirst().getName() + " closes their eyes again.");
-        } else if (traitors.size() == 2) {
+        } else if (traitors.size() > 1) {
             model.getScreenHandler().println(MyLists.commaAndJoin(traitors, Player::getName) +
                     " open their eyes and smile at each other. Then they close their eyes again.");
         }
