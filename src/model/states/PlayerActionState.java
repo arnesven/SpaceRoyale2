@@ -35,7 +35,9 @@ public class PlayerActionState extends GameState {
             }
             model.stepCurrentPlayer();
             model.drawBoard();
-            model.saveGame();
+            if (i < turnsToPlay - 1) { // No need to save after last player's actions
+                model.saveGame();      // Will automatically save after this state is done
+            }
         }
         return new EmperorHealthDeclineState();
     }

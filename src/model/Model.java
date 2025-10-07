@@ -509,7 +509,7 @@ public class Model {
 
     public void playerDefects(Player player) {
         screenHandler.println(player.getName() + " defects to the rebel side!");
-        screenHandler.println(player.getName() + "'s Rebel Alignment card is placed in the Battle Chance deck.");
+        screenHandler.println(player.getShortName() + "'s Rebel Alignment card is placed in the Battle Chance deck.");
         addBattleChanceCard(player.getLoyaltyCard());
         DefectedPlayer defector = new DefectedPlayer(player);
         if (player.getCurrentLocation() == getPrisonPlanet()) {
@@ -518,11 +518,11 @@ public class Model {
         } else {
             defector.tradeInUnits(this, player);
         }
-        getScreenHandler().println(player.getName() + " discards " + player.getUnitCardsInHand().size() + " Unit cards.");
+        getScreenHandler().println(player.getShortName() + " discards " + player.getUnitCardsInHand().size() + " Unit cards.");
         for (EmpireUnitCard eu : new ArrayList<>(player.getUnitCardsInHand())) {
             player.discardCard(this, eu);
         }
-        getScreenHandler().println(player.getName() + " discards " + player.getTacticsCardsInHand().size() + " Tactics cards.");
+        getScreenHandler().println(player.getShortName() + " discards " + player.getTacticsCardsInHand().size() + " Tactics cards.");
         for (TacticsCard tc : new ArrayList<>(player.getTacticsCardsInHand())) {
             player.discardCard(this, tc);
         }
@@ -533,10 +533,11 @@ public class Model {
         for (int i = 0; i < 2; ++i) {
             defector.addCardToHand(gameData.rebelUnitDeck.drawOne());
         }
-        getScreenHandler().println(player.getName() + " draws 2 Rebel Units:");
+        getScreenHandler().println(player.getShortName() + " draws 2 Rebel Units:");
         defector.printHand(screenHandler);
 
         defector.drawEventCards(this);
+        getScreenHandler().println(player.getShortName() + " is moved to Rebel Stronghold.");
         player.moveToLocation(gameData.gameBoard.getRebelStronghold());
         defector.moveToLocation(gameData.gameBoard.getRebelStronghold());
 
