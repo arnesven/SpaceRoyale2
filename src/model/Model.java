@@ -23,6 +23,7 @@ import view.ScreenHandler;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 public class Model {
@@ -57,7 +58,7 @@ public class Model {
     }
 
 
-    private void saveGame() {
+    public void saveGame() {
         getScreenHandler().println("* Saving Game *");
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("save_data.sr2"));
@@ -544,5 +545,17 @@ public class Model {
 
     public List<Player> getPlayersNotDefectors() {
         return MyLists.filter(getPlayers(), p -> !(p instanceof DefectedPlayer));
+    }
+
+    public boolean hasCollaborativelyDrawnThisTurn(Player current) {
+        return gameData.collaborativeDraw.contains(current);
+    }
+
+    public void resetCollaborativeDraw() {
+        gameData.collaborativeDraw = new HashSet<>();
+    }
+
+    public void addToCollaborativeDrawers(Player performer) {
+        gameData.collaborativeDraw.add(performer);
     }
 }

@@ -14,19 +14,17 @@ import util.MyLists;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PlayerActionState extends GameState {
     private static final int MAX_HAND_SIZE = 8;
-    private Set<Player> collaborativeDraw = new HashSet<>();
 
     @Override
     public GameState run(Model model) {
-
-        for (int i = 0; i < model.getPlayers().size(); ++i) {
-            Player current = model.getCurrentPlayer();
+        Player current = model.getCurrentPlayer();
+        int turnsToPlay = model.getPlayers().size() - model.getPlayers().indexOf(current);
+        for (int i = 0; i < turnsToPlay; ++i) {
+            current = model.getCurrentPlayer();
             println(model, current.getName() + "'s turn. ");
             println(model, "Location: " + current.getCurrentLocation().getName() + ".");
             println(model, "Loyalty: " + current.getLoyaltyCard().getName());
@@ -37,6 +35,7 @@ public class PlayerActionState extends GameState {
             }
             model.stepCurrentPlayer();
             model.drawBoard();
+            model.saveGame();
         }
         return new EmperorHealthDeclineState();
     }
@@ -176,7 +175,7 @@ public class PlayerActionState extends GameState {
 
     private void addNonMoveActions(MultipleChoice multipleChoice, Model model, Player current) {
         if (isOnCentralia(model, current)) {
-            if (!collaborativeDraw.contains(current)) {
+            if (!model.hasCollaborativelyDrawnThisTurn(current)) {
                 multipleChoice.addOption("Collaborative Draw Unit Cards", this::collaborativeDrawUnitCards);
             }
             if (model.getUnrest() > 0 && MyLists.filter(model.getPlayers(), p -> p.getCurrentLocation() == model.getCentralia()).size() > 1) {
@@ -273,7 +272,7 @@ public class PlayerActionState extends GameState {
     private void collaborativeDrawUnitCards(Model model, Player player) {
         MultipleChoice multipleChoice = new MultipleChoice();
         for (Player p : model.getPlayers()) {
-            if (p != player && isOnCentralia(model, p) && !collaborativeDraw.contains(p)) {
+            if (p != player && isOnCentralia(model, p) && !model.hasCollaborativelyDrawnThisTurn(p)) {
                 multipleChoice.addOption(p.getName(), (model1, performer) -> drawCardsTogetherWith(model1, performer, p));
             }
         }
@@ -286,10 +285,10 @@ public class PlayerActionState extends GameState {
 
     private void drawCardsTogetherWith(Model model, Player performer, Player other) {
         drawTwoCards(model, performer);
-        collaborativeDraw.add(performer);
+        model.addToCollaborativeDrawers(performer);
         if (other != null) {
             drawTwoCards(model, other);
-            collaborativeDraw.add(other);
+            model.addToCollaborativeDrawers(other);
             println(model, "It's still " + performer.getName() + "'s turn.");
         }
     }
