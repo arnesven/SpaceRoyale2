@@ -131,6 +131,7 @@ public abstract class BattleBoard extends BoardLocation {
                 ((TitanUnitCard)titan).upgrade();
                 model.getScreenHandler().println("Titan upgraded to " + titan.getName() + ".");
                 EventCard event = MyLists.find(model.getEventCardsInPlay(),ev -> ev instanceof SuperTitanEventCard);
+                model.getEventCardsInPlay().remove(event);
                 model.discardEventCard(event);
             }
         }
@@ -143,6 +144,7 @@ public abstract class BattleBoard extends BoardLocation {
                 ((StarWarriorUnitCard)starWarrior).upgrade();
                 model.getScreenHandler().println("Star warrior upgraded to " + starWarrior.getName() + ".");
                 EventCard event = MyLists.find(model.getEventCardsInPlay(), ev -> ev instanceof ChampionOfLightEventCard);
+                model.getEventCardsInPlay().remove(event);
                 model.discardEventCard(event);
             }
         }
