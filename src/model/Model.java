@@ -278,10 +278,10 @@ public class Model {
         }
 
         if (!gameData.eventCardsInPlay.isEmpty()) {
-            screenHandler.drawText("-= Events in play =-", 69, 0);
-            int yOff = 1;
+            screenHandler.drawText("Events in play:", 54, 0);
+            int yOff = 0;
             for (EventCard ev : gameData.eventCardsInPlay) {
-                screenHandler.drawText(ev.getName(), 69, yOff++);
+                screenHandler.drawText(ev.getName(), 70, yOff++);
             }
         }
     }
