@@ -333,7 +333,7 @@ public class PlayerActionState extends GameState {
         performer.printHand(model.getScreenHandler());
     }
 
-    private void discardIfOverLimit(Model model, Player current) {
+    public static void  discardIfOverLimit(Model model, Player current) {
         MultipleChoice multipleChoice = new MultipleChoice();
         for (EmpireUnitCard eu : current.getUnitCardsInHand()) {
             multipleChoice.addOption(eu.getNameAndStrength(), (m, performer) -> performer.discardCard(m, eu));
@@ -342,7 +342,7 @@ public class PlayerActionState extends GameState {
             multipleChoice.addOption(tc.getName(), (m, p) -> p.discardCard(model, tc));
         }
         if (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
-            println(model, current.getName() + " has too many cards in hand.");
+            model.getScreenHandler().println(current.getName() + " has too many cards in hand.");
         }
         while (multipleChoice.getNumberOfChoices() > MAX_HAND_SIZE) {
             multipleChoice.promptAndDoAction(model,"Select a card to discard:", current);

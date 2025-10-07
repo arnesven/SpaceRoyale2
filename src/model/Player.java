@@ -195,4 +195,8 @@ public class Player implements Serializable {
     public boolean takeTurn(Model model, PlayerActionState playerActionState) {
         return playerActionState.takeNormalPlayerTurn(model, this);
     }
+
+    public void removeTacticsCardFromHand(TacticsCard tc) {
+        tacticsCardsInHand.remove(tc);
+    }
 }

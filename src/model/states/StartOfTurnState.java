@@ -8,6 +8,9 @@ public class StartOfTurnState extends GameState {
         model.getScreenHandler().println("Turn " + model.getTurn());
         model.drawBoard();
         model.resetCollaborativeDraw();
-        return new PlayerActionState(); // TODO: On turn 2 and forward, Trading Step
+        if (model.getTurn() == 1) {
+            return new PlayerActionState(); // TODO: On turn 2 and forward, Trading Step
+        }
+        return new TradingStepState();
     }
 }

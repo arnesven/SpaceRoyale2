@@ -15,6 +15,7 @@ import model.states.InitialGameState;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,5 +36,5 @@ public class GameData implements Serializable {
     public List<EventCard> eventCardsInPlay = new ArrayList<>();
     public int initialRebelUnitRate = 3;
     public GameState currentState = new InitialGameState();
-    public Set<Player> collaborativeDraw;
+    public Set<Player> collaborativeDraw = new HashSet<>();
 }
