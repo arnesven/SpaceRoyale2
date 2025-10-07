@@ -36,7 +36,7 @@ public class DefectedPlayer extends Player {
 
     @Override
     public String getName() {
-        return inner.getName() + "(Defector)";
+        return "Defector " + getSimpleName();
     }
 
     public void tradeInUnits(Model model, Player player) {

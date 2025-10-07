@@ -148,17 +148,17 @@ public class Player implements Serializable {
         tacticsCardsInHand.add(tc);
     }
 
-    private String makeSimpleName() {
+    protected String getSimpleName() {
         return getName().replace("General ", "").replace("Admiral ", "");
     }
 
     public void drawYourselfHorizontally(Model model, int x, int y) {
-        model.getScreenHandler().drawText(makeSimpleName() + " E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
+        model.getScreenHandler().drawText(getSimpleName() + " E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
         model.getScreenHandler().drawText("EI:" + emperorInfluence + " PI:" + popularInfluence + " Deck:" + unitDeck.size(), x, y+1);
     }
 
     public void drawYourselfVertically(Model model, int x, int y) {
-        model.getScreenHandler().drawText(makeSimpleName(), x, y);
+        model.getScreenHandler().drawText(getSimpleName(), x, y);
         model.getScreenHandler().drawText("E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y+1);
         model.getScreenHandler().drawText("EI:" + emperorInfluence, x, y+2);
         model.getScreenHandler().drawText("PI:" + popularInfluence, x, y+3);

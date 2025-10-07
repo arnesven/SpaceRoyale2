@@ -262,7 +262,7 @@ public class Model {
         gameData.rebelUnitDeck.drawYourself(screenHandler, x + 16, y + 1);
         gameData.eventDeck.drawYourself(screenHandler, x + 20, y - 1);
 
-        screenHandler.drawText("_- DISCARDS -_", x+4, y+4);
+        screenHandler.drawText("DISCARDS", x+8, y+4);
         if (!gameData.tacticsDiscard.isEmpty()) {
             screenHandler.drawText("T " + gameData.tacticsDiscard.size(), x+3, y + 5);
         }
