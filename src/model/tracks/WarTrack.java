@@ -12,16 +12,32 @@ public class WarTrack implements Serializable {
 
     /**
      * TURN 1-3:
-     *  | BatRS | -5 | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  5 |  BoC  |
-     *         Rebel Advantage <                         > Empire Advantage
+     *  | BoC | -5 | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  5 |  BatRS  |
+     *       Rebel Advantage <                         > Empire Advantage
      *
      * TURN 4-6:
-     *       | BatRS | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  BoC  |
-     *              Rebel Advantage <               > Empire Advantage
+     *       | BoC | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  BatRS  |
+     *            Rebel Advantage <               > Empire Advantage
      *
      * TURN 7-8:
-     *            | BatRS | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  BoC  |
-     *              Rebel Advantage <               > Empire Advantage
+     *            | BoC | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  BatRS  |
+     *            Rebel Advantage <               > Empire Advantage
+     *
+     *
+     * PROPOSAL:
+     *
+     * TURN 1-3:
+     *       | BoC | -4 | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  4 |  BatRS  |
+     *            Rebel Advantage <               > Empire Advantage
+     *
+     * TURN 4-6:
+     *            | BoC | -3 | -2 | -1 |  0  |  1 |  2 |  3 |  BatRS  |
+     *                 Rebel Advantage <     > Empire Advantage
+     *
+     * TURN 7-8:
+     *                 | BoC | -2 | -1 |  0  |  1 |  2 |  BatRS  |
+     *                 Rebel Advantage <     > Empire Advantage
+     *
      */
 
     private static final List<BattleBoard> NEUTRAL_BOARDS = List.of(

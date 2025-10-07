@@ -45,7 +45,8 @@ public class RebelSabotageEventCard extends EventCard {
                 selectedBattle[0].removeUnit(eu);
             });
         }
-        while (selectedCards.size()*2 < selectedBattle[0].getEmpireUnits().size()) {
+        int totalCards = selectedBattle[0].getEmpireUnits().size();
+        while (selectedCards.size()*2 < totalCards) {
             multipleChoice.promptAndDoAction(model, "Discard which card?", player);
             multipleChoice.removeSelectedOption();
         }
