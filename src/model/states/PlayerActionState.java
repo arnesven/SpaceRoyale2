@@ -372,16 +372,14 @@ public class PlayerActionState extends GameState {
             return true;
         }
 
-        // Draw Cards
-        model.getScreenHandler().println(defector.getName() + " draws 2 Rebel Units:");
-        for (int i = 0; i < 2; ++i) {
-            try {
-                defector.addCardToHand(model.drawRebelUnitCard());
-            } catch (DeckIsEmptyException die) {
-                model.getScreenHandler().println("Rebel Unit deck, empty, drew " + i + " card(s) instead.");
-                break;
-            }
+        // Draw Card
+        model.getScreenHandler().println(defector.getName() + " draws 1 Rebel Unit card:");
+        try {
+            defector.addCardToHand(model.drawRebelUnitCard());
+        } catch (DeckIsEmptyException die) {
+            model.getScreenHandler().println("Rebel Unit deck, empty. Didn't draw card.");
         }
+
         defector.printHand(model.getScreenHandler());
 
         // Discard if over hand limit
