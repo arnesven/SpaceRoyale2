@@ -4,7 +4,7 @@ import model.cards.GameCard;
 
 public class NoAlignmentCard extends AlignmentCard {
     public NoAlignmentCard() {
-        super("*None*", 0);
+        super("None (Defector)", 0);
     }
 
     @Override

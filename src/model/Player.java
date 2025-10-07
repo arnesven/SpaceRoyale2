@@ -153,13 +153,17 @@ public class Player implements Serializable {
     }
 
     public void drawYourselfHorizontally(Model model, int x, int y) {
-        model.getScreenHandler().drawText(getSimpleName() + " E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
+        model.getScreenHandler().drawText(getSimpleName() + " " + getCardSymbol(model) + + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
         model.getScreenHandler().drawText("EI:" + emperorInfluence + " PI:" + popularInfluence + " Deck:" + unitDeck.size(), x, y+1);
+    }
+
+    private String getCardSymbol(Model model) {
+        return model.hasCollaborativelyDrawnThisTurn(this) ?  "ë" : "E";
     }
 
     public void drawYourselfVertically(Model model, int x, int y, boolean compact) {
         model.getScreenHandler().drawText(getSimpleName(), x, y);
-        model.getScreenHandler().drawText("E" + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y + 1);
+        model.getScreenHandler().drawText(getCardSymbol(model) + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y + 1);
         if (compact) {
             model.getScreenHandler().drawText(String.format("EI:%d PI:%d", emperorInfluence, popularInfluence), x, y + 2);
             model.getScreenHandler().drawText("Deck:" + unitDeck.size(), x, y + 3);
