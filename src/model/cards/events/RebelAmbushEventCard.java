@@ -40,7 +40,6 @@ public class RebelAmbushEventCard extends EventCard {
                     bb.addRebelCard(model.drawRebelUnitCard());
                 } catch (DeckIsEmptyException die) {
                     model.getScreenHandler().println("Rebel Unit deck is empty, added all available.");
-                    break;
                 }
                 m.resolveBattle(bb);
             });
