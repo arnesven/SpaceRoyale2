@@ -105,7 +105,10 @@ public class PlayerActionState extends GameState {
                 });
             }
         }
-        multipleChoice.promptAndDoAction(model, "There are multiple battles which need to be resolved. Which one would you like to resolve first?", player);
+        if (multipleChoice.getNumberOfChoices() > 0) {
+            model.getScreenHandler().println("There are multiple battles which need to be resolved.");
+            multipleChoice.promptAndDoAction(model, "Which one would you like to resolve first?", player);
+        }
     }
 
     private void increaseUnrest(Model model, Player player) {
