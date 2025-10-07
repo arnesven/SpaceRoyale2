@@ -4,6 +4,7 @@ import model.DefectedPlayer;
 import model.GameOverException;
 import model.Model;
 import model.Player;
+import model.cards.DeckIsEmptyException;
 import model.cards.units.RebelUnitCard;
 import model.states.PlayerActionState;
 import util.MyLists;
@@ -25,7 +26,12 @@ public class BattleAtTheRebelStronghold extends InvasionBattleBoard {
         }
         model.getScreenHandler().println("Adding 10 Rebel unit cards from the deck.");
         for (int i = 0; i < CARDS_TO_DRAW; ++i) {
-            addRebelCard(model.drawRebelUnitCard());
+            try {
+                addRebelCard(model.drawRebelUnitCard());
+            } catch (DeckIsEmptyException die) {
+                model.getScreenHandler().println("Rebel Unit deck is empty, added " + i + " cards.");
+                break;
+            }
         }
         for (Player p : model.getPlayersNotDefectors()) {
             MultipleChoice multipleChoice = new MultipleChoice();

@@ -3,6 +3,7 @@ package model.cards.events;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import model.cards.DeckIsEmptyException;
 import model.cards.GameCard;
 import util.MyStrings;
 import view.MultipleChoice;
@@ -23,7 +24,12 @@ public class BandingTogetherEventCard extends EventCard {
                 model.getScreenHandler().println(MyStrings.capitalize(MyStrings.numberWord(UNITS_TO_ADD)) +
                         " Rebel Unit cards added to " + bb.getName() + ".");
                 for (int i = 0; i < UNITS_TO_ADD; ++i) {
-                    bb.addRebelCard(model.drawRebelUnitCard());
+                    try {
+                        bb.addRebelCard(model.drawRebelUnitCard());
+                    } catch (DeckIsEmptyException die) {
+                        model.getScreenHandler().println("Rebel Unit deck is empty, added " + i + " cards.");
+                        break;
+                    }
                 }
             });
         }

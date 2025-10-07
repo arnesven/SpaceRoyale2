@@ -145,9 +145,14 @@ public class Model {
     }
 
     private void addInitialRebelUnitsToBattle(BattleBoard bb) {
-        screenHandler.println("Adding 3 Rebel Units to " + bb.getName() + ".");
+        screenHandler.println("Adding " + gameData.initialRebelUnitRate + " Rebel Units to " + bb.getName() + ".");
         for (int i = 0; i < gameData.initialRebelUnitRate; ++i) {
-            bb.addRebelCard(gameData.rebelUnitDeck.drawOne());
+            try {
+                bb.addRebelCard(drawRebelUnitCard());
+            } catch (DeckIsEmptyException die) {
+                screenHandler.println("Rebel deck is empty! Added " + i + " cards instead.");
+                break;
+            }
         }
     }
 
@@ -305,6 +310,9 @@ public class Model {
             }
             gameData.rebelUnitDeck.shuffle();
             gameData.rebelUnitDiscard.clear();
+        }
+        if (gameData.rebelUnitDeck.isEmpty()) {
+            throw new DeckIsEmptyException();
         }
         return gameData.rebelUnitDeck.drawOne();
     }

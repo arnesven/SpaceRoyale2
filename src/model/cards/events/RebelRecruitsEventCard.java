@@ -3,6 +3,7 @@ package model.cards.events;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import model.cards.DeckIsEmptyException;
 import model.cards.GameCard;
 
 public class RebelRecruitsEventCard extends EventCard {
@@ -16,7 +17,11 @@ public class RebelRecruitsEventCard extends EventCard {
     public void resolve(Model model, Player player) {
         model.getScreenHandler().println("A Rebel Unit card added to each battle.");
         for (BattleBoard bb : model.getBattles()) {
-            bb.addRebelCard(model.drawRebelUnitCard());
+            try {
+                bb.addRebelCard(model.drawRebelUnitCard());
+            } catch (DeckIsEmptyException die) {
+                model.getScreenHandler().println("Rebel Unit deck is empty. No card added to " + bb.getName() + ".");
+            }
         }
     }
 

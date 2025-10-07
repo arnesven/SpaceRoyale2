@@ -3,6 +3,7 @@ package model.cards.events;
 import model.Model;
 import model.Player;
 import model.board.BattleBoard;
+import model.cards.DeckIsEmptyException;
 import model.cards.GameCard;
 import view.MultipleChoice;
 
@@ -34,8 +35,13 @@ public class RebelAmbushEventCard extends EventCard {
         for (BattleBoard bb : suitableBattles) {
             multipleChoice.addOption(bb.getName(), (m, p) -> {
                 m.getScreenHandler().println("Adding 2 Rebel Units to " + bb.getName() + ".");
-                bb.addRebelCard(model.drawRebelUnitCard());
-                bb.addRebelCard(model.drawRebelUnitCard());
+                try {
+                    bb.addRebelCard(model.drawRebelUnitCard());
+                    bb.addRebelCard(model.drawRebelUnitCard());
+                } catch (DeckIsEmptyException die) {
+                    model.getScreenHandler().println("Rebel Unit deck is empty, added all available.");
+                    break;
+                }
                 m.resolveBattle(bb);
             });
         }

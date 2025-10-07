@@ -6,6 +6,7 @@ import model.Player;
 import model.board.BattleBoard;
 import model.board.BoardLocation;
 import model.board.PrisonPlanetLocation;
+import model.cards.DeckIsEmptyException;
 import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
 import model.cards.tactics.TacticsCard;
@@ -72,10 +73,14 @@ public class PlayerActionState extends GameState {
     public void draw2RebelUnits(Model model, Player performer) {
         println(model, performer.getName() + " draws 2 Rebel Units from the deck.");
         List<RebelUnitCard> cards = new ArrayList<>();
-        cards.add(model.drawRebelUnitCard());
-        cards.add(model.drawRebelUnitCard());
+        try {
+            cards.add(model.drawRebelUnitCard());
+            cards.add(model.drawRebelUnitCard());
+        } catch (DeckIsEmptyException die) {
+            model.getScreenHandler().println("Rebel deck is empty. Placing " + cards.size() + " cards.");
+        }
 
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < cards.size(); ++i) {
             String prompt = "Where would you like to place the " +
                     (i == 0 ? "first":"second") + " card?";
             MultipleChoice multipleChoice = new MultipleChoice();
@@ -366,10 +371,15 @@ public class PlayerActionState extends GameState {
         }
 
         // Draw Cards
-        for (int i = 0; i < 2; ++i) {
-            defector.addCardToHand(model.drawRebelUnitCard());
-        }
         model.getScreenHandler().println(defector.getName() + " draws 2 Rebel Units:");
+        for (int i = 0; i < 2; ++i) {
+            try {
+                defector.addCardToHand(model.drawRebelUnitCard());
+            } catch (DeckIsEmptyException die) {
+                model.getScreenHandler().println("Rebel Unit deck, empty, drew " + i + " card(s) instead.");
+                break;
+            }
+        }
         defector.printHand(model.getScreenHandler());
 
         // Discard if over hand limit
