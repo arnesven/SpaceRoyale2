@@ -29,6 +29,7 @@ public class GameBoard {
         }
         centralia.drawYourself(model, xOff, yOff + 6);
         prisonPlanet.drawYourself(model, xOff, yOff + 9);
+        rebelStronghold.drawYourself(model, xOff + 50, yOff+5);
     }
 
     public BattleBoard[] getBattles() {

@@ -185,7 +185,7 @@ public class Model {
         drawPlayers(gameData.players);
         gameData.gameBoard.drawYourself(this, 8, 2);
         drawDecks(22, 8);
-        gameData.gameTracks.drawYourself(this, 54, 8);
+        gameData.gameTracks.drawYourself(this, 54, 10);
         screenHandler.printDrawingArea();
         screenHandler.println("");
     }
