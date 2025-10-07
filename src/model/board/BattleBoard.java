@@ -162,12 +162,12 @@ public abstract class BattleBoard extends BoardLocation {
         int empireSpace = MyLists.intAccumulate(empireUnits, this::getSpaceStrength);
         int empireGround = MyLists.intAccumulate(empireUnits, this::getGroundStrength);
         print(model,"Tallies:  Rebel  Empire");
-        print(model, String.format("Space %8d%s %6d%s", rebelSpace, winAsteriskRebel(rebelSpace, empireSpace), empireSpace, winAsteriskEmpire(empireSpace, rebelSpace)));
-        print(model, String.format("Ground %7d%s %6d%s", rebelGround, winAsteriskRebel(rebelGround, empireGround), empireGround, winAsteriskEmpire(empireGround, rebelGround)));
+        print(model, String.format("Space %8d%s %6d%s", rebelSpace, winAsteriskRebel(rebelSpace, empireSpace), empireSpace, winAsteriskEmpire(empireSpace, rebelSpace, !empireUnits.isEmpty())));
+        print(model, String.format("Ground %7d%s %6d%s", rebelGround, winAsteriskRebel(rebelGround, empireGround), empireGround, winAsteriskEmpire(empireGround, rebelGround, !empireUnits.isEmpty())));
     }
 
-    private String winAsteriskEmpire(int empire, int rebel) {
-        if (empire >= rebel) {
+    private String winAsteriskEmpire(int empire, int rebel, boolean atLeastOneUnit) {
+        if (empire >= rebel && atLeastOneUnit) {
             return "*";
         }
         return " ";

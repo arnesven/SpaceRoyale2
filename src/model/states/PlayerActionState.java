@@ -24,6 +24,7 @@ public class PlayerActionState extends GameState {
     public GameState run(Model model) {
         Player current = model.getCurrentPlayer();
         int turnsToPlay = model.getPlayers().size() - model.getPlayers().indexOf(current);
+        model.getScreenHandler().println("Player Action step, turns to take: " + turnsToPlay);
         for (int i = 0; i < turnsToPlay; ++i) {
             current = model.getCurrentPlayer();
             println(model, current.getName() + "'s turn. ");
