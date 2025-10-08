@@ -206,7 +206,7 @@ public abstract class BattleBoard extends BoardLocation {
         }
     }
 
-    private void possiblyDiscardTacticsCard(Model model, Player player, TacticsCard tc) {
+    public static void possiblyDiscardTacticsCard(Model model, Player player, TacticsCard tc) {
         List<TacticsImprovementEventCard> tacticsImprovements = MyLists.transform(MyLists.filter(model.getEventCardsInPlay(),
                         ev -> ev instanceof TacticsImprovementEventCard),
                 ev -> (TacticsImprovementEventCard)ev);

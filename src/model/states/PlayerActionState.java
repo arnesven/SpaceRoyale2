@@ -9,6 +9,7 @@ import model.board.PrisonPlanetLocation;
 import model.cards.DeckIsEmptyException;
 import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
+import model.cards.tactics.RapidMobilizationCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.*;
 import util.MyLists;
@@ -60,6 +61,31 @@ public class PlayerActionState extends GameState {
             discardIfOverLimit(model, current);
         }
         return false;
+    }
+
+    private void playRapidMobilizationIfAble(Model model, Player current) {
+        boolean[] breakLoop = new boolean[]{false};
+        for (Player p : model.getPlayersStartingFrom(current)) {
+            MultipleChoice multipleChoice = new MultipleChoice();
+            TacticsCard tacticsCard = MyLists.find(p.getTacticsCardsInHand(), tc -> tc instanceof RapidMobilizationCard);
+            if (tacticsCard != null && p.getCurrentLocation() instanceof BattleBoard &&
+                    p.getCurrentLocation() == current.getCurrentLocation()) {
+                multipleChoice.addOption("Play " + tacticsCard.getName(), (m, p2) -> {
+                    tacticsCard.resolve(m, p2,
+                            (BattleBoard) p2.getCurrentLocation());
+                    BattleBoard.possiblyDiscardTacticsCard(m, p2, tacticsCard);
+                    breakLoop[0] = true;
+                });
+            }
+            multipleChoice.addOption("Skip", (_,_) -> {});
+            if (multipleChoice.getNumberOfChoices() > 1) {
+                multipleChoice.promptAndDoAction(model, p.getName() + " can play " + tacticsCard.getName() +
+                        " to resolve " + p.getCurrentLocation().getName() + ".", p);
+            }
+            if (breakLoop[0]) {
+                break; // Battle was resolved, nobody else can play RM.
+            }
+        }
     }
 
     private void doNegativeAction(Model model, Player current) {
@@ -198,7 +224,11 @@ public class PlayerActionState extends GameState {
         } else if (isOnPrisonPlanet(current)) {
             multipleChoice.addOption("Escape prison", ArrestAction::escapeFromPrison);
         } else if (!current.getUnitCardsInHand().isEmpty()) {
-            multipleChoice.addOption("Add Cards to Battle", PlayerActionState::addCardsToBattle);
+            multipleChoice.addOption("Add Cards to Battle", (m, p) -> {
+                addCardsToBattle(m, p);
+                playRapidMobilizationIfAble(m, p);
+                }
+            );
         }
         UnitCard agent = MyLists.find(current.getUnitCardsInHand(), eu -> eu instanceof AgentUnitCard);
         if (agent != null) {
