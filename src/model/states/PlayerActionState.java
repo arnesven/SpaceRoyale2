@@ -312,7 +312,7 @@ public class PlayerActionState extends GameState {
         MultipleChoice multipleChoice = new MultipleChoice();
         for (Player p : model.getPlayers()) {
             if (p != player && isOnCentralia(model, p) && !model.hasCollaborativelyDrawnThisTurn(p)) {
-                multipleChoice.addOption(p.getName() + "(" + p.getTotalCardsInHand() + " cards)", (model1, performer) -> drawCardsTogetherWith(model1, performer, p));
+                multipleChoice.addOption(p.getName() + " (" + p.getTotalCardsInHand() + " cards)", (model1, performer) -> drawCardsTogetherWith(model1, performer, p));
             }
         }
         if (multipleChoice.getNumberOfChoices() == 0) {
