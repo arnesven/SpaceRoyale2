@@ -21,10 +21,7 @@ import view.MultipleChoice;
 import view.ScreenHandler;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class Model {
     private final ScreenHandler screenHandler;
@@ -300,6 +297,9 @@ public class Model {
 
     public void stepCurrentPlayer() {
         int index = gameData.players.indexOf(gameData.currentPlayer);
+        if (index == -1) {
+            throw new NoSuchElementException("Could not find player when stepping");
+        }
         gameData.currentPlayer = gameData.players.get((index + 1) % gameData.players.size());
     }
 
@@ -555,6 +555,9 @@ public class Model {
         defector.moveToLocation(gameData.gameBoard.getRebelStronghold());
 
         gameData.players.set(gameData.players.indexOf(player), defector);
+        if (gameData.currentPlayer == player) {
+            gameData.currentPlayer = defector;
+        }
     }
 
     public List<Player> getPlayersNotDefectors() {
