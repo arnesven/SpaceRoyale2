@@ -544,7 +544,7 @@ public class Model {
         }
 
         for (int i = 0; i < 2; ++i) {
-            defector.addCardToHand(gameData.rebelUnitDeck.drawOne());
+            defector.addCardToHand(drawRebelUnitCard());
         }
         getScreenHandler().println(player.getShortName() + " draws 2 Rebel Units:");
         defector.printHand(screenHandler);
