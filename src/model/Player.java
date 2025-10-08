@@ -142,6 +142,7 @@ public class Player implements Serializable {
 
     public void addCardToHand(EmpireUnitCard eu) {
         unitCardsInHand.add(eu);
+        unitCardsInHand.sort(Comparator.comparingInt(UnitCard::getStrength));
     }
 
     public void addCardToHand(TacticsCard tc) {
