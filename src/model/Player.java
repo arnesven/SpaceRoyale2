@@ -3,6 +3,7 @@ package model;
 import model.board.BoardLocation;
 import model.cards.*;
 import model.cards.alignment.AlignmentCard;
+import model.cards.alignment.RebelAlignmentCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.EmpireUnitCard;
 import model.cards.units.EmpireUnitPlayerDeck;
@@ -154,7 +155,8 @@ public class Player implements Serializable {
     }
 
     public void drawYourselfHorizontally(Model model, int x, int y) {
-        model.getScreenHandler().drawText(getSimpleName() + " " + getCardSymbol(model) + + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y);
+        char loy = loyalty instanceof RebelAlignmentCard ? 'R':'E';
+        model.getScreenHandler().drawText(getSimpleName() + " " + getCardSymbol(model) + + unitCardsInHand.size() + " T" + tacticsCardsInHand.size() + " " + loy, x, y);
         model.getScreenHandler().drawText("EI:" + emperorInfluence + " PI:" + popularInfluence + " Deck:" + unitDeck.size(), x, y+1);
     }
 
@@ -163,17 +165,18 @@ public class Player implements Serializable {
     }
 
     public void drawYourselfVertically(Model model, int x, int y, boolean compact) {
+        char loy = loyalty instanceof RebelAlignmentCard ? 'R':'E';
         model.getScreenHandler().drawText(getSimpleName(), x, y);
         model.getScreenHandler().drawText(getCardSymbol(model) + unitCardsInHand.size() + " T" + tacticsCardsInHand.size(), x, y + 1);
         if (compact) {
-            model.getScreenHandler().drawText(String.format("EI:%d PI:%d", emperorInfluence, popularInfluence), x, y + 2);
+            model.getScreenHandler().drawText(String.format("EI:%d PI:%d " + loy, emperorInfluence, popularInfluence), x, y + 2);
             model.getScreenHandler().drawText("Deck:" + unitDeck.size(), x, y + 3);
 
         } else {
             model.getScreenHandler().drawText("EI:" + emperorInfluence, x, y + 2);
             model.getScreenHandler().drawText("PI:" + popularInfluence, x, y + 3);
             model.getScreenHandler().drawText("Deck:", x, y + 4);
-            model.getScreenHandler().drawText(" " + unitDeck.size(), x, y + 5);
+            model.getScreenHandler().drawText(loy + " " + unitDeck.size(), x, y + 5);
         }
     }
 
