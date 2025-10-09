@@ -5,8 +5,8 @@ public class EmpireUnitPlayerDeck extends EmpireUnitDeck {
     private static final int NO_OF_AGENT_CARDS = 2;
     private static final int NO_OF_SHUTTLE_CARDS = 2;
     private static final int NO_OF_GROUND_TROOPS_CARDS = 4;
-    private static final int NO_OF_FIGHTERS_CARDS = 4;
-    private static final int NO_OF_GRAV_ARMOR_CARDS = 1;
+    private static final int NO_OF_FIGHTERS_CARDS = 3;
+    private static final int NO_OF_GRAV_ARMOR_CARDS = 2;
     private static final int NO_OF_CRUISER_CARDS = 2;
     private static final int NO_OF_BATTLESHIP_CARDS = 1;
 
