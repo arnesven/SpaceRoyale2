@@ -78,6 +78,7 @@ public abstract class BattleBoard extends BoardLocation {
     public void resolveYourself(Model model) {
         upgradeTitan(model);
         upgradeStarWarrior(model);
+        handleBlackCrusaders(model);
         rebelUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
         empireUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
         print(model, "Rebel Forces are: " + freqListOrNone(rebelUnits));
@@ -118,6 +119,21 @@ public abstract class BattleBoard extends BoardLocation {
         } else {
             discardRebelCards(model, rebelUnits, imperialWin);
         }
+    }
+
+    private void handleBlackCrusaders(Model model) {
+        do {
+            EmpireUnitCard eu = MyLists.find(empireUnits,
+                    card -> card instanceof EmpireBlackCrusaderUnitCard &&
+                            ((EmpireBlackCrusaderUnitCard) card).isRebel());
+            if (eu != null) {
+                model.getScreenHandler().println(eu.getName() + " is moved to the rebel side!");
+                empireUnits.remove(eu);
+                rebelUnits.add(((EmpireBlackCrusaderUnitCard)eu).makeRebelCard());
+            } else {
+                break;
+            }
+        } while (true);
     }
 
     private void setImperialWin(boolean imperialWin) {

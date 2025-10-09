@@ -45,6 +45,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new OppresiveBureaucracyEventCard());
         addCard(new DisarmamentEventCard());
         addCard(new RebelAmbushEventCard());
+        addCard(new BlackCrusaderEventCard());
         shuffle();
     }
 

@@ -404,10 +404,12 @@ public class Model {
     }
 
     public void discardRebelCards(List<RebelUnitCard> cards) {
+        cards.removeIf(c -> c instanceof SpecialRebelUnit);
         gameData.rebelUnitDiscard.addAll(cards);
     }
 
     public void discardEmpireCards(List<EmpireUnitCard> cards) {
+        cards.removeIf(c -> c instanceof SpecialEmpireUnitCard);
         gameData.empireUnitDiscard.addAll(cards);
     }
 
