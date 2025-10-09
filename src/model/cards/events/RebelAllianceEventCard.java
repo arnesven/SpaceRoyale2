@@ -4,9 +4,9 @@ import model.Model;
 import model.Player;
 import model.cards.GameCard;
 
-public class RebelLogisticsEventCard extends EventCard {
-    public RebelLogisticsEventCard() {
-        super("Rebel Logistics", false,
+public class RebelAllianceEventCard extends EventCard {
+    public RebelAllianceEventCard() {
+        super("Rebel Alliance", false,
                 "Keep this card in play. Each time a new Battle is set up, " +
                         "add one additional Rebel Unit to it.");
     }
@@ -24,6 +24,6 @@ public class RebelLogisticsEventCard extends EventCard {
 
     @Override
     public GameCard copy() {
-        return new RebelLogisticsEventCard();
+        return new RebelAllianceEventCard();
     }
 }

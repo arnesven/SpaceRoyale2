@@ -2,7 +2,7 @@ package model.cards.units;
 
 import model.cards.GameCard;
 
-public class RebelBlackCrusaderUnitCard extends SpecialRebelUnit {
+public class RebelBlackCrusaderUnitCard extends SpecialRebelUnitCard {
     public RebelBlackCrusaderUnitCard(int strength, boolean groundUnit) {
         super("Black Crusader", strength, groundUnit);
     }

@@ -13,7 +13,6 @@ import model.cards.tactics.TacticsCard;
 import model.cards.tactics.TacticsDeck;
 import model.cards.units.*;
 import model.states.GameState;
-import model.states.InitialGameState;
 import util.Arithmetics;
 import util.MyLists;
 import util.MyPair;
@@ -404,13 +403,12 @@ public class Model {
     }
 
     public void discardRebelCards(List<RebelUnitCard> cards) {
-        cards.removeIf(c -> c instanceof SpecialRebelUnit);
-        gameData.rebelUnitDiscard.addAll(cards);
+        cards.removeIf(c -> c instanceof SpecialRebelUnitCard);
+        gameData.rebelUnitDiscard.addAll(MyLists.filter(cards, c -> !(c instanceof SpecialRebelUnitCard)));
     }
 
     public void discardEmpireCards(List<EmpireUnitCard> cards) {
-        cards.removeIf(c -> c instanceof SpecialEmpireUnitCard);
-        gameData.empireUnitDiscard.addAll(cards);
+        gameData.empireUnitDiscard.addAll(MyLists.filter(cards, c -> !(c instanceof SpecialEmpireUnitCard)));
     }
 
     public void discardTacticsCards(TacticsCard card) {

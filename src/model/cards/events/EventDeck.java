@@ -9,7 +9,7 @@ public class EventDeck extends Deck<EventCard> {
 
     public EventDeck() {
         for (int i = 0; i < 3; ++i) {
-            addCard(new RebelLogisticsEventCard());
+            addCard(new RebelAllianceEventCard());
             addCard(new BandingTogetherEventCard());
             addCard(new RebelRecruitsEventCard());
         }
