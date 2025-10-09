@@ -403,7 +403,6 @@ public class Model {
     }
 
     public void discardRebelCards(List<RebelUnitCard> cards) {
-        cards.removeIf(c -> c instanceof SpecialRebelUnitCard);
         gameData.rebelUnitDiscard.addAll(MyLists.filter(cards, c -> !(c instanceof SpecialRebelUnitCard)));
     }
 
