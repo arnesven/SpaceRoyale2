@@ -335,7 +335,7 @@ public class PlayerActionState extends GameState {
     private void drawThreeCards(Model model, Player performer) {
         MultipleChoice multipleChoice = new MultipleChoice();
         multipleChoice.addOption("3 Unit Cards", (model1, performer1) -> performer1.drawUnitCards(model1, 3));
-        if (isOnCentralia(model, performer) && !model.getTacticsDeck().isEmpty()) {
+        if (isOnCentralia(model, performer) && model.isTacticsCardsAvailable()) {
             multipleChoice.addOption("2 Unit Cards + 1 Tactics Card", (model2, performer2) -> {
                 performer2.drawUnitCards(model2, 2);
                 performer2.drawTacticsCard(model2);
@@ -354,7 +354,7 @@ public class PlayerActionState extends GameState {
     private void drawTwoCards(Model model, Player performer) {
         MultipleChoice multipleChoice = new MultipleChoice();
         multipleChoice.addOption("2 Unit Cards", (model1, performer1) -> performer1.drawUnitCards(model1, 2));
-        if (!model.getTacticsDeck().isEmpty()) {
+        if (model.isTacticsCardsAvailable()) {
             multipleChoice.addOption("1 Tactics Card", (model2, performer2) -> {
                 performer2.drawTacticsCard(model2);
             });

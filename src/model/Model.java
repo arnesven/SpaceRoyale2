@@ -575,4 +575,8 @@ public class Model {
     public void addToCollaborativeDrawers(Player performer) {
         gameData.collaborativeDraw.add(performer);
     }
+
+    public boolean isTacticsCardsAvailable() {
+        return !gameData.tacticsDeck.isEmpty() || !gameData.tacticsDiscard.isEmpty();
+    }
 }
