@@ -49,6 +49,7 @@ public class DefendPlanetBattleBoard extends BattleBoard {
                     multipleChoice.addOption("Draw Tactics Card", (m, _) -> p.drawTacticsCard(m));
                 }
                 multipleChoice.promptAndDoAction(model, p.getName() + " gets one card as a reward:", p);
+                p.printHand(model.getScreenHandler());
             }
         }
     }
