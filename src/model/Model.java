@@ -521,8 +521,7 @@ public class Model {
 
     public void playerDefects(Player player) {
         screenHandler.println(player.getName() + " defects to the rebel side!");
-        screenHandler.println(player.getShortName() + "'s Rebel Alignment card is placed in the Battle Chance deck.");
-        addBattleChanceCard(player.getLoyaltyCard());
+        screenHandler.println(player.getShortName() + "'s Rebel Alignment card is revealed.");
         DefectedPlayer defector = new DefectedPlayer(player);
         if (player.getCurrentLocation() == getPrisonPlanet()) {
             getScreenHandler().println("Since " + player.getName() +
