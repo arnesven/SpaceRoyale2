@@ -205,9 +205,9 @@ public class Model {
         gameData.currentPlayer = gameData.players.getFirst();
 
         screenHandler.println("The remaining " + alignmentCards.size() +
-                " Alignment cards, plus 2 of each alignment, become the Battle Chance deck.");
-        alignmentCards.addCopies(new EmpireAlignmentCard(), 2);
-        alignmentCards.addCopies(new RebelAlignmentCard(), 2);
+                " Alignment cards, plus 1 of each alignment, become the Battle Chance deck.");
+        alignmentCards.addCard(new EmpireAlignmentCard());
+        alignmentCards.addCard(new RebelAlignmentCard());
         alignmentCards.shuffle();
         gameData.battleChanceDeck = alignmentCards;
     }
