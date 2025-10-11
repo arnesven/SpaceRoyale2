@@ -28,7 +28,7 @@ public class EventDeck extends Deck<EventCard> {
         addCard(new MiraculousRecoveryEventCard());
         addCard(new PropagandaCampaignEventCard());
         addCard(new PrisonBreakEventCard());
-        addCard(new SuperTitanEventCard());
+        addCard(new RebelFlagshipCard());
         addCard(new ChampionOfLightEventCard());
         addCard(new SuddenDeathEventCard());
         addCard(new NewTechRollOutEventCard());

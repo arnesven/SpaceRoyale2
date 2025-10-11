@@ -2,9 +2,9 @@ package model.cards.units;
 
 import model.cards.GameCard;
 
-public class CruiserCard extends EmpireUnitCard {
+public class CruiserCard extends RebelUnitCard {
     public CruiserCard() {
-        super("Cruiser", 4, false);
+        super("Cruiser", 5, false);
     }
 
     @Override

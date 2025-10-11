@@ -6,7 +6,7 @@ import model.cards.*;
 import model.cards.alignment.AlignmentCard;
 import model.cards.events.ChampionOfLightEventCard;
 import model.cards.events.EventCard;
-import model.cards.events.SuperTitanEventCard;
+import model.cards.events.RebelFlagshipCard;
 import model.cards.events.TacticsImprovementEventCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.*;
@@ -76,7 +76,7 @@ public abstract class BattleBoard extends BoardLocation {
     }
 
     public void resolveYourself(Model model) {
-        upgradeTitan(model);
+        upgradeBattleship(model);
         upgradeStarWarrior(model);
         handleBlackCrusaders(model);
         rebelUnits.sort(Comparator.comparingInt(UnitCard::getStrength));
@@ -140,13 +140,13 @@ public abstract class BattleBoard extends BoardLocation {
         this.imperialWin = imperialWin;
     }
 
-    private void upgradeTitan(Model model) {
-        if (MyLists.any(model.getEventCardsInPlay(), ev -> ev instanceof SuperTitanEventCard)) {
-            RebelUnitCard titan = MyLists.find(rebelUnits, ru -> ru instanceof TitanUnitCard);
+    private void upgradeBattleship(Model model) {
+        if (MyLists.any(model.getEventCardsInPlay(), ev -> ev instanceof RebelFlagshipCard)) {
+            RebelUnitCard titan = MyLists.find(rebelUnits, ru -> ru instanceof BattleshipCard);
             if (titan != null) {
-                ((TitanUnitCard)titan).upgrade();
-                model.getScreenHandler().println("Titan upgraded to " + titan.getName() + ".");
-                EventCard event = MyLists.find(model.getEventCardsInPlay(),ev -> ev instanceof SuperTitanEventCard);
+                ((BattleshipCard)titan).upgrade();
+                model.getScreenHandler().println("Battleship upgraded to " + titan.getName() + ".");
+                EventCard event = MyLists.find(model.getEventCardsInPlay(),ev -> ev instanceof RebelFlagshipCard);
                 model.getEventCardsInPlay().remove(event);
                 model.discardEventCard(event);
             }
@@ -259,9 +259,9 @@ public abstract class BattleBoard extends BoardLocation {
     private void resolveMinefields(Model model) {
         if (battleHasMinefields() && minesAreEffective(model)) {
             List<EmpireUnitCard> cardsToDiscard = MyLists.filter(empireUnits,
-                    eu -> eu instanceof CruiserCard || eu instanceof BattleshipCard);
+                    eu -> eu instanceof DestroyerCard || eu instanceof TitanCard);
             if (!cardsToDiscard.isEmpty()) {
-                print(model, "The rebels' minefield destroys all imperial cruisers and battleships!");
+                print(model, "The rebels' minefield destroys all imperial destroyers and titans!");
                 print(model, "Discarding " + MyLists.frequencyList(cardsToDiscard, GameCard::getName));
             }
             for (EmpireUnitCard ship : cardsToDiscard) {

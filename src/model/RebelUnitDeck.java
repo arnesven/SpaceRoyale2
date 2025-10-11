@@ -11,16 +11,16 @@ public class RebelUnitDeck extends Deck<RebelUnitCard> {
     private static final int NO_OF_MINEFIELD_CARDS = 3;
     private static final int NO_OF_FRIGATE_CARDS = 6;
     private static final int NO_OF_STAR_WARRIOR_CARDS = 3;
-    private static final int NO_OF_DESTROYER_CARDS = 4;
-    private static final int NO_OF_TITAN_CARDS = 3;
+    private static final int NO_OF_CRUISER_CARDS = 4;
+    private static final int NO_OF_BATTLESHIP_CARDS = 3;
 
     private static final RebelUnitCard DRONES = new DronesUnitCard();
     private static final RebelUnitCard REBEL_SOLDIERS = new RebelSoldiersCard();
     private static final RebelUnitCard MINEFIELD = new MinefieldUnitCard();
     private static final RebelUnitCard FRIGATE = new FrigateUnitCard();
     private static final RebelUnitCard STAR_WARRIOR = new StarWarriorUnitCard();
-    private static final RebelUnitCard DESTROYER = new DestroyerUnitCard();
-    private static final RebelUnitCard TITAN = new TitanUnitCard();
+    private static final RebelUnitCard CRUISER = new CruiserCard();
+    private static final RebelUnitCard BATTLESHIP = new BattleshipCard();
 
     public RebelUnitDeck() {
         addCopies(DRONES, NO_OF_DRONES_CARDS);
@@ -28,8 +28,8 @@ public class RebelUnitDeck extends Deck<RebelUnitCard> {
         addCopies(MINEFIELD, NO_OF_MINEFIELD_CARDS);
         addCopies(FRIGATE, NO_OF_FRIGATE_CARDS);
         addCopies(STAR_WARRIOR, NO_OF_STAR_WARRIOR_CARDS);
-        addCopies(DESTROYER, NO_OF_DESTROYER_CARDS);
-        addCopies(TITAN, NO_OF_TITAN_CARDS);
+        addCopies(CRUISER, NO_OF_CRUISER_CARDS);
+        addCopies(BATTLESHIP, NO_OF_BATTLESHIP_CARDS);
         shuffle();
     }
 
