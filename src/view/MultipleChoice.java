@@ -4,6 +4,7 @@ import model.Model;
 import model.Player;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class MultipleChoice {
@@ -26,7 +27,11 @@ public class MultipleChoice {
                 model.getScreenHandler().println("[" + (i + 1) + "] " + options.get(i));
             }
             do {
-                this.choice = model.getScreenHandler().integerInput();
+                try {
+                    this.choice = model.getScreenHandler().integerInput();
+                } catch (InputMismatchException ime) {
+                    // Ignore
+                }
             } while (choice < 1 || choice > options.size());
         }
         executeOption(model, performer, choice);
