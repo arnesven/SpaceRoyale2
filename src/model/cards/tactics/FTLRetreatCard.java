@@ -18,11 +18,11 @@ public class FTLRetreatCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         if (battle.getEmpireUnits().isEmpty()) {
             model.getScreenHandler().println(player.getName() + " moves to Centralia.");
             player.moveToLocation(model.getCentralia());
-            return;
+            return true;
         }
 
         MultipleChoice multipleChoice = new MultipleChoice();
@@ -36,6 +36,7 @@ public class FTLRetreatCard extends TacticsCard {
             });
         }
         multipleChoice.promptAndDoAction(model, "Which card does " + player.getName() + " pick up from the battle?", player);
+        return true;
     }
 
     @Override

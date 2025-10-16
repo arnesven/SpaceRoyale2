@@ -16,13 +16,14 @@ public class MinefieldCodesCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         if (battle.battleHasMinefields()) {
             model.getScreenHandler().println("The rebel minefields have been disabled.");
             battle.disableMines();
-        } else {
-            model.getScreenHandler().println("The card has no effect since there are no minefields in this battle.");
+            return true;
         }
+        model.getScreenHandler().println("The card has no effect since there are no minefields in this battle.");
+        return false;
     }
 
     @Override

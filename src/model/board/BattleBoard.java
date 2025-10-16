@@ -204,20 +204,21 @@ public abstract class BattleBoard extends BoardLocation {
 
     private void playEarlyTacticsCards(Model model) {
         for (Player player : MyLists.filter(model.getPlayers(), p -> !p.getTacticsCardsInHand().isEmpty())) {
-            MultipleChoice multipleChoice = new MultipleChoice();
-            for (TacticsCard tc : player.getTacticsCardsInHand()) {
-                if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playedAfterReveal()) {
-                    multipleChoice.addOption(tc.getName(), (m, p) -> {
-                        tc.resolve(model, p, this);
-                        possiblyDiscardTacticsCard(model, p, tc);
-                    });
-                }
-            }
+            MultipleChoice multipleChoice;
             boolean[] done = new boolean[]{false};
-            multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
             while (!done[0] && player.getCurrentLocation() == this) { // If the player used FTL to move, no more cards can be played.
+                multipleChoice = new MultipleChoice();
+                multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
+                for (TacticsCard tc : player.getTacticsCardsInHand()) {
+                    if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playedAfterReveal()) {
+                        multipleChoice.addOption(tc.getName(), (m, p) -> {
+                            if (tc.resolve(model, p, this)) {
+                                possiblyDiscardTacticsCard(model, p, tc);
+                            }
+                        });
+                    }
+                }
                 multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
-                multipleChoice.removeSelectedOption();
             }
         }
     }
@@ -238,20 +239,21 @@ public abstract class BattleBoard extends BoardLocation {
 
     private void playLateTacticsCards(Model model) {
         for (Player player : MyLists.filter(model.getPlayers(), p -> !p.getTacticsCardsInHand().isEmpty())) {
-            MultipleChoice multipleChoice = new MultipleChoice();
-            for (TacticsCard tc : player.getTacticsCardsInHand()) {
-                if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playAfterBattle()) {
-                    multipleChoice.addOption(tc.getName(), (m, p) -> {
-                        tc.resolve(model, p, this);
-                        possiblyDiscardTacticsCard(model, p, tc);
-                    });
-                }
-            }
+            MultipleChoice multipleChoice;
             boolean[] done = new boolean[]{false};
-            multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
             while (!done[0]) {
+                multipleChoice = new MultipleChoice();
+                multipleChoice.addOption("Pass", (_, _) -> { done[0] = true; });
+                for (TacticsCard tc : player.getTacticsCardsInHand()) {
+                    if ((player.getCurrentLocation() == this || tc.canBePlayedOutsideOfBattle()) && tc.playAfterBattle()) {
+                        multipleChoice.addOption(tc.getName(), (m, p) -> {
+                            if (tc.resolve(model, p, this)) {
+                                possiblyDiscardTacticsCard(model, p, tc);
+                            }
+                        });
+                    }
+                }
                 multipleChoice.promptAndDoAction(model, "Does " + player.getName() + " play a Tactics card?", player);
-                multipleChoice.removeSelectedOption();
             }
         }
     }

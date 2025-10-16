@@ -21,10 +21,11 @@ public class RapidMobilizationCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         model.getScreenHandler().println(player.getName() + " plays " + getName() + " to force " +
                 battle.getName() + " to be resolved.");
         model.resolveBattle(battle);
+        return true;
     }
 
     @Override

@@ -21,11 +21,11 @@ public class MassDriverCannonCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         List<RebelUnitCard> ground = MyLists.filter(battle.getRebelUnits(), this::isDestroyableSpaceUnit);
         if (ground.isEmpty()) {
             model.getScreenHandler().println("There are no Space units to discard.");
-            return;
+            return false;
         }
         MultipleChoice multipleChoice = new MultipleChoice();
         for (RebelUnitCard ru : ground) {
@@ -43,6 +43,7 @@ public class MassDriverCannonCard extends TacticsCard {
             });
         }
         multipleChoice.promptAndDoAction(model, "Select a space unit to discard:", player);
+        return true;
     }
 
     private boolean isDestroyableSpaceUnit(RebelUnitCard rebelUnitCard) {

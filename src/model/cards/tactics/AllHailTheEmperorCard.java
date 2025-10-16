@@ -18,17 +18,18 @@ public class AllHailTheEmperorCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         if (battle instanceof SpaceBattleBoard || battle instanceof DefendPlanetBattleBoard) {
             if (battle.isEmpireVictorious()) {
                 model.getScreenHandler().println(player.getName() + " plays " + this.getName() + " and gains 1 Empire Influence.");
                 player.addToEmperorInfluence(1);
-            } else {
-                model.getScreenHandler().println("Empire was not victorious, " + getName() + " has no effect.");
+                return true;
             }
-        } else {
-            model.getScreenHandler().println(this.getName() + " has no effect in this type of battle.");
+            model.getScreenHandler().println("Empire was not victorious, " + getName() + " has no effect.");
+            return false;
         }
+        model.getScreenHandler().println(this.getName() + " has no effect in this type of battle.");
+        return false;
     }
 
     @Override

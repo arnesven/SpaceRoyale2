@@ -23,12 +23,12 @@ public class EvasiveManeuversCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         List<EmpireUnitCard> cardsToPickFrom = MyLists.filter(battle.getEmpireUnits(),
                 eu -> eu instanceof ShuttleCard || eu instanceof FightersCard);
         if (cardsToPickFrom.isEmpty()) {
             model.getScreenHandler().println("There are no suitable cards for " + this.getName() + " to recover.");
-            return;
+            return false;
         }
 
         MultipleChoice multipleChoice = new MultipleChoice();
@@ -44,6 +44,7 @@ public class EvasiveManeuversCard extends TacticsCard {
             multipleChoice.promptAndDoAction(model, "Which card do you want to pick up?", player);
             multipleChoice.removeSelectedOption();
         }
+        return true;
     }
 
     @Override

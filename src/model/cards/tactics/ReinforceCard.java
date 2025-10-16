@@ -23,14 +23,14 @@ public class ReinforceCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         if (player.getCurrentLocation() != battle) {
             model.getScreenHandler().println(player.getName() + " moves to " + battle.getName() + ".");
             player.moveToLocation(battle);
         }
         if (player.getUnitCardsInHand().isEmpty()) {
             model.getScreenHandler().println(player.getName() + " has no cards to add to the battle.");
-            return;
+            return true;
         }
         MultipleChoice multipleChoice = new MultipleChoice();
         for (EmpireUnitCard eu : player.getUnitCardsInHand()) {
@@ -41,6 +41,7 @@ public class ReinforceCard extends TacticsCard {
             });
         }
         multipleChoice.promptAndDoAction(model, "Which card do you wish " + player.getName() + " to add to the battle?", player);
+        return true;
     }
 
     @Override

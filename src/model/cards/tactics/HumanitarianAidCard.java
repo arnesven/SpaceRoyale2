@@ -17,17 +17,18 @@ public class HumanitarianAidCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         if (battle instanceof InvasionBattleBoard) {
             if (battle.isEmpireVictorious()) {
                 player.addToPopularInfluence(1);
                 model.getScreenHandler().println(player.getName() + " plays " + this.getName() + " to gain 1 Popular Influence.");
-            } else {
-                model.getScreenHandler().println("Empire was not victorious, " + getName() + " has no effect.");
+                return true;
             }
-        } else {
-            model.getScreenHandler().println(getName() + " has no effect in this type of battle.");
+            model.getScreenHandler().println("Empire was not victorious, " + getName() + " has no effect.");
+            return false;
         }
+        model.getScreenHandler().println(getName() + " has no effect in this type of battle.");
+        return false;
     }
 
     @Override

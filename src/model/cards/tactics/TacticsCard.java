@@ -12,7 +12,7 @@ public abstract class TacticsCard extends GameCard {
 
     public abstract boolean playedAfterReveal();
 
-    public abstract void resolve(Model model, Player player, BattleBoard battle);
+    public abstract boolean resolve(Model model, Player player, BattleBoard battle);
 
     public boolean canBePlayedOutsideOfBattle() {
         return false;

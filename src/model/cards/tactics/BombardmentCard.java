@@ -23,10 +23,10 @@ public class BombardmentCard extends TacticsCard {
     }
 
     @Override
-    public void resolve(Model model, Player player, BattleBoard battle) {
+    public boolean resolve(Model model, Player player, BattleBoard battle) {
         if (!battle.canUseBombardment()) {
             model.getScreenHandler().println("Bombardment has no effect in Space battles.");
-            return;
+            return false;
         }
         List<UnitCard> cardsToDiscard = new ArrayList<>();
         MultipleChoice multipleChoice = new MultipleChoice();
@@ -61,6 +61,7 @@ public class BombardmentCard extends TacticsCard {
                     player.getName() + " gets an additional -1 Popular Influence.");
             player.addToPopularInfluence(-1);
         }
+        return true;
     }
 
     private boolean isDestroyableGroundUnit(RebelUnitCard rebelUnitCard) {
