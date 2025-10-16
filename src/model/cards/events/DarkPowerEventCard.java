@@ -5,6 +5,7 @@ import model.Player;
 import model.cards.GameCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.EmpireUnitCard;
+import util.MyLists;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
@@ -21,10 +22,18 @@ public class DarkPowerEventCard extends EventCard {
 
     @Override
     public void resolve(Model model, Player player) {
+        int minPi = MyLists.minimum(model.getPlayersNotDefectors(), Player::getPopularInfluence);
+        for (Player p : MyLists.filter(model.getPlayersNotDefectors(), p2 -> p2.getPopularInfluence() == minPi)) {
+            model.getScreenHandler().println(p.getName() + " has the least Popular Influence (" + minPi + ").");
+            playerDiscardsCards(model, p);
+        }
+    }
+
+    private void playerDiscardsCards(Model model, Player player) {
         List<EmpireUnitCard> unitsToDiscard = new ArrayList<>();
         List<TacticsCard> tacticsToDiscard = new ArrayList<>();
         if (player.getTotalCardsInHand() <= NO_OF_CARDS) {
-            model.getScreenHandler().println(player.getName() + " has less than " + NO_OF_CARDS + ", discarding entire hand.");
+            model.getScreenHandler().println(player.getName() + " has " + NO_OF_CARDS + " or less cards, discarding entire hand.");
             unitsToDiscard.addAll(player.getUnitCardsInHand());
             tacticsToDiscard.addAll(player.getTacticsCardsInHand());
         } else {
@@ -42,7 +51,7 @@ public class DarkPowerEventCard extends EventCard {
                     model.getScreenHandler().println(tc.getName() + " selected, " + cardsLeft(unitsToDiscard, tacticsToDiscard) + " left to select.");
                 });
             }
-            while (unitsToDiscard.size() < NO_OF_CARDS) {
+            while (unitsToDiscard.size() + tacticsToDiscard.size() < NO_OF_CARDS) {
                 multipleChoice.promptAndDoAction(model, "Discard which card?", player);
                 multipleChoice.removeSelectedOption();
             }
