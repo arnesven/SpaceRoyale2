@@ -20,7 +20,7 @@ public class GameTracks implements Serializable {
     public GameTracks(Model model) {
         this.turn = 1;
         this.unrest = 0;
-        this.health = 0;
+        this.health = 1;
         this.war = new WarTrack();
     }
 

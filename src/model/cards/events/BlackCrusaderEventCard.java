@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlackCrusaderEventCard extends EventCard {
-    private final int INFLUENCE_NEEDED = 3;
+    private final int INFLUENCE_NEEDED = 2;
 
     private List<EmpireUnitCard> cards = new ArrayList<>();
 
