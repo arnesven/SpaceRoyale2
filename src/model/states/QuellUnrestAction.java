@@ -2,6 +2,7 @@ package model.states;
 
 import model.Model;
 import model.Player;
+import model.cards.alignment.RebelAlignmentCard;
 import model.cards.units.AgentUnitCard;
 import model.cards.units.EmpireUnitCard;
 import model.cards.units.UnitCard;
@@ -55,7 +56,8 @@ public class QuellUnrestAction {
                         model.getScreenHandler().println(p.getName() + " contributes a card, face down.");
                     });
                 }
-                multipleChoice.promptAndDoAction(model, "Which card does " + p.getName() + " contribute?", p);
+                multipleChoice.promptAndDoAction(model, "Which card does " + p.getName() + "(" +
+                        (p.getLoyaltyCard() instanceof RebelAlignmentCard ? "R":"E") + ") contribute?", p);
             }
         }
         Collections.shuffle(contributedCards);
