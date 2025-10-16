@@ -20,7 +20,7 @@ public class MiraculousRecoveryEventCard extends EventCard {
         int dieRoll = MyRandom.rollD10();
         model.getScreenHandler().println("The die is rolled, it's a " + dieRoll + ".");
         model.getScreenHandler().print("The Health counter retreats ");
-        int retreat = dieRoll <= 6 ? 1 : dieRoll <= 8 ? 2 : 3;
+        int retreat = dieRoll <= 7 ? 1 : dieRoll <= 9 ? 2 : 3;
         model.advanceHealthCounter(-retreat);
         model.getScreenHandler().println(retreat + " spaces. Now on " + model.getEmperorHealth() + ".");
     }
