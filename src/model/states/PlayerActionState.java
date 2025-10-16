@@ -1,11 +1,10 @@
 package model.states;
 
 import model.DefectedPlayer;
+import model.GameOverException;
 import model.Model;
 import model.Player;
-import model.board.BattleBoard;
-import model.board.BoardLocation;
-import model.board.PrisonPlanetLocation;
+import model.board.*;
 import model.cards.DeckIsEmptyException;
 import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
@@ -178,6 +177,14 @@ public class PlayerActionState extends GameState {
         } else {
             model.getEventCardsInPlay().add(card1);
             println(model, card1.getName() + " stays in play.");
+        }
+        if (model.getUnrest() == model.getMaxUnrest()) {
+            throw new GameOverException();
+        }
+        if (model.checkForBattleOfCentralia()) {
+            new BattleOfCentralia(model, new ArrayList<>()).resolveYourself(model);
+        } else if (model.checkForBattleAtRebelStronghold()) {
+            new BattleAtTheRebelStronghold(model, new ArrayList<>()).resolveYourself(model);
         }
     }
 

@@ -1,5 +1,6 @@
 package model;
 
+import model.board.BattleBoard;
 import model.board.BoardLocation;
 import model.cards.*;
 import model.cards.alignment.AlignmentCard;
@@ -202,5 +203,14 @@ public class Player implements Serializable {
 
     public void removeTacticsCardFromHand(TacticsCard tc) {
         tacticsCardsInHand.remove(tc);
+    }
+
+    public boolean isOnBattleLocation(Model model) {
+        for (BattleBoard bb : model.getBattles()) {
+            if (currentLocation == bb) {
+                return true;
+            }
+        }
+        return false;
     }
 }

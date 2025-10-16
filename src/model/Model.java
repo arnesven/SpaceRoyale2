@@ -1,8 +1,6 @@
 package model;
 
-import model.board.BattleBoard;
-import model.board.BoardLocation;
-import model.board.GameBoard;
+import model.board.*;
 import model.cards.*;
 import model.cards.alignment.AlignmentCard;
 import model.cards.alignment.EmpireAlignmentCard;
@@ -523,6 +521,17 @@ public class Model {
         screenHandler.println(player.getName() + " defects to the rebel side!");
         screenHandler.println(player.getShortName() + "'s Rebel Alignment card is revealed.");
         DefectedPlayer defector = new DefectedPlayer(player);
+        if (player.getCurrentLocation() == getCentralia()) {
+            getScreenHandler().println("Unrest increased by 1.");
+            increaseUnrest(1);
+            if (getUnrest() == getMaxUnrest()) {
+                throw new GameOverException();
+            }
+        } else if (player.isOnBattleLocation(this)) {
+            getScreenHandler().println("War counter advances 1 step.");
+            advanceWarCounter();
+        }
+
         if (player.getCurrentLocation() == getPrisonPlanet()) {
             getScreenHandler().println("Since " + player.getName() +
                     " is on the Prison planet, no special Rebel Unit cards can be claimed.");
@@ -555,6 +564,12 @@ public class Model {
         gameData.players.set(gameData.players.indexOf(player), defector);
         if (gameData.currentPlayer == player) {
             gameData.currentPlayer = defector;
+        }
+
+        if (checkForBattleOfCentralia()) {
+            new BattleOfCentralia(this, new ArrayList<>()).resolveYourself(this);
+        } else if (this.checkForBattleAtRebelStronghold()) {
+            new BattleAtTheRebelStronghold(this, new ArrayList<>()).resolveYourself(this);
         }
     }
 

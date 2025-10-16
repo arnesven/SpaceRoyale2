@@ -1,6 +1,5 @@
 package model;
 
-import model.board.BattleAtTheRebelStronghold;
 import model.board.BattleBoard;
 import model.cards.alignment.NoAlignmentCard;
 import model.cards.events.EventCard;
