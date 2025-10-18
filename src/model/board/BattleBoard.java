@@ -4,6 +4,7 @@ import model.Model;
 import model.Player;
 import model.cards.*;
 import model.cards.alignment.AlignmentCard;
+import model.cards.alignment.NoAlignmentCard;
 import model.cards.events.ChampionOfLightEventCard;
 import model.cards.events.EventCard;
 import model.cards.events.RebelFlagshipCard;
@@ -87,8 +88,14 @@ public abstract class BattleBoard extends BoardLocation {
 
         playEarlyTacticsCards(model);
 
-        AlignmentCard align = model.drawBattleChanceCard();
-        print(model, "Drawing 1 card from Battle Chance Deck: " + align.getName());
+        AlignmentCard align;
+        if (!empireUnits.isEmpty()) {
+            align = model.drawBattleChanceCard();
+            print(model, "Drawing 1 card from Battle Chance Deck: " + align.getName());
+        } else {
+            print(model, "Since there are no Empire Unit cards, Battle Chance card is skipped.");
+            align = new NoAlignmentCard();
+        }
 
         resolveMinefields(model);
 
