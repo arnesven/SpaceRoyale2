@@ -43,7 +43,7 @@ public class UnrestStepState extends GameState {
                 multipleChoice.addOption("Don't play card", (_, _) -> {
                 });
                 multipleChoice.promptAndDoAction(model, "Does " + p.getName() + " play " + secForces.getName() +
-                        "  to modify the die roll by +2 or -2?", p);
+                        " to modify the die roll by +2 or -2?", p);
             }
         }
 

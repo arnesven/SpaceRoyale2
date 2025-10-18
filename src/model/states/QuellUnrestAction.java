@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class QuellUnrestAction {
+    private static final int MAX_PARTICIPANTS = 4;
+
     public static void doAction(Model model, Player player) {
         List<Player> involvedPlayers = new ArrayList<>();
         MultipleChoice multipleChoice = new MultipleChoice();
@@ -22,7 +24,7 @@ public class QuellUnrestAction {
                 multipleChoice.addOption(p.getName(), (_, _) -> involvedPlayers.add(p));
             }
         }
-        int maxOthers = getMaxParticipants(model.getTurn()) - 1;
+        int maxOthers = MAX_PARTICIPANTS - 1;
         boolean first = true;
         boolean[] isDone = new boolean[]{false};
         do {
@@ -75,17 +77,7 @@ public class QuellUnrestAction {
 
         model.discardEmpireCards(contributedCards);
     }
-
-    private static int getMaxParticipants(int turn) {
-        if (turn < 4) {
-            return 4;
-        }
-        if (turn < 7) {
-            return 3;
-        }
-        return 2;
-    }
-
+    
     private static boolean isOnCentralia(Model model, Player player) {
         return model.getCentralia() == player.getCurrentLocation();
     }
