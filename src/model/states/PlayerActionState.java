@@ -9,6 +9,7 @@ import model.cards.DeckIsEmptyException;
 import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
 import model.cards.tactics.RapidMobilizationCard;
+import model.cards.tactics.SecurityForcesCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.*;
 import util.MyLists;
@@ -230,12 +231,21 @@ public class PlayerActionState extends GameState {
             }
         } else if (isOnPrisonPlanet(current)) {
             multipleChoice.addOption("Escape prison", ArrestAction::escapeFromPrison);
-        } else if (!current.getUnitCardsInHand().isEmpty()) {
-            multipleChoice.addOption("Add Cards to Battle", (m, p) -> {
-                addCardsToBattle(m, p);
-                playRapidMobilizationIfAble(m, p);
-                }
-            );
+        } else {
+            TacticsCard secForces = MyLists.find(current.getTacticsCardsInHand(), tc -> tc instanceof SecurityForcesCard);
+            if (secForces != null) {
+                multipleChoice.addOption("Play " + secForces.getName(), (m, p) -> {
+                    secForces.resolve(model, current, (BattleBoard) current.getCurrentLocation());
+                    BattleBoard.possiblyDiscardTacticsCard(m, p, secForces);
+                });
+            }
+            if (!current.getUnitCardsInHand().isEmpty()) {
+                multipleChoice.addOption("Add Cards to Battle", (m, p) -> {
+                            addCardsToBattle(m, p);
+                            playRapidMobilizationIfAble(m, p);
+                        }
+                );
+            }
         }
         UnitCard agent = MyLists.find(current.getUnitCardsInHand(), eu -> eu instanceof AgentUnitCard);
         if (agent != null) {

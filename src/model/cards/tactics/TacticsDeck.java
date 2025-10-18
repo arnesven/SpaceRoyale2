@@ -17,6 +17,7 @@ public class TacticsDeck extends Deck<TacticsCard> {
     private static final int NO_OF_MINEFIELD_CODES_CARDS = 4;
     private static final int NO_OF_HUMANITARIAN_CARDS = 2;
     private static final int NO_OF_RAPID_MOBILIZATION_CARDS = 4;
+    private static final int NO_OF_SECURITY_FORCES_CARDS = 2;
 
     private static final TacticsCard BOMBARDMENT_CARD = new BombardmentCard();
     private static final TacticsCard ALL_HAIL_THE_EMPEROR_CARD = new AllHailTheEmperorCard();
@@ -28,6 +29,7 @@ public class TacticsDeck extends Deck<TacticsCard> {
     private static final TacticsCard MINEFIELD_CODES_CARD = new MinefieldCodesCard();
     private static final TacticsCard HUMANITARIAN_AID_CARD = new HumanitarianAidCard();
     private static final TacticsCard RAPID_MOBILIZATION_CARD = new RapidMobilizationCard();
+    private static final TacticsCard SECURITY_FORCES_CARD = new SecurityForcesCard();
 
     public TacticsDeck() {
         addCopies(BOMBARDMENT_CARD, NO_OF_BOMBARDMENT_CARDS);
@@ -40,6 +42,7 @@ public class TacticsDeck extends Deck<TacticsCard> {
         addCopies(MINEFIELD_CODES_CARD, NO_OF_MINEFIELD_CODES_CARDS);
         addCopies(HUMANITARIAN_AID_CARD, NO_OF_HUMANITARIAN_CARDS);
         addCopies(RAPID_MOBILIZATION_CARD, NO_OF_RAPID_MOBILIZATION_CARDS);
+        addCopies(SECURITY_FORCES_CARD, NO_OF_SECURITY_FORCES_CARDS);
         shuffle();
     }
 
