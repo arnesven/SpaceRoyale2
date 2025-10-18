@@ -91,7 +91,9 @@ public class PlayerActionState extends GameState {
     private void doNegativeAction(Model model, Player current) {
         MultipleChoice multipleChoice = new MultipleChoice();
         multipleChoice.addOption("Draw 2 Rebel Units", this::draw2RebelUnits);
-        multipleChoice.addOption("Increase Unrest", this::increaseUnrest);
+        if (model.getUnrest() < 8) {
+            multipleChoice.addOption("Increase Unrest", this::increaseUnrest);
+        }
         multipleChoice.addOption("Draw Event Cards", this::drawEventCards);
         multipleChoice.promptAndDoAction(model, "Select a negative action:", current);
         checkForTriggeredBattles(model, current);
