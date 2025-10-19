@@ -20,6 +20,7 @@ public class EmperorHealthDeclineState extends GameState {
             model.advanceHealthCounter(2);
         } else {
             println(model, "The Emperor's health declining very quickly.");
+            model.advanceHealthCounter(3);
         }
         println(model, "Emperor Health: " + model.getEmperorHealth() + "/" + model.getEmperorMaxHealth());
         return new UnrestStepState();

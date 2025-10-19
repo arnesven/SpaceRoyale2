@@ -151,14 +151,15 @@ public class DefectedPlayer extends Player {
                 discardCard(m, ru);
             });
         }
-        multipleChoice.addOption("Pass", (m, p) -> {});
 
+        boolean[] done = new boolean[]{true};
+        multipleChoice.addOption("Pass", (m, p) -> { done[0] = true; });
         int count = 0;
         do  {
             multipleChoice.promptAndDoAction(model, "Which card does " + getName() + " add to " + battleBoard.getName() + "?", this);
             multipleChoice.removeSelectedOption();
             count++;
         } while (count < 2 && multipleChoice.getNumberOfChoices() > 0 &&
-                !multipleChoice.getSelectedOptionName().equals("Pass"));
+                !done[0]);
     }
 }
