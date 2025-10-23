@@ -26,6 +26,9 @@ public class DisarmamentEventCard extends EventCard {
             while (!done[0]) {
                 MultipleChoice multipleChoice = new MultipleChoice();
                 TacticsCard bombardment = MyLists.find(p.getTacticsCardsInHand(), tc -> tc instanceof BombardmentCard);
+                if (bombardment == null) {
+                    break;
+                }
                 multipleChoice.addOption("Discard " + bombardment.getName() + " to get 1 Popular Influence", (m, p2) -> {
                     p2.discardCard(model, bombardment);
                     p2.addToPopularInfluence(1);
