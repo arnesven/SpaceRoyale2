@@ -27,9 +27,9 @@ public class ShuttleCard extends EmpireUnitCard {
         return false;
     }
 
-    public static void moveWithPlayer(Model model, Player performer, BoardLocation movedFrom, BoardLocation dest) {
-        for (Player p : model.getPlayers()) {
-            if (p != performer && p.getCurrentLocation() == movedFrom) {
+    public static void moveWithPlayer(Model model, Player performer, BoardLocation dest) {
+        for (Player p : model.getPlayersNotDefectors()) {
+            if (p != performer && p.getCurrentLocation() != model.getPrisonPlanet() && p.getCurrentLocation() != dest) {
                 EmpireUnitCard shuttle = MyLists.find(p.getUnitCardsInHand(), eu -> eu instanceof ShuttleCard);
                 if (shuttle != null) {
                     MultipleChoice multipleChoice = new MultipleChoice();

@@ -325,10 +325,9 @@ public class PlayerActionState extends GameState {
            if (dest != player.getCurrentLocation()) {
                multipleChoice.addOption(dest.getName(),
                        (_, performer) -> {
-                           BoardLocation movedFrom = performer.getCurrentLocation();
                            performer.moveToLocation(dest);
                            println(model, performer.getName() + " moves to " + dest.getName() + ".");
-                           ShuttleCard.moveWithPlayer(model, performer, movedFrom, dest);
+                           ShuttleCard.moveWithPlayer(model, performer, dest);
                        });
            }
         }
