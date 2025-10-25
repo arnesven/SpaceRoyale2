@@ -1,15 +1,25 @@
-package model.states;
+package model.cards.special;
 
 import model.Model;
 import model.Player;
+import model.cards.GameCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.units.EmpireUnitCard;
+import model.states.PlayerActionState;
 import view.MultipleChoice;
 
-public class TradingStepState extends GameState {
+public class ReorganizeSpecialEvent extends SpecialEventCard {
+    public ReorganizeSpecialEvent() {
+        super("Reorganize");
+    }
+
     @Override
-    public GameState run(Model model) {
-        model.getScreenHandler().println("Trading Step.");
+    public GameCard copy() {
+        return new ReorganizeSpecialEvent();
+    }
+
+    @Override
+    public void resolve(Model model) {
         for (Player p : model.getPlayersNotDefectors()) {
             MultipleChoice multipleChoice = new MultipleChoice();
             for (Player p2 : model.getPlayersNotDefectors()) {
@@ -30,8 +40,6 @@ public class TradingStepState extends GameState {
         for (Player p : model.getPlayersNotDefectors()) {
             PlayerActionState.discardIfOverLimit(model, p);
         }
-        model.drawBoard();
-        return new PlayerActionState();
     }
 
     private void giveCardsToPlayer(Model model, Player from, Player to) {
@@ -55,8 +63,8 @@ public class TradingStepState extends GameState {
             done[0] = true;
         });
         while (multipleChoice.getNumberOfChoices() > 0 && !done[0]) {
-           multipleChoice.promptAndDoAction(model, "Give away chich card?", from);
-           multipleChoice.removeSelectedOption();
+            multipleChoice.promptAndDoAction(model, "Give away chich card?", from);
+            multipleChoice.removeSelectedOption();
         }
     }
 }

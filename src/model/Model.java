@@ -7,6 +7,7 @@ import model.cards.alignment.EmpireAlignmentCard;
 import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
 import model.cards.events.EventDeck;
+import model.cards.special.SpecialEventCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.tactics.TacticsDeck;
 import model.cards.units.*;
@@ -591,5 +592,17 @@ public class Model {
 
     public boolean isTacticsCardsAvailable() {
         return !gameData.tacticsDeck.isEmpty() || !gameData.tacticsDiscard.isEmpty();
+    }
+
+    public void clearSpecialEvents() {
+        gameData.specialEvents.clear();
+    }
+
+    public void placeSpecialEvent(Player player, SpecialEventCard specialEvent) {
+        gameData.specialEvents.put(player, specialEvent);
+    }
+
+    public SpecialEventCard getSpecialEvent(Player player) {
+        return gameData.specialEvents.get(player);
     }
 }

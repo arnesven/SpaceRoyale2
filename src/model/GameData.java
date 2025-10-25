@@ -2,9 +2,9 @@ package model;
 
 import model.board.GameBoard;
 import model.cards.*;
-import model.cards.alignment.AlignmentCard;
 import model.cards.events.EventCard;
 import model.cards.events.EventDeck;
+import model.cards.special.SpecialEventCard;
 import model.cards.tactics.TacticsCard;
 import model.cards.tactics.TacticsDeck;
 import model.cards.units.CommonEmpireUnitDeck;
@@ -14,10 +14,7 @@ import model.states.GameState;
 import model.states.InitialGameState;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GameData implements Serializable {
     public GameBoard gameBoard;
@@ -37,4 +34,5 @@ public class GameData implements Serializable {
     public int initialRebelUnitRate = 3;
     public GameState currentState = new InitialGameState();
     public Set<Player> collaborativeDraw = new HashSet<>();
+    public Map<Player, SpecialEventCard> specialEvents = new HashMap<>();
 }

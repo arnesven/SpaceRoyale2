@@ -8,6 +8,7 @@ import model.board.*;
 import model.cards.DeckIsEmptyException;
 import model.cards.alignment.RebelAlignmentCard;
 import model.cards.events.EventCard;
+import model.cards.special.SpecialEventCard;
 import model.cards.tactics.RapidMobilizationCard;
 import model.cards.tactics.SecurityForcesCard;
 import model.cards.tactics.TacticsCard;
@@ -36,6 +37,9 @@ public class PlayerActionState extends GameState {
             if (current.takeTurn(model, this)) {
                 break;
             }
+
+            resolveSpecialEvent(model, current);
+
             model.stepCurrentPlayer();
             model.drawBoard();
             if (i < turnsToPlay - 1) { // No need to save after last player's actions
@@ -43,6 +47,15 @@ public class PlayerActionState extends GameState {
             }
         }
         return new EmperorHealthDeclineState();
+    }
+
+    private void resolveSpecialEvent(Model model, Player current) {
+        SpecialEventCard specialEvent = model.getSpecialEvent(current);
+        if (specialEvent == null) {
+            return;
+        }
+        println(model, "Resolving Special Event '" + specialEvent.getName() + "'.");
+        specialEvent.resolve(model);
     }
 
     public boolean takeNormalPlayerTurn(Model model, Player current) {
