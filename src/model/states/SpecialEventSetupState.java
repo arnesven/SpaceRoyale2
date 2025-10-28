@@ -18,7 +18,8 @@ public class SpecialEventSetupState extends GameState {
     private static final List<SpecialEventCard> otherSpecialEvents = List.of(
             new ParadeSpecialEventCard(),
             new DemonstrationSpecialEventCard(),
-            new AudienceSpecialEventCard()
+            new AudienceSpecialEventCard(),
+            new CouncilOfTenSpecialEventCard()
     );
 
     @Override
@@ -30,6 +31,7 @@ public class SpecialEventSetupState extends GameState {
         List<SpecialEventCard> otherCards = new ArrayList<>(otherSpecialEvents);
 
         if (model.getTurn() > 1) {
+            otherCards.remove(MyRandom.sample(otherCards));
             if (model.getPlayers().size() < 8) {
                 otherCards.remove(MyRandom.sample(otherCards));
             }

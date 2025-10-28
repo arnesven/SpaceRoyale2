@@ -4,18 +4,16 @@ import model.Model;
 import model.Player;
 import model.cards.GameCard;
 import model.cards.units.AgentUnitCard;
-import model.cards.units.EmpireUnitCard;
 import util.MyLists;
-import util.MyPair;
 import util.MyRandom;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AudienceSpecialEventCard extends SpecialEventCard {
+    private static final int TARGET_NUMBER = 6;
+
     public AudienceSpecialEventCard() {
         super("Audience");
     }
@@ -60,7 +58,7 @@ public class AudienceSpecialEventCard extends SpecialEventCard {
             model.getScreenHandler().println(player.getName() + " reveals an Agent card to add 3 to the die roll");
             dieRoll += 3;
         }
-        if (dieRoll < 6) {
+        if (dieRoll < TARGET_NUMBER) {
             model.getScreenHandler().println("The Emperor is unimpressed by " + player.getName() + ".");
             model.getScreenHandler().println(player.getName() + " loses 1 Emperor Influence.");
             player.addToEmperorInfluence(-1);
