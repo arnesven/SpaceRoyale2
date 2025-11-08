@@ -49,11 +49,12 @@ public class DemonstrationSpecialEventCard extends SpecialEventCard {
                     ", (" + pair.first.getEmperorInfluence() + " EI)");
         }
 
-        for (MyPair<Player, EmpireUnitCard> winner : contenders) {
-            if (score(winner) == score(contenders.getFirst())) {
-                model.getScreenHandler().println("The emperor rewards " + winner.first.getName() + " with 1 Emperor Influence.");
-                winner.first.addToEmperorInfluence(1);
-            }
+        List<MyPair<Player, EmpireUnitCard>> winners = MyLists.filter(contenders, pair ->
+                score(pair) == score(contenders.getFirst()));
+
+        for (MyPair<Player, EmpireUnitCard> winner : winners) {
+            model.getScreenHandler().println("The emperor rewards " + winner.first.getName() + " with 1 Emperor Influence.");
+            winner.first.addToEmperorInfluence(1);
         }
     }
 

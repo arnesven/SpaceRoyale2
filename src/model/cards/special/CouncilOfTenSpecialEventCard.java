@@ -7,6 +7,7 @@ import model.cards.tactics.TacticsCard;
 import model.cards.units.EmpireUnitCard;
 import util.MyLists;
 import util.MyRandom;
+import util.MyStrings;
 import view.MultipleChoice;
 
 import java.util.ArrayList;
@@ -67,7 +68,10 @@ public class CouncilOfTenSpecialEventCard extends SpecialEventCard {
         }
         while (selectedCards.size() < 2) {
             multipleChoice.promptAndDoAction(model, "Select 2 cards to discard.", player);
+            multipleChoice.removeSelectedOption();
         }
+        model.getScreenHandler().println(player.getName() + " discards " +
+                MyLists.commaAndJoin(selectedCards, GameCard::getName) + ".");
         int dieRoll = MyRandom.rollD10();
         model.getScreenHandler().println("Rolling a die, it's a " + dieRoll + ".");
         if (dieRoll >= TARGET_NUMBER) {
