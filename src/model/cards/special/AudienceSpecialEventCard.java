@@ -70,7 +70,7 @@ public class AudienceSpecialEventCard extends SpecialEventCard {
     }
 
     private int score(Player player, List<Player> playerOrder) {
-        return player.getEmperorInfluence() * 1000 + player.getPopularInfluence() * 100 -
+        return player.getEmperorInfluence() * 1000 + player.getPopularInfluence() * 100 +
                 playerOrder.indexOf(player);
     }
 

@@ -36,7 +36,9 @@ public class CouncilOfTenSpecialEventCard extends SpecialEventCard {
         model.getScreenHandler().println("Result of Council of Ten:");
         for (Player player : sorted) {
             model.getScreenHandler().println(player.getName() + ": " + player.getPopularInfluence() + " PI, "
-                    + player.getTotalCardsInHand() + " cards, " + (player.getTotalCardsInHand() < 2 ? "(too few cards)" : ""));
+                    + player.getTotalCardsInHand() + " cards, " + (player.getTotalCardsInHand() < 2 ? "(too few cards)" : "")
+                    + ", " + playerOrder.indexOf(player) + " place."
+                    );
         }
 
         for (Player player : MyLists.filter(sorted, p -> p.getTotalCardsInHand() >= 2)) {
@@ -84,7 +86,7 @@ public class CouncilOfTenSpecialEventCard extends SpecialEventCard {
     }
 
     private int score(Player player, List<Player> playerOrder) {
-        return player.getPopularInfluence() * 1000 + player.getTotalCardsInHand();
+        return player.getPopularInfluence() * 10000 + 100*player.getTotalCardsInHand() + playerOrder.indexOf(player);
     }
 
     @Override

@@ -12,6 +12,7 @@ import model.cards.units.EmpireUnitCard;
 import model.cards.units.RebelUnitCard;
 import model.states.GameState;
 import model.states.InitialGameState;
+import model.states.SpecialEvents;
 
 import java.io.Serializable;
 import java.util.*;
@@ -34,5 +35,5 @@ public class GameData implements Serializable {
     public int initialRebelUnitRate = 3;
     public GameState currentState = new InitialGameState();
     public Set<Player> collaborativeDraw = new HashSet<>();
-    public Map<Player, SpecialEventCard> specialEvents = new HashMap<>();
+    public SpecialEvents specialEvents = new SpecialEvents();
 }

@@ -50,12 +50,14 @@ public class PlayerActionState extends GameState {
     }
 
     private void resolveSpecialEvent(Model model, Player current) {
-        SpecialEventCard specialEvent = model.getSpecialEvent(current);
+        SpecialEventCard specialEvent = model.getSpecialEvents().getCardForPlayer(current);
         if (specialEvent == null) {
             return;
         }
         println(model, "Resolving Special Event '" + specialEvent.getName() + "'.");
         specialEvent.resolve(model);
+        println(model, "Replacing Special Event '" + specialEvent.getName() + "'.");
+        specialEvent.replace(model);
     }
 
     public boolean takeNormalPlayerTurn(Model model, Player current) {

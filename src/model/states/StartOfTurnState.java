@@ -8,6 +8,6 @@ public class StartOfTurnState extends GameState {
         model.getScreenHandler().println("Turn " + model.getTurn());
         model.drawBoard();
         model.resetCollaborativeDraw();
-        return new SpecialEventSetupState();
+        return new PlayerActionState();
     }
 }

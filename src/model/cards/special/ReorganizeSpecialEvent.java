@@ -8,6 +8,8 @@ import model.cards.units.EmpireUnitCard;
 import model.states.PlayerActionState;
 import view.MultipleChoice;
 
+import java.util.List;
+
 public class ReorganizeSpecialEvent extends SpecialEventCard {
     public ReorganizeSpecialEvent() {
         super("Reorganize");
@@ -66,5 +68,11 @@ public class ReorganizeSpecialEvent extends SpecialEventCard {
             multipleChoice.promptAndDoAction(model, "Give away chich card?", from);
             multipleChoice.removeSelectedOption();
         }
+    }
+
+    @Override
+    public void replace(Model model) {
+        model.getSpecialEvents().removeCard(this);
+        model.getSpecialEvents().placeCards(model, List.of(this));
     }
 }

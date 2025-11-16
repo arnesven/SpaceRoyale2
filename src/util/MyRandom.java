@@ -20,7 +20,7 @@ public class MyRandom {
         List<T> result = new ArrayList<>(list);
         Collections.shuffle(result);
         for (int i = n; i < list.size(); ++i) {
-            result.remove(0);
+            result.removeFirst();
         }
         return result;
     }
