@@ -46,7 +46,6 @@ public class SpecialEvents implements Serializable {
     public void placeRandomSpecialEvents(Model model, int i) {
         List<SpecialEventCard> cardsToPlace = MyRandom.sampleN(i, otherSpecialEvents);
         otherSpecialEvents.removeAll(cardsToPlace);
-        cardsToPlace.addFirst(new ReorganizeSpecialEvent());
         placeCards(model, cardsToPlace);
     }
 
@@ -63,5 +62,9 @@ public class SpecialEvents implements Serializable {
             }
         }
         throw new IllegalStateException("Tried removing a special event card that nobody had!");
+    }
+
+    public int getNumberOfCardsInPlay() {
+        return map.size();
     }
 }

@@ -13,6 +13,5 @@ public abstract class SpecialEventCard extends GameCard {
     public void replace(Model model) {
         model.getScreenHandler().println("Returning " + getName() + " to the special events.");
         model.getSpecialEvents().returnCard(this);
-        model.getSpecialEvents().placeRandomSpecialEvents(model, 1);
     }
 }

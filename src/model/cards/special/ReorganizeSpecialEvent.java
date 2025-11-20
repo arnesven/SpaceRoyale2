@@ -73,6 +73,13 @@ public class ReorganizeSpecialEvent extends SpecialEventCard {
     @Override
     public void replace(Model model) {
         model.getSpecialEvents().removeCard(this);
+        int numberInPlay = model.getSpecialEvents().getNumberOfCardsInPlay();
+        model.getScreenHandler().println("Number of special event cards in play: " + numberInPlay);
         model.getSpecialEvents().placeCards(model, List.of(this));
+        if (numberInPlay == 0) {
+            int numPlayers = model.getPlayers().size();
+            model.getSpecialEvents().placeRandomSpecialEvents(model,
+                    numPlayers == 5 ? 1 : (numPlayers == 8 ? 3 : 2));
+        }
     }
 }
